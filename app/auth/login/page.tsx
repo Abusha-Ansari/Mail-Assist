@@ -21,7 +21,7 @@ export default function LoginPage() {
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
-      router.push("/dashboard");
+      router.push("/");
     }, 1500);
   };
 
@@ -70,15 +70,12 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
+        <div className="flex items-center text-xs uppercase">
+          <span className="flex-grow border-t" />
+          <span className="px-2 bg-background text-muted-foreground">
+            Or continue with
+          </span>
+          <span className="flex-grow border-t" />
         </div>
 
         <Button variant="outline" className="w-full" type="button">
@@ -103,7 +100,7 @@ export default function LoginPage() {
         <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link
-            href="/signup"
+            href="/auth/signup"
             className="font-medium text-primary hover:underline"
           >
             Sign up

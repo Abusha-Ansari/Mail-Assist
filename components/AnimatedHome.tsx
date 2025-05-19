@@ -52,7 +52,7 @@ export default function AnimatedHome() {
           <Link href="/signup">Get Started</Link>
         </Button>
         <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-          <Link href="/login">Login</Link>
+          <Link href="/auth/login">Login</Link>
         </Button>
       </motion.div>
 
