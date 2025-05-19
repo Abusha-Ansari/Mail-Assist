@@ -1,29 +1,49 @@
-'use client'
+"use client";
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Mail, Rocket, Shield, Sparkles } from "lucide-react"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Mail,Shield, Rocket, Sparkles, Send, DollarSign, Smile } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+
 
 const features = [
   {
     icon: <Shield className="h-8 w-8 text-primary" />,
     title: "Secure",
-    description: "End-to-end encryption for all your communications"
+    description: "End-to-end encryption for all your communications",
   },
   {
     icon: <Rocket className="h-8 w-8 text-primary" />,
     title: "Fast",
-    description: "Lightning-fast delivery to any inbox worldwide"
+    description: "Lightning-fast delivery to any inbox worldwide",
   },
   {
     icon: <Sparkles className="h-8 w-8 text-primary" />,
     title: "Simple",
-    description: "Intuitive interface that anyone can use"
-  }
-]
+    description: "Intuitive interface that anyone can use",
+  },
+  {
+    icon: <Send className="h-8 w-8 text-primary" />,
+    title: "Anonymous Mails",
+    description: "Send emails without revealing your identity",
+  },
+  {
+    icon: <DollarSign className="h-8 w-8 text-primary" />,
+    title: "Affordable Credits",
+    description: "Get email credits at the most competitive rates",
+  },
+  {
+    icon: <Smile className="h-8 w-8 text-primary" />,
+    title: "Hassle-Free",
+    description: "A smooth, stress-free user experience every time",
+  },
+];
+
 
 export default function AnimatedHome() {
+  const [loggedin, setloggedin] = useState(true);
+
   return (
     <section className="container flex flex-col items-center justify-center gap-6 px-4 pb-12 pt-6 md:py-16">
       <motion.div
@@ -51,9 +71,25 @@ export default function AnimatedHome() {
         <Button asChild size="lg" className="w-full sm:w-auto">
           <Link href="/signup">Get Started</Link>
         </Button>
-        <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-          <Link href="/auth/login">Login</Link>
-        </Button>
+        {loggedin ? (
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            <Link href="/send">Send Mail</Link>
+          </Button>
+        ) : (
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            <Link href="/auth/login">Login</Link>
+          </Button>
+        )}
       </motion.div>
 
       {/* Feature Grid */}
@@ -71,10 +107,12 @@ export default function AnimatedHome() {
           >
             <div className="rounded-full bg-primary/10 p-4">{feature.icon}</div>
             <h3 className="text-xl font-bold">{feature.title}</h3>
-            <p className="text-sm text-muted-foreground">{feature.description}</p>
+            <p className="text-sm text-muted-foreground">
+              {feature.description}
+            </p>
           </motion.div>
         ))}
       </motion.div>
     </section>
-  )
+  );
 }
