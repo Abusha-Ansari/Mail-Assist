@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { LogIn } from "lucide-react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { LogIn } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      setIsLoading(false)
-      router.push("/dashboard")
-    }, 1500)
-  }
+      setIsLoading(false);
+      router.push("/dashboard");
+    }, 1500);
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 sm:px-0">
@@ -101,12 +101,15 @@ export default function LoginPage() {
         </Button>
 
         <p className="text-center text-sm text-muted-foreground">
-          Don't have an account?{" "}
-          <Link href="/signup" className="font-medium text-primary hover:underline">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/signup"
+            className="font-medium text-primary hover:underline"
+          >
             Sign up
           </Link>
         </p>
       </motion.div>
     </div>
-  )
+  );
 }
