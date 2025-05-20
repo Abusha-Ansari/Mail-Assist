@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Mail,Shield, Rocket, Sparkles, Send, DollarSign, Smile } from "lucide-react";
 import Link from "next/link";
-// import { useState } from "react";
+import { useUser } from "@/context/UserContext";
 
 
 const features = [
@@ -42,8 +42,7 @@ const features = [
 
 
 export default function AnimatedHome() {
-  // const [loggedin, setloggedin] = useState(true);
-  const loggedin = false; // Placeholder for logged-in state 
+  const {loggedIn} = useUser()
 
   return (
     <section className="container flex flex-col items-center justify-center gap-6 px-4 pb-12 pt-6 md:py-16">
@@ -72,7 +71,7 @@ export default function AnimatedHome() {
         <Button asChild size="lg" className="w-full sm:w-auto">
           <Link href="/signup">Get Started</Link>
         </Button>
-        {loggedin ? (
+        {loggedIn ? (
           <Button
             asChild
             variant="outline"

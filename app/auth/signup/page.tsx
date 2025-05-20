@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { failure, success, container } from "@/lib/toast.util";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -16,18 +18,33 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
       setIsLoading(false);
-      router.push("/dashboard");
-    }, 1500);
+      failure("Signup fail, try again", 3000);
+      return;
+    }
+
+    if (data.user) {
+      success("Signup successful! Please check your email to confirm.", 5000);
+      setIsLoading(false);
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 5000);
+    }
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center pl-4 pr-4">
+      {container}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

@@ -2,15 +2,19 @@
 
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { Moon, Sun, Mail, LogIn, UserPlus, CreditCard, Menu, X } from "lucide-react"
+import { Moon, Sun, Mail, LogIn, UserPlus, CreditCard, Menu, X, LogOut } from "lucide-react"
 import { useTheme } from "next-themes"
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
+import { useUser } from "@/context/UserContext"
+import { supabase } from "@/lib/supabaseClient";
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const { loggedIn, setLoggedIn } = useUser()
+  
 
   useEffect(() => {
     setMounted(true)
@@ -20,16 +24,27 @@ export function Navbar() {
     setTheme(theme === "dark" ? "light" : "dark")
   }
 
-  const navLinks = [
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setLoggedIn(false) // or call a function to recheck auth status
+  }
+
+  const commonLinks = [
     { href: "/send", icon: Mail, label: "Send Mail" },
     { href: "/buy-credits", icon: CreditCard, label: "Buy Credits" },
-    { href: "/auth/login", icon: LogIn, label: "Login" },
-    { href: "/auth/signup", icon: UserPlus, label: "Sign Up" },
   ]
+
+  const authLinks = loggedIn
+    ? [] // Don't use link for logout, handled separately below
+    : [
+        { href: "/auth/login", icon: LogIn, label: "Login" },
+        { href: "/auth/signup", icon: UserPlus, label: "Sign Up" },
+      ]
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pl-5 pr-5">
       <div className="container flex h-16 items-center justify-between">
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -43,7 +58,7 @@ export function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-3">
-          {navLinks.map(({ href, icon: Icon, label }) => (
+          {[...commonLinks, ...authLinks].map(({ href, icon: Icon, label }) => (
             <motion.div key={href} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button variant="ghost" size="lg" asChild className="text-base">
                 <Link href={href}>
@@ -54,6 +69,22 @@ export function Navbar() {
             </motion.div>
           ))}
 
+          {/* Logout Button if logged in */}
+          {loggedIn && (
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                size="lg"
+                onClick={handleLogout}
+                className="text-base flex items-center gap-2"
+              >
+                <LogOut className="h-5 w-5" />
+                Logout
+              </Button>
+            </motion.div>
+          )}
+
+          {/* Theme Toggle */}
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               variant="ghost"
@@ -85,7 +116,7 @@ export function Navbar() {
             className="md:hidden overflow-hidden"
           >
             <div className="flex flex-col gap-2 px-4 pb-4">
-              {navLinks.map(({ href, icon: Icon, label }) => (
+              {[...commonLinks, ...authLinks].map(({ href, icon: Icon, label }) => (
                 <Link
                   key={href}
                   href={href}
@@ -95,6 +126,19 @@ export function Navbar() {
                   {label}
                 </Link>
               ))}
+
+              {loggedIn && (
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  onClick={handleLogout}
+                  className="flex items-center gap-3 text-base"
+                >
+                  <LogOut className="h-5 w-5" />
+                  Logout
+                </Button>
+              )}
+
               <Button
                 variant="ghost"
                 size="lg"

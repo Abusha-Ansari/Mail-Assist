@@ -61,7 +61,7 @@ export default function SendMailPage() {
         //* console.log(data);
         if(data){
           setIsLoading(false);
-          success("Email sent successfully!");
+          success("Email sent successfully!",2000);
           setFormData((prev) => ({
             ...prev,
             to: "",
@@ -72,7 +72,7 @@ export default function SendMailPage() {
         }
       })
       .catch((error) => {
-        failure("Failed to send email. Please try again.");
+        failure("Failed to send email. Please try again.",2000);
         console.error("Error:", error);
         setIsLoading(false);
       });

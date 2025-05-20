@@ -3,10 +3,10 @@ import React from "react";
 import { toast, ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const success = (message: string) => {
+export const success = (message: string, time:number) => {
   toast.success(message, {
     position: "top-center",
-    autoClose: 1000,
+    autoClose: time,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -16,10 +16,10 @@ export const success = (message: string) => {
   });
 };
 
-export const failure = (message: string) => {
+export const failure = (message: string, time:number) => {
   toast.error(message, {
     position: "top-center",
-    autoClose: 1000,
+    autoClose: time,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

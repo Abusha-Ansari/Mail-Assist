@@ -8,25 +8,45 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { container, success } from "@/lib/toast.util";
+import { container, failure, success } from "@/lib/toast.util";
+import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/context/UserContext";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { setLoggedIn } = useUser();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    // failure("Login failed. Please try again.");
-    success("Login successful!");
-    setIsLoading(false);
-    setTimeout(() => {
-      router.push("/");
-    }, 2000);
 
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setIsLoading(false);
+      failure(error.message, 5000);
+      return;
+    }
+
+    const user = data.user;
+
+    if (!user) {
+      setIsLoading(false);
+      failure("User not found", 1000);
+      return;
+    }
+    success("Login successful!", 2000);
+    setIsLoading(false);
+    setLoggedIn(true);
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 2000);
   };
 
   return (
