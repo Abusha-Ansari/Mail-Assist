@@ -59,16 +59,17 @@ export default function SendMailPage() {
 
         //* get the mail id from the response
         //* console.log(data);
-        
-        setIsLoading(false);
-        success("Email sent successfully!");
-        setFormData((prev) => ({
-          ...prev,
-          to: "",
-          subject: "",
-          body: "",
-        }));
-        router.push("/dashboard")
+        if(data){
+          setIsLoading(false);
+          success("Email sent successfully!");
+          setFormData((prev) => ({
+            ...prev,
+            to: "",
+            subject: "",
+            body: "",
+          }));
+          router.push("/dashboard")
+        }
       })
       .catch((error) => {
         failure("Failed to send email. Please try again.");

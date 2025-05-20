@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { container, failure, success } from "@/lib/toast.util";
+import { container, success } from "@/lib/toast.util";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
