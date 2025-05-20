@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { container, failure, success } from "@/lib/toast.util";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -19,14 +20,18 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     // Simulate API call
+    // failure("Login failed. Please try again.");
+    success("Login successful!");
+    setIsLoading(false);
     setTimeout(() => {
-      setIsLoading(false);
       router.push("/");
-    }, 1500);
+    }, 2000);
+
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 sm:px-0">
+      {container}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

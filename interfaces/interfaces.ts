@@ -8,3 +8,10 @@ export interface EmailProps {
     from: string;
     bodyMessage: string;
 }
+
+export interface EmailForm {
+    to: string;
+    subject:string;
+    body: string;
+    from: string;
+}
