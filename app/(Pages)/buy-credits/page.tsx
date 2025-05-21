@@ -148,7 +148,7 @@ export default function BuyCreditsPage() {
                 />
               </div>
               <p className="text-sm text-muted-foreground text-center">
-                You'll receive{" "}
+                {"You'll receive "}
                 <span className="font-bold">
                   {calculateCredits(selectedAmount)} credits
                 </span>{" "}
