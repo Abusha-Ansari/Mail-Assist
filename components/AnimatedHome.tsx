@@ -68,9 +68,25 @@ export default function AnimatedHome() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="flex flex-col items-center gap-4 sm:flex-row"
       >
-        <Button asChild size="lg" className="w-full sm:w-auto">
-          <Link href="/signup">Get Started</Link>
-        </Button>
+        {loggedIn ? (
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            <Link href="/dashboard">Dashboard</Link>
+          </Button>
+        ) : (
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            <Link href="/auth/signup">Get Started</Link>
+          </Button>
+        )}
         {loggedIn ? (
           <Button
             asChild
