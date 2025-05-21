@@ -9,6 +9,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { success, container, failure } from "@/lib/toast.util";
+import { deductCredits } from "@/utils/auth";
+import { useUser } from "@/context/UserContext";
+import { addUserMail } from "@/utils/userMail.utils";
 
 export default function SendMailPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +20,8 @@ export default function SendMailPage() {
     body: "",
     from: "mail.assist.user@abusha.tech",
   });
+
+  const { user } = useUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -56,23 +61,35 @@ export default function SendMailPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-
         //* get the mail id from the response
-        //* console.log(data);
-        if(data){
+        // console.log(data);
+        if (data) {
           setIsLoading(false);
-          success("Email sent successfully!",2000);
+          success("Email sent successfully!", 2000);
           setFormData((prev) => ({
             ...prev,
             to: "",
             subject: "",
             body: "",
           }));
-          router.push("/dashboard")
+          deductCredits(user!.id)
+            .then(() => {
+              
+              addUserMail({
+                userId: user!.id,
+                mailId: data.id,
+                status: "send",
+              });
+
+              router.push("/dashboard")
+            })
+            .catch((error) => {
+              console.error("Error deducting credits:", error);
+            });
         }
       })
       .catch((error) => {
-        failure("Failed to send email. Please try again.",2000);
+        failure("Failed to send email. Please try again.", 2000);
         console.error("Error:", error);
         setIsLoading(false);
       });

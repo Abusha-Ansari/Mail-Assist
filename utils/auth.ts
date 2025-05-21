@@ -64,9 +64,19 @@ export async function getUserProfile() {
 
 
 export async function deductCredits(userId: string) {
-  const { error } = await supabase.rpc('deduct_credits', { user_id: userId, amount: 5 });
-  if (error) throw error;
+  const { error, data } = await supabase.rpc("deduct_credits", {
+    user_id: userId,
+    amount: 5,
+  });
+
+  if (error) {
+    console.error("Error deducting credits:", error);
+    throw error;
+  }
+
+  return data;
 }
+
 
 
 export async function addCredits(userId: string, amount: number) {
