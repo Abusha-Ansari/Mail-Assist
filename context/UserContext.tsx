@@ -5,6 +5,7 @@ import { getUserProfile } from '@/utils/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type UserProfile = {
+  id: string;
   username: string;
   credits: number;
 };
@@ -14,6 +15,7 @@ type UserContextType = {
   loading: boolean;
   loggedIn: boolean;
   setLoggedIn: (value: boolean) => void;
+  setUser: (user: UserProfile | null) => void;
 };
 
 const UserContext = createContext<UserContextType>({
@@ -21,6 +23,7 @@ const UserContext = createContext<UserContextType>({
   loading: true,
   loggedIn: false,
   setLoggedIn: () => {},
+  setUser: () => {},
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
@@ -53,7 +56,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, loading, loggedIn, setLoggedIn }}>
+    <UserContext.Provider value={{ user, setUser ,  loading, loggedIn, setLoggedIn }}>
       {children}
     </UserContext.Provider>
   );

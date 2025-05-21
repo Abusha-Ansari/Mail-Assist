@@ -11,43 +11,58 @@ import { motion } from "framer-motion";
 import { container, failure, success } from "@/lib/toast.util";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/context/UserContext";
+import { getUserProfile } from "@/utils/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { setLoggedIn } = useUser();
+  const { setLoggedIn , setUser } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  e.preventDefault();
+  setIsLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-    if (error) {
-      setIsLoading(false);
-      failure(error.message, 5000);
-      return;
-    }
-
-    const user = data.user;
-
-    if (!user) {
-      setIsLoading(false);
-      failure("User not found", 1000);
-      return;
-    }
-    success("Login successful!", 2000);
+  if (error) {
     setIsLoading(false);
-    setLoggedIn(true);
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 2000);
-  };
+    failure(error.message, 5000);
+    return;
+  }
+
+  const user = data.user;
+
+  if (!user) {
+    setIsLoading(false);
+    failure("User not found", 1000);
+    return;
+  }
+
+  // ✅ Fetch user profile from 'profiles' table
+  const profile = await getUserProfile();
+
+  if (!profile) {
+    setIsLoading(false);
+    failure("User profile not found", 1000);
+    return;
+  }
+
+  // ✅ Update global context
+  setUser(profile);
+  setLoggedIn(true);
+
+  success("Login successful!", 2000);
+  setIsLoading(false);
+  
+  setTimeout(() => {
+    router.push("/dashboard");
+  }, 2000);
+};
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 sm:px-0">
