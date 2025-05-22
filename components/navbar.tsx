@@ -8,12 +8,14 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
 import { useUser } from "@/context/UserContext"
 import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation"
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const { loggedIn, setLoggedIn } = useUser()
+  const router = useRouter()
   
 
   useEffect(() => {
@@ -26,9 +28,10 @@ export function Navbar() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    setLoggedIn(false) // or call a function to recheck auth status
+    setLoggedIn(false)
+    setMenuOpen(false)
+    router.push("/auth/login");
   }
-
   const commonLinks = [
     { href: "/send", icon: Mail, label: "Send Mail" },
     { href: "/buy-credits", icon: CreditCard, label: "Buy Credits" },
@@ -120,6 +123,7 @@ export function Navbar() {
                 <Link
                   key={href}
                   href={href}
+                  onClick={() => setMenuOpen(!menuOpen)} 
                   className="flex items-center gap-3 py-3 text-base font-medium text-primary hover:underline"
                 >
                   <Icon className="h-5 w-5" />

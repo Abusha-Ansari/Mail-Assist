@@ -8,6 +8,9 @@ export interface UserMail {
   mail_id: string;
   mail_time: string;
   status: MailStatus;
+  to_email: string | null;
+  subject: string | null;
+  html: string | null;
 }
 
 // Add a mail record for a user
@@ -15,16 +18,25 @@ export async function addUserMail({
   userId,
   mailId,
   status = "pending",
+  to_email,
+  subject,
+  html,
 }: {
   userId: string;
   mailId: string;
   status?: MailStatus;
+  to_email?: string | null;
+  subject?: string | null;
+  html?: string | null;
 }) {
   const { data, error } = await supabase.from("user_mails").insert([
     {
       user_id: userId,
       mail_id: mailId,
       status,
+      to_email: to_email,
+      subject: subject,
+      html: html,
     },
   ]);
 
@@ -80,6 +92,23 @@ export async function getUserMailsByStatus(userId: string, status: MailStatus) {
 export async function deleteUserMails(userId: string) {
   const { error } = await supabase.from("user_mails").delete().eq("user_id", userId);
   if (error) throw error;
+}
+
+
+export async function GetUserMailById(mailId: string) {
+
+  // console.log("mailId", mailId);
+  
+  const { data, error } = await supabase
+  .from("user_mails")
+  .select("*")
+  .eq('user_id', mailId as unknown as string);
+
+  if (error) throw error;
+   
+  // console.log("data", data);
+
+  return data;
 }
 
 

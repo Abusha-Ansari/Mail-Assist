@@ -20,6 +20,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+    {/* // <html lang="en" className={resolvedTheme === "dark" ? "dark" : ""} suppressHydrationWarning> */}
+
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

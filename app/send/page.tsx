@@ -21,17 +21,17 @@ export default function SendMailPage() {
     from: "mail.assist.user@abusha.tech",
   });
 
-  const { user } = useUser();
+  const { user, loggedIn } = useUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("email");
-    if (storedEmail) {
+    if (loggedIn && user?.username) {
+      const storedEmail = `${user.username}+@gmail.com`;
       setFormData((prev) => ({ ...prev, from: storedEmail }));
     }
-  }, []);
+  }, [loggedIn, user?.username]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -47,52 +47,63 @@ export default function SendMailPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("/api/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to: formData.to,
-        subject: formData.subject,
-        bodyMessage: formData.body,
-        from: formData.from,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        //* get the mail id from the response
-        // console.log(data);
-        if (data) {
-          setIsLoading(false);
-          success("Email sent successfully!", 2000);
-          setFormData((prev) => ({
-            ...prev,
-            to: "",
-            subject: "",
-            body: "",
-          }));
-          deductCredits(user!.id)
-            .then(() => {
-              
-              addUserMail({
-                userId: user!.id,
-                mailId: data.id,
-                status: "send",
-              });
-
-              router.push("/dashboard")
-            })
-            .catch((error) => {
-              console.error("Error deducting credits:", error);
-            });
-        }
+    if (loggedIn) {
+      fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: formData.to,
+          subject: formData.subject,
+          bodyMessage: formData.body,
+          from: formData.from,
+        }),
       })
-      .catch((error) => {
-        failure("Failed to send email. Please try again.", 2000);
-        console.error("Error:", error);
-        setIsLoading(false);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          if (data) {
+            setIsLoading(false);
+            success("Email sent successfully!", 2000);
+            deductCredits(user!.id)
+              .then(() => {
+                addUserMail({
+                  userId: user!.id,
+                  mailId: data.id,
+                  status: "send",
+                  to_email: formData.to,
+                  subject: formData.subject,
+                  html: formData.body,
+                });
+                setFormData((prev) => ({
+                  ...prev,
+                  to: "",
+                  subject: "",
+                  body: "",
+                }));
+
+                router.push("/dashboard");
+              })
+              .catch((error) => {
+                console.error("Error deducting credits:", error);
+              });
+          }
+        })
+        .catch((error) => {
+          failure("Failed to send email. Please try again.", 2000);
+          console.error("Error:", error);
+          setIsLoading(false);
+        });
+    } else {
+      failure("Please login to send email", 2000);
+      setIsLoading(false);
+      setFormData((prev) => ({
+        ...prev,
+        to: "",
+        subject: "",
+        body: "",
+      }));
+    }
   };
 
   return (
