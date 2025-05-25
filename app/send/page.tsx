@@ -65,7 +65,7 @@ export default function SendMailPage() {
           if (data) {
             setIsLoading(false);
             success("Email sent successfully!", 2000);
-            deductCredits(user!.id)
+            deductCredits(user!.id, 5)
               .then(() => {
                 addUserMail({
                   userId: user!.id,

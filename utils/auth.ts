@@ -63,10 +63,10 @@ export async function getUserProfile() {
 }
 
 
-export async function deductCredits(userId: string) {
+export async function deductCredits(userId: string, credits: number) {
   const { error, data } = await supabase.rpc("deduct_credits", {
     user_id: userId,
-    amount: 5,
+    amount: credits,
   });
 
   if (error) {
