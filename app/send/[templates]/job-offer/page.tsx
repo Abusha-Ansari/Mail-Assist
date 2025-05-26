@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { success, failure } from "@/lib/toast.util";
+import { success, failure, container } from "@/lib/toast.util";
 import { deductCredits } from "@/utils/auth";
 import { addUserMail } from "@/utils/userMail.utils";
 
@@ -35,7 +35,12 @@ export default function JobOfferTemplatePage() {
     e.preventDefault();
     setIsSending(true);
 
-    if(loggedIn && user){
+    if (!loggedIn || !user) {
+      failure("Please login to send email", 2000);
+      return;
+    }
+
+    
       try {
       const res = await fetch("/api/send", {
         method: "POST",
@@ -68,38 +73,39 @@ export default function JobOfferTemplatePage() {
       });
 
       success("Job offer email sent successfully!", 2000);
+      await new Promise((res) => setTimeout(res, 3000));
       router.push("/dashboard");
     } catch (err) {
       failure("Failed to send email"+`${err}`, 2000);
     } finally {
       setIsSending(false);
     }
-    }
   };
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
+      {container}
       <h1 className="text-2xl font-bold mb-6 text-center">Send a Job Offer Email</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="to">To</Label>
+            <Label htmlFor="to" className="pb-2">To</Label>
             <Input id="to" type="email" value={formData.to} onChange={handleChange} required />
           </div>
 
           <div>
-            <Label htmlFor="company">Company</Label>
+            <Label htmlFor="company" className="pb-2">Company</Label>
             <Input id="company" value={formData.company} onChange={handleChange} required />
           </div>
 
           <div>
-            <Label htmlFor="position">Position</Label>
+            <Label htmlFor="position" className="pb-2">Position</Label>
             <Input id="position" value={formData.position} onChange={handleChange} required />
           </div>
 
           <div>
-            <Label htmlFor="description">Job Description</Label>
+            <Label htmlFor="description" className="pb-2">Job Description</Label>
             <Textarea
               id="description"
               value={formData.description}
@@ -108,7 +114,7 @@ export default function JobOfferTemplatePage() {
             />
           </div>
 
-          <Button type="submit" disabled={isSending} className="w-full">
+          <Button type="submit" disabled={isSending} className="w-full border hover:cursor-pointer">
             {isSending ? "Sending..." : "Send Email (10 credits)"}
           </Button>
         </div>

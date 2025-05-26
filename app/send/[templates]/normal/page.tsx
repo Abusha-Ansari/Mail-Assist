@@ -9,7 +9,7 @@ import MailFormLayout from "@/components/MailFormLayout";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { success, failure } from "@/lib/toast.util";
+import { success, failure, container } from "@/lib/toast.util";
 import { deductCredits } from "@/utils/auth";
 import { addUserMail } from "@/utils/userMail.utils";
 
@@ -62,6 +62,7 @@ export default function NormalEmailForm() {
       });
 
       success("Email sent successfully", 2000);
+      await new Promise((res) => setTimeout(res, 2000));
       router.push("/dashboard");
     } catch (err) {
       failure("Sending failed "+`${err}`, 2000);
@@ -72,6 +73,7 @@ export default function NormalEmailForm() {
 
   return (
     <MailFormLayout title="Send Normal Email" description="Use the standard email format (5 credits)">
+      {container}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="to">To</Label>

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 import { deductCredits } from '@/utils/auth';
 import { addUserMail } from '@/utils/userMail.utils';
-import { success, failure } from '@/lib/toast.util';
+import { success, failure, container } from '@/lib/toast.util';
 import { PaymentConfirmationTemplate } from '@/templates/PaymentConfirmationTemplate';
 
 export default function PaymentConfirmationPage() {
@@ -31,9 +31,11 @@ export default function PaymentConfirmationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log("form submit start")
     if (!loggedIn || !user) {
       failure('Please login to send email', 2000);
+      console.log(loggedIn, user)
+      console.log("form submit end failure")
       return;
     }
 
@@ -72,6 +74,7 @@ export default function PaymentConfirmationPage() {
       });
 
       success('Payment confirmation sent successfully!', 2000);
+      await new Promise((res) => setTimeout(res, 3000));
       router.push('/dashboard');
     } catch (error) {
       failure('Failed to send email', 2000);
@@ -83,12 +86,13 @@ export default function PaymentConfirmationPage() {
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
+      {container}
       <h1 className="text-2xl font-bold mb-6 text-center">Send Payment Confirmation</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="to">Recipient Email</Label>
+            <Label htmlFor="to" className="pb-2">Recipient Email</Label>
             <Input
               id="to"
               type="email"
@@ -99,7 +103,7 @@ export default function PaymentConfirmationPage() {
           </div>
 
           <div>
-            <Label htmlFor="recipientName">Recipient Name</Label>
+            <Label htmlFor="recipientName" className="pb-2">Recipient Name</Label>
             <Input 
               id="recipientName" 
               value={formData.recipientName} 
@@ -109,7 +113,7 @@ export default function PaymentConfirmationPage() {
           </div>
 
           <div>
-            <Label htmlFor="amount">Amount</Label>
+            <Label htmlFor="amount" className="pb-2">Amount</Label>
             <Input 
               id="amount" 
               value={formData.amount} 
@@ -119,7 +123,7 @@ export default function PaymentConfirmationPage() {
           </div>
 
           <div>
-            <Label htmlFor="transactionId">Transaction ID</Label>
+            <Label htmlFor="transactionId" className="pb-2">Transaction ID</Label>
             <Input 
               id="transactionId" 
               value={formData.transactionId} 
@@ -129,7 +133,7 @@ export default function PaymentConfirmationPage() {
           </div>
 
           <div>
-            <Label htmlFor="date">Payment Date</Label>
+            <Label htmlFor="date" className="pb-2">Payment Date</Label>
             <Input 
               id="date" 
               type="date" 
@@ -139,7 +143,7 @@ export default function PaymentConfirmationPage() {
             />
           </div>
 
-          <Button type="submit" disabled={isSending} className="w-full">
+          <Button type="submit" disabled={isSending} className="w-full border hover:cursor-pointer">
             {isSending ? 'Sending...' : 'Send Confirmation (10 credits)'}
           </Button>
         </div>

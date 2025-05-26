@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 import { deductCredits } from '@/utils/auth';
 import { addUserMail } from '@/utils/userMail.utils';
-import { success, failure } from '@/lib/toast.util';
+import { success, failure, container } from '@/lib/toast.util';
 import { EventReminderTemplate } from '@/templates/EventReminderTemplate';
 
 export default function EventReminderPage() {
@@ -75,6 +75,7 @@ export default function EventReminderPage() {
       });
 
       success('Event reminder sent successfully!', 2000);
+      await new Promise((res) => setTimeout(res, 3000));
       router.push('/dashboard');
     } catch (error) {
       failure('Failed to send email', 2000);
@@ -86,36 +87,37 @@ export default function EventReminderPage() {
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
+      {container}
       <h1 className="text-2xl font-bold mb-6 text-center">Send an Event Reminder</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="to">To</Label>
+            <Label htmlFor="to" className="pb-2">To</Label>
             <Input id="to" type="email" value={formData.to} onChange={handleChange} />
           </div>
 
           <div>
-            <Label htmlFor="eventName">Event Name</Label>
+            <Label htmlFor="eventName" className="pb-2">Event Name</Label>
             <Input id="eventName" value={formData.eventName} onChange={handleChange} required />
           </div>
 
           <div>
-            <Label htmlFor="date">Date</Label>
+            <Label htmlFor="date" className="pb-2">Date</Label>
             <Input id="date" type="date" value={formData.date} onChange={handleChange} required />
           </div>
 
           <div>
-            <Label htmlFor="time">Time</Label>
+            <Label htmlFor="time" className="pb-2">Time</Label>
             <Input id="time" value={formData.time} onChange={handleChange} required />
           </div>
 
           <div>
-            <Label htmlFor="venue">Venue</Label>
+            <Label htmlFor="venue" className="pb-2">Venue</Label>
             <Textarea id="venue" value={formData.venue} onChange={handleChange} required />
           </div>
 
-          <Button type="submit" disabled={isSending} className="w-full">
+          <Button type="submit" disabled={isSending} className="w-full border hover:cursor-pointer">
             {isSending ? "Sending..." : "Send Reminder (10 credits)"}
           </Button>
         </div>

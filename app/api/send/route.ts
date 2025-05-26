@@ -50,36 +50,36 @@ export async function POST(req: NextRequest) {
     break;
 
   case "event-reminder":
-    if (!templateData?.eventName || !templateData?.eventDate || !templateData?.time || !templateData?.venue) {
+    if (!templateData?.eventName || !templateData?.date || !templateData?.time || !templateData?.venue) {
       return NextResponse.json({ error: "Missing template data" }, { status: 400 });
     }
     reactTemplate = EventReminderTemplate({
       eventName: templateData.eventName,
-      date: templateData.eventDate,
+      date: templateData.date,
       time: templateData.time,
       venue: templateData.venue,
     });
     break;
 
   case "thank-you":
-    if (!templateData?.recipientName || !templateData?.reason) {
+    if (!templateData?.recipientName || !templateData?.message) {
       return NextResponse.json({ error: "Missing template data" }, { status: 400 });
     }
     reactTemplate = ThankYouTemplate({
       recipientName: templateData.recipientName,
-      message: templateData.reason,
+      message: templateData.message,
     });
     break;
 
   case "payment-confirmation":
-    if (!templateData?.recipientName || !templateData?.amount || !templateData?.transactionId || !templateData?.paymentDate) {
+    if (!templateData?.recipientName || !templateData?.amount || !templateData?.transactionId || !templateData?.date) {
       return NextResponse.json({ error: "Missing template data" }, { status: 400 });
     }
     reactTemplate = PaymentConfirmationTemplate({
       recipientName: templateData.recipientName,
       amount: templateData.amount,
       transactionId: templateData.transactionId,
-      date: templateData.paymentDate,
+      date: templateData.date,
     });
     break;
 

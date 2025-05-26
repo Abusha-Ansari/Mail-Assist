@@ -9,8 +9,9 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 import { deductCredits } from '@/utils/auth';
 import { addUserMail } from '@/utils/userMail.utils';
-import { success, failure } from '@/lib/toast.util';
+import { success, failure, container } from '@/lib/toast.util';
 import { ThankYouTemplate } from '@/templates/ThankYouTemplate';
+// import { ToastContainer } from 'react-toastify';
 
 export default function ThankYouPage() {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ export default function ThankYouPage() {
         body: JSON.stringify({
           to: formData.to || `${user.username}@gmail.com`,
           from: `${user?.username}+@gmail.com`,
-          subject: `Thank You from ${formData.recipientName}`,
+          subject: `Thank You from ${user?.username}`,
           templateType: 'thank-you',
           templateData: {
             recipientName: formData.recipientName,
@@ -69,6 +70,7 @@ export default function ThankYouPage() {
       });
 
       success('Thank you email sent successfully!', 2000);
+      await new Promise((res) => setTimeout(res, 3000));
       router.push('/dashboard');
     } catch (error) {
       failure('Failed to send email', 2000);
@@ -80,12 +82,13 @@ export default function ThankYouPage() {
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
+      {container}
       <h1 className="text-2xl font-bold mb-6 text-center">Send a Thank You Email</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="to">Recipient Email</Label>
+            <Label htmlFor="to" className="pb-2">Recipient Email</Label>
             <Input 
               id="to" 
               type="email" 
@@ -96,7 +99,7 @@ export default function ThankYouPage() {
           </div>
 
           <div>
-            <Label htmlFor="recipientName">Your Name</Label>
+            <Label htmlFor="recipientName" className="pb-2">Your Name</Label>
             <Input 
               id="recipientName" 
               value={formData.recipientName} 
@@ -106,7 +109,7 @@ export default function ThankYouPage() {
           </div>
 
           <div>
-            <Label htmlFor="message">Thank You Message</Label>
+            <Label htmlFor="message" className="pb-2">Thank You Message</Label>
             <Textarea 
               id="message" 
               value={formData.message} 
@@ -116,7 +119,7 @@ export default function ThankYouPage() {
             />
           </div>
 
-          <Button type="submit" disabled={isSending} className="w-full">
+          <Button type="submit" disabled={isSending} className="w-full border hover:cursor-pointer">
             {isSending ? 'Sending...' : 'Send Thank You (10 credits)'}
           </Button>
         </div>

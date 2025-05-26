@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { deductCredits } from "@/utils/auth";
 import { addUserMail } from "@/utils/userMail.utils";
-import { success, failure } from "@/lib/toast.util";
+import { success, failure, container } from "@/lib/toast.util";
 
 export default function InterviewInviteForm() {
   const [form, setForm] = useState({
@@ -67,6 +67,7 @@ export default function InterviewInviteForm() {
       });
 
       success("Email sent!", 2000);
+      await new Promise((res) => setTimeout(res, 3000));
       router.push("/dashboard");
     } catch (error) {
       failure("Failed to send email", 2000);
@@ -83,6 +84,7 @@ export default function InterviewInviteForm() {
   return (
     <>
       <div className="container max-w-4xl mx-auto py-8 px-4">
+        {container}
         <h1 className="text-2xl font-bold mb-6 text-center">
           Send an Interview Invitation
         </h1>
@@ -93,7 +95,7 @@ export default function InterviewInviteForm() {
         >
           <div className="space-y-4">
             <div>
-              <Label htmlFor="to">To</Label>
+              <Label htmlFor="to" className="pb-2">To</Label>
               <Input
                 id="to"
                 type="email"
@@ -103,7 +105,7 @@ export default function InterviewInviteForm() {
             </div>
 
             <div>
-              <Label htmlFor="company">Company</Label>
+              <Label htmlFor="company" className="pb-2">Company</Label>
               <Input
                 id="company"
                 value={form.company}
@@ -113,7 +115,7 @@ export default function InterviewInviteForm() {
             </div>
 
             <div>
-              <Label htmlFor="position">Position</Label>
+              <Label htmlFor="position" className="pb-2">Position</Label>
               <Input
                 id="position"
                 value={form.position}
@@ -123,7 +125,7 @@ export default function InterviewInviteForm() {
             </div>
 
             <div>
-              <Label htmlFor="date">Date</Label>
+              <Label htmlFor="date" className="pb-2">Date</Label>
               <Input
                 id="date"
                 value={form.date}
@@ -133,7 +135,7 @@ export default function InterviewInviteForm() {
             </div>
 
             <div>
-              <Label htmlFor="time">Time</Label>
+              <Label htmlFor="time" className="pb-2">Time</Label>
               <Input
                 id="time"
                 value={form.time}
@@ -143,7 +145,7 @@ export default function InterviewInviteForm() {
             </div>
 
             <div>
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location" className="pb-2">Location</Label>
               <Input
                 id="location"
                 value={form.location}
@@ -152,7 +154,7 @@ export default function InterviewInviteForm() {
               />
             </div>
 
-            <Button type="submit" disabled={isLoading} className="w-full">
+            <Button type="submit" disabled={isLoading} className="w-full border hover:cursor-pointer">
               {isLoading ? "Sending..." : "Send Invitation (10 credits)"}
             </Button>
           </div>
