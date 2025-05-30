@@ -70,3 +70,31 @@ export interface PaymentConfirmationTemplateProps {
   transactionId: string;
   date: string;
 }
+
+export interface Block {
+  id: string;
+  type: "text" | "heading" | "button";
+  content: string;
+  styles: {
+    textAlign: "left" | "center" | "right";
+    fontSize: string;
+    color: string;
+    backgroundColor: string;
+    fontWeight: "normal" | "bold";
+    fontStyle: "normal" | "italic";
+    textDecoration: "none" | "underline";
+  };
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  placeholders: string[];
+}
+export interface CustomTemplate {
+  id: string;
+  name: string;
+  blocks: Block[];
+  createdAt: string;
+  updatedAt: string;
+}

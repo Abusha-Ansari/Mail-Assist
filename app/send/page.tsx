@@ -46,10 +46,10 @@ const templates = [
   },
   {
     name: "Custom Template",
-    description: "Design your own (Coming Soon)",
-    href: "/send/templates/custom",
-    cost: 10,
-    disabled: true,
+    description: "Design your own Custom Template",
+    href: "/send/customTemplate",
+    cost: 15,
+    disabled: false,
   },
 ];
 

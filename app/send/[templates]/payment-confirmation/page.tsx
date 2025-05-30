@@ -31,11 +31,11 @@ export default function PaymentConfirmationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("form submit start")
+    // console.log("form submit start")
     if (!loggedIn || !user) {
       failure('Please login to send email', 2000);
-      console.log(loggedIn, user)
-      console.log("form submit end failure")
+      // console.log(loggedIn, user)
+      // console.log("form submit end failure")
       return;
     }
 
