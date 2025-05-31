@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UserPlus } from "lucide-react";
+import { UserPlus, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,6 +15,7 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -25,6 +26,11 @@ export default function SignupPage() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          name: name
+        }
+      }
     });
 
     if (error) {
@@ -36,10 +42,13 @@ export default function SignupPage() {
     if (data.user) {
       success("Signup successful! Please check your email to confirm.", 5000);
       setIsLoading(false);
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 5000);
+      await new Promise((res)=>{setTimeout(res,5000)});
+      router.push("/auth/login");
     }
+  };
+
+  const handleGoogleSignup = async () => {
+    failure("Google signup is currently unavailable. Please use email signup instead.", 5000);
   };
 
   return (
@@ -83,15 +92,34 @@ export default function SignupPage() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 relative">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                )}
+                <span className="sr-only">
+                  {showPassword ? "Hide password" : "Show password"}
+                </span>
+              </Button>
+            </div>
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
@@ -107,7 +135,12 @@ export default function SignupPage() {
           <span className="flex-grow border-t" />
         </div>
 
-        <Button variant="outline" className="w-full" type="button">
+        <Button 
+          variant="outline" 
+          className="w-full" 
+          type="button"
+          onClick={handleGoogleSignup}
+        >
           <svg
             className="mr-2 h-4 w-4"
             aria-hidden="true"

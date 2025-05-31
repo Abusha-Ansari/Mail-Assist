@@ -71,10 +71,14 @@ useEffect(() => {
                 <p className="text-sm text-muted-foreground mb-4">
                   Placeholders: {template.placeholders.join(', ')}
                 </p>
+
+                <p className="text-sm text-muted-foreground mb-4">
+                  Template Id: {template.id}
+                </p>
                 <Button 
                   onClick={() => router.push(`/send/custom-template/${template.id}`)}
                   
-                  className="w-full hover:cursor-pointer"
+                  className="w-full border hover:cursor-pointer"
                 >
                   Use Template
                 </Button>

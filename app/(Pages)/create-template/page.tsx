@@ -188,7 +188,7 @@ export default function EmailBuilder() {
   };
 
   return (
-    <div className="max-w-4xl py-8 flex flex-col items-center justify-center mx-auto">
+    <div className="max-w-4xl py-8 px-4 flex flex-col items-center justify-center mx-auto">
       {container}
       <Card>
         <CardHeader>

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LogIn } from "lucide-react";
+import { LogIn, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,53 +16,54 @@ import { getUserProfile } from "@/utils/auth";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { setLoggedIn , setUser } = useUser();
+  const { setLoggedIn, setUser } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  if (error) {
+    if (error) {
+      setIsLoading(false);
+      failure(error.message, 5000);
+      return;
+    }
+
+    const user = data.user;
+
+    if (!user) {
+      setIsLoading(false);
+      failure("User not found", 1000);
+      return;
+    }
+
+    // ✅ Fetch user profile from 'profiles' table
+    const profile = await getUserProfile();
+
+    if (!profile) {
+      setIsLoading(false);
+      failure("User profile not found", 1000);
+      return;
+    }
+
+    // ✅ Update global context
+    setUser(profile);
+    setLoggedIn(true);
+
+    success("Login successful!", 2000);
     setIsLoading(false);
-    failure(error.message, 5000);
-    return;
-  }
-
-  const user = data.user;
-
-  if (!user) {
-    setIsLoading(false);
-    failure("User not found", 1000);
-    return;
-  }
-
-  // ✅ Fetch user profile from 'profiles' table
-  const profile = await getUserProfile();
-
-  if (!profile) {
-    setIsLoading(false);
-    failure("User profile not found", 1000);
-    return;
-  }
-
-  // ✅ Update global context
-  setUser(profile);
-  setLoggedIn(true);
-
-  success("Login successful!", 2000);
-  setIsLoading(false);
-  
-  setTimeout(() => {
-    router.push("/dashboard");
-  }, 2000);
-};
+    
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 2000);
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 sm:px-0">
@@ -94,15 +95,34 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 relative">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pr-10" // Add padding to prevent text under the eye icon
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                )}
+                <span className="sr-only">
+                  {showPassword ? "Hide password" : "Show password"}
+                </span>
+              </Button>
+            </div>
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>

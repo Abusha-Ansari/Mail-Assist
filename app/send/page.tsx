@@ -48,7 +48,7 @@ const templates = [
     name: "Custom Template",
     description: "Design your own Custom Template",
     href: "/send/customTemplate",
-    cost: 15,
+    cost: 10,
     disabled: false,
   },
 ];
@@ -91,7 +91,7 @@ export default function SendMailHome() {
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-2 text-foreground">{template.name}</h2>
                 <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
-                <Button asChild disabled={template.disabled}>
+                <Button asChild disabled={template.disabled} className="border hover:cursor-pointer">
                   <Link href={template.href}>
                     {template.disabled ? "Coming Soon" : `Use Template (${template.cost} credits)`}
                   </Link>
