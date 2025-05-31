@@ -36,6 +36,16 @@ export default function InterviewInviteForm() {
     setIsLoading(true);
 
     try {
+
+      try {
+              await deductCredits(user.id, 10);
+            } catch (creditError) {
+              failure("Not enough credits to send email", 2000);
+              console.error("Credit deduction failed:", creditError);
+              // setIsSending(false);
+              return;
+            }
+
       const response = await fetch("/api/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

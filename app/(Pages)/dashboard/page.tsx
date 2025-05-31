@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@/context/UserContext";
-import { getUserProfile } from "@/utils/auth";
+import { getUserMails, getUserProfile } from "@/utils/auth";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -79,16 +79,17 @@ export default function Dashboard() {
 
         if (profile) {
           setUserProfile(profile);
-          const res = await fetch("/api/user-mails", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ user_id: profile.id }),
-          });
-          const data: UserMailResponse = await res.json();
-          setUserMails(data);
-          setFilteredMails(data);
+          // const res = await fetch("/api/user-mails", {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify({ user_id: profile.id }),
+          // });
+          // const data: UserMailResponse = await res.json();
+          const res:UserMailResponse = await getUserMails(profile.id);
+          setUserMails(res);
+          setFilteredMails(res);
         }
       };
       fetchUserAndMails();

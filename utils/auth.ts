@@ -87,3 +87,18 @@ export async function addCredits(userId: string, amount: number) {
 
   if (error) throw error;
 }
+
+export async function getUserMails(userId: string) {
+  const { data, error } = await supabase
+    .from("user_mails")
+    .select("*")
+    .eq("user_id", userId)
+    .order("mail_time", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching user mails:", error);
+    throw error;
+  }
+
+  return data;
+}
