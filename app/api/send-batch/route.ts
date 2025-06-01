@@ -5,7 +5,7 @@ import { Resend } from 'resend';
 
 export async function POST(req: NextRequest) {
   try {
-    const { templateId, rows } = await req.json();
+    const { templateId, rows, subject } = await req.json();
 
     if (!templateId || !Array.isArray(rows) || rows.length === 0) {
       return NextResponse.json({ message: 'Invalid payload' }, { status: 400 });
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
       return {
         from: 'Mail Assist <mailassist@abusha.tech>',
         to: [row.email],
-        subject: 'Batch Email',
+        subject: `${subject}`,
         html,
       };
     });

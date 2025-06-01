@@ -75,13 +75,23 @@ useEffect(() => {
                 <p className="text-sm text-muted-foreground mb-4">
                   Template Id: {template.id}
                 </p>
+                <div className='flex flex-col gap-4'>
+
                 <Button 
                   onClick={() => router.push(`/send/custom-template/${template.id}`)}
                   
                   className="w-full border hover:cursor-pointer"
                 >
-                  Use Template
+                  Use Template (single email)
                 </Button>
+                <Button 
+                  onClick={() => router.push(`/send/batch-email/${template.id}`)}
+                  
+                  className="w-full border hover:cursor-pointer"
+                >
+                  Send Bulk Email
+                </Button>
+                </div>
               </CardContent>
             </Card>
           ))}

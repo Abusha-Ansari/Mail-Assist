@@ -88,6 +88,7 @@ export default function AnimatedHome() {
           </Button>
         )}
         {loggedIn ? (
+          <>
           <Button
             asChild
             variant="outline"
@@ -96,6 +97,16 @@ export default function AnimatedHome() {
           >
             <Link href="/send">Send Mail</Link>
           </Button>
+
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            <Link href="/send/all-custom-templates">Send Batch Mail</Link>
+          </Button>
+          </>
         ) : (
           <Button
             asChild
