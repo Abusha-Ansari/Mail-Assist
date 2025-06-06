@@ -7,7 +7,7 @@ export async function withRateLimit(req: Request) {
   try {
     await rateLimiter.consume(ip)
     return null // no error, proceed normally
-  } catch (err) {
+  } catch {
     return new NextResponse(JSON.stringify({ error: 'Too many requests' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json' },

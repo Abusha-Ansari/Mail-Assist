@@ -28,7 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     return NextResponse.json({ message: 'Signup successful. Please check your email to confirm.' }, { status: 200 });
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Unexpected error occurred' }, { status: 500 });
   }
 }
