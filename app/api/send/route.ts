@@ -8,11 +8,16 @@ import { InterviewInviteTemplate } from '@/templates/InterviewInviteTemplate';
 import { EventReminderTemplate } from '@/templates/EventReminderTemplate';
 import { ThankYouTemplate } from '@/templates/ThankYouTemplate';
 import { PaymentConfirmationTemplate } from '@/templates/PaymentConfirmationTemplate';
+import { withRateLimit } from "@/lib/withRateLimit";
 
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
+
+  const rateLimitResponse = await withRateLimit(req)
+  if (rateLimitResponse) return rateLimitResponse
+  
   const emailData: EmailProps = await req.json();
 
   const { to, from, subject, bodyMessage, templateType, templateData } = emailData;

@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { failure, success, container } from "@/lib/toast.util";
-import { supabase } from "@/lib/supabaseClient";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -20,32 +19,35 @@ export default function SignupPage() {
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  e.preventDefault();
+  setIsLoading(true);
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name: name
-        }
-      }
+  try {
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
     });
 
-    if (error) {
+    const result = await res.json();
+
+    if (!res.ok) {
+      failure(result.error || 'Signup failed', 3000);
       setIsLoading(false);
-      failure("Signup fail, try again", 3000);
       return;
     }
 
-    if (data.user) {
-      success("Signup successful! Please check your email to confirm.", 5000);
-      setIsLoading(false);
-      await new Promise((res)=>{setTimeout(res,5000)});
-      router.push("/auth/login");
-    }
-  };
+    success('Signup successful! Please check your email to confirm.', 5000);
+    setIsLoading(false);
+    await new Promise((res) => setTimeout(res, 5000));
+    router.push('/auth/login');
+  } catch (error) {
+    console.error(error);
+    failure('Network error. Please try again.', 3000);
+    setIsLoading(false);
+  }
+};
+
 
   const handleGoogleSignup = async () => {
     failure("Google signup is currently unavailable. Please use email signup instead.", 5000);
