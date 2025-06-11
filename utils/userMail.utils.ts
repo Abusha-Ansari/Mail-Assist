@@ -1,13 +1,13 @@
 import { supabase } from "@/lib/supabaseClient";
 
-export type MailStatus = "send" | "pending";
+export type MailStatus = "send" | "scheduled" | "pending" | "failed";
 
 export interface UserMail {
   id: string;
   user_id: string;
   mail_id: string;
   mail_time: string;
-  status: MailStatus;
+  status: MailStatus | "scheduled";
   to_email: string | null;
   subject: string | null;
   html: string | null;

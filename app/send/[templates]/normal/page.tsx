@@ -20,6 +20,9 @@ export default function NormalEmailForm() {
     body: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [schedule, setSchedule] = useState(false);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const { user, loggedIn } = useUser();
   const router = useRouter();
 
@@ -37,45 +40,83 @@ export default function NormalEmailForm() {
 
     setIsLoading(true);
     try {
+      // Try to deduct credits upfront
+      await deductCredits(user.id, 5); // Assuming scheduling also costs upfront
 
-      try {
-        await deductCredits(user.id, 10);
-      } catch (creditError) {
-        failure("Not enough credits to send email", 2000);
-        console.error("Credit deduction failed:", creditError);
-        // setIsSending(false);
-        return;
-      }
-
-      const res = await fetch("/api/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: formData.to,
-          subject: formData.subject,
-          bodyMessage: formData.body,
-          from: `${user.username}+@gmail.com`,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Send failed");
-
-      await deductCredits(user.id, 5);
-      await addUserMail({
-        userId: user.id,
-        mailId: data.id,
-        status: "send",
-        to_email: formData.to,
+      const emailPayload = {
+        to: formData.to,
         subject: formData.subject,
-        html: formData.body,
-      });
+        bodyMessage: formData.body,
+        from: `${user.username}+@gmail.com`,
+      };
 
-      success("Email sent successfully", 2000);
-      await new Promise((res) => setTimeout(res, 2000));
-      router.push("/dashboard");
+      if (schedule==true) {
+        if (!date || !time) {
+          failure("Please select both date and time", 2000);
+          return;
+        }
+
+        const scheduledTime = new Date(`${date}T${time}`);
+        if (scheduledTime <= new Date()) {
+          failure("Scheduled time must be in the future", 2000);
+          return;
+        }
+
+        const res = await fetch("https://my-cron-worker.msaif8747.workers.dev/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            time: scheduledTime.toISOString(),
+            url: "https://mailassist.abusha.tech/api/send", // Update if needed
+            emailData: emailPayload,
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Scheduling failed");
+        }
+        await deductCredits(user.id, 5);
+        await addUserMail({
+          userId: user.id,
+          mailId: `scheduled-${Date.now()}`, // Use a unique ID for scheduled emails
+          status: "scheduled",
+          to_email: formData.to,
+          subject: formData.subject,
+          html: formData.body,
+        });
+
+        success("Email scheduled successfully", 2000);
+
+        await new Promise((res) => setTimeout(res, 2000));
+        router.push("/dashboard");
+      } else {
+        // Send immediately
+        const res = await fetch("/api/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(emailPayload),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error || "Send failed");
+
+        await deductCredits(user.id, 5);
+        await addUserMail({
+          userId: user.id,
+          mailId: data.id,
+          status: "send",
+          to_email: formData.to,
+          subject: formData.subject,
+          html: formData.body,
+        });
+
+        success("Email sent successfully", 2000);
+        await new Promise((res) => setTimeout(res, 2000));
+        router.push("/dashboard");
+      }
     } catch (err) {
-      failure("Sending failed "+`${err}`, 2000);
+      console.log(err)
+      failure("Sending failed " + `${err}`, 2000);
     } finally {
       setIsLoading(false);
     }
@@ -97,8 +138,28 @@ export default function NormalEmailForm() {
           <Label htmlFor="body">Body</Label>
           <Textarea id="body" required value={formData.body} onChange={handleChange} className="min-h-[200px]" />
         </div>
+
+        {/* Schedule Option */}
+        <div className="space-y-2">
+          <label className="flex items-center space-x-2">
+            <input type="checkbox" checked={schedule} onChange={(e) => setSchedule(e.target.checked)} />
+            <span>Schedule this email?</span>
+          </label>
+          {schedule && (
+            <div className="flex gap-4">
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+            </div>
+          )}
+        </div>
+
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Sending..." : <><Send className="mr-2 h-4 w-4" />Send Email</>}
+          {isLoading ? "Sending..." : (
+            <>
+              <Send className="mr-2 h-4 w-4" />
+              {schedule ? "Schedule Email" : "Send Email"}
+            </>
+          )}
         </Button>
       </form>
     </MailFormLayout>
