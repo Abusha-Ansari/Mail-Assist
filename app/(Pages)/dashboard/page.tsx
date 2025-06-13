@@ -42,7 +42,6 @@ import {
   AlertCircle,
   Clock,
   Eye,
-  TrendingUp,
   BarChart3,
 } from "lucide-react";
 

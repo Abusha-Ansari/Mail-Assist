@@ -1,109 +1,141 @@
 "use client";
-import React, { useState, useEffect, use } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-  Mail, Shield, Rocket, Sparkles, Send, DollarSign, Smile, 
-  Users, FileText, Eye, Upload, Zap, Star, ArrowRight, 
-  CheckCircle, Play, MessageSquare, Globe, Lock, Clock,
-  TrendingUp, Award, Heart, ChevronDown, Sun, Moon
-} from 'lucide-react';
-import { useUser } from '@/context/UserContext';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  Mail,
+  Shield,
+  Sparkles,
+  Send,
+  DollarSign,
+  Users,
+  FileText,
+  Eye,
+  Upload,
+  ArrowRight,
+  CheckCircle,
+  Play,
+  MessageSquare,
+  Clock,
+  TrendingUp,
+  Heart,
+  ChevronDown
+} from "lucide-react";
+import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
 
 type AnimatedCounterProps = { end: number; duration?: number };
 
 const AnimatedCounter = ({ end, duration = 2000 }: AnimatedCounterProps) => {
   const [count, setCount] = useState(0);
-  
+
   useEffect(() => {
     let startTime: number | undefined;
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
       setCount(Math.floor(progress * end));
-      
+
       if (progress < 1) {
         requestAnimationFrame(animate);
       }
     };
     requestAnimationFrame(animate);
   }, [end, duration]);
-  
+
   return count;
 };
 
 export default function AnimatedHome() {
   const { loggedIn } = useUser();
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
-  
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
+
   const router = useRouter();
 
   const features = [
     {
       icon: <Send className="h-8 w-8 text-blue-500" />,
       title: "Custom Email Sending",
-      description: "Send personalized emails to any recipient with our easy-to-use interface",
-      color: "blue"
+      description:
+        "Send personalized emails to any recipient with our easy-to-use interface",
+      color: "blue",
     },
     {
       icon: <FileText className="h-8 w-8 text-purple-500" />,
       title: "Predefined Templates",
-      description: "Choose from ready-made templates for interviews, events, thank you notes, and more",
-      color: "purple"
+      description:
+        "Choose from ready-made templates for interviews, events, thank you notes, and more",
+      color: "purple",
     },
     {
       icon: <Sparkles className="h-8 w-8 text-pink-500" />,
       title: "Custom Email Builder",
-      description: "Drag-and-drop interface to create your own templates with placeholders",
-      color: "pink"
+      description:
+        "Drag-and-drop interface to create your own templates with placeholders",
+      color: "pink",
     },
     {
       icon: <Upload className="h-8 w-8 text-green-500" />,
       title: "Batch Email Sending",
-      description: "Upload CSV files and send personalized emails to multiple contacts at once",
-      color: "green"
+      description:
+        "Upload CSV files and send personalized emails to multiple contacts at once",
+      color: "green",
     },
     {
       icon: <Eye className="h-8 w-8 text-orange-500" />,
       title: "Email History Dashboard",
-      description: "View records of all emails sent with full content and delivery status",
-      color: "orange"
+      description:
+        "View records of all emails sent with full content and delivery status",
+      color: "orange",
     },
     {
       icon: <Shield className="h-8 w-8 text-red-500" />,
       title: "Anonymous Sending",
-      description: "Send emails without revealing your identity for sensitive communications",
-      color: "red"
-    }
+      description:
+        "Send emails without revealing your identity for sensitive communications",
+      color: "red",
+    },
   ];
 
   const templates = [
-    { name: "Interview Invitation", icon: <Users className="h-6 w-6" />, usage: "2.5k" },
-    { name: "Event Reminder", icon: <Clock className="h-6 w-6" />, usage: "1.8k" },
-    { name: "Thank You Note", icon: <Heart className="h-6 w-6" />, usage: "3.2k" },
-    { name: "Payment Confirmation", icon: <CheckCircle className="h-6 w-6" />, usage: "1.4k" }
+    {
+      name: "Interview Invitation",
+      icon: <Users className="h-6 w-6" />,
+      usage: "2.5k",
+    },
+    {
+      name: "Event Reminder",
+      icon: <Clock className="h-6 w-6" />,
+      usage: "1.8k",
+    },
+    {
+      name: "Thank You Note",
+      icon: <Heart className="h-6 w-6" />,
+      usage: "3.2k",
+    },
+    {
+      name: "Payment Confirmation",
+      icon: <CheckCircle className="h-6 w-6" />,
+      usage: "1.4k",
+    },
   ];
 
   const stats = [
     { number: 50000, label: "Emails Delivered", icon: <Send /> },
     { number: 2500, label: "Happy Users", icon: <Users /> },
     { number: 99, label: "Uptime %", icon: <TrendingUp /> },
-    { number: 24, label: "Support Hours", icon: <Clock /> }
+    { number: 24, label: "Support Hours", icon: <Clock /> },
   ];
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 transition-colors duration-300">
-
-
-
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <motion.div 
+        <motion.div
           style={{ y }}
           className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 dark:from-blue-400/10 dark:via-purple-400/10 dark:to-pink-400/10"
         />
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -121,8 +153,8 @@ export default function AnimatedHome() {
                 <Mail className="h-10 w-10 text-white" />
               </div>
             </motion.div>
-            
-            <motion.h1 
+
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -130,18 +162,18 @@ export default function AnimatedHome() {
             >
               Mail_Assist
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
             >
-              Send emails seamlessly without using your own email address. 
+              Send emails seamlessly without using your own email address.
               <br className="hidden md:block" />
               Secure, fast, and hassle-free email delivery for everyone.
             </motion.p>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -150,10 +182,16 @@ export default function AnimatedHome() {
             >
               {loggedIn ? (
                 <>
-                  <button onClick={() => router.push("/dashboard")} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                  <button
+                    onClick={() => router.push("/dashboard")}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  >
                     Go to Dashboard
                   </button>
-                  <button onClick={() => router.push("/send")} className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 bg-white dark:bg-gray-800">
+                  <button
+                    onClick={() => router.push("/send")}
+                    className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 bg-white dark:bg-gray-800"
+                  >
                     Send Mail Now
                   </button>
                 </>
@@ -161,7 +199,8 @@ export default function AnimatedHome() {
                 <>
                   <button
                     onClick={() => router.push("/auth/signup")}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center gap-2">
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center gap-2"
+                  >
                     Get Started Free <ArrowRight className="h-5 w-5" />
                   </button>
                   <button className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 flex items-center gap-2 bg-white dark:bg-gray-800">
@@ -170,7 +209,7 @@ export default function AnimatedHome() {
                 </>
               )}
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -209,9 +248,13 @@ export default function AnimatedHome() {
                   <AnimatedCounter end={stat.number} />
                   {stat.label === "Uptime %" && "%"}
                   {stat.label === "Support Hours" && "/7"}
-                  {(stat.label === "Emails Delivered" || stat.label === "Happy Users") && "+"}
+                  {(stat.label === "Emails Delivered" ||
+                    stat.label === "Happy Users") &&
+                    "+"}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">{stat.label}</div>
+                <div className="text-gray-600 dark:text-gray-400">
+                  {stat.label}
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -232,10 +275,11 @@ export default function AnimatedHome() {
               Powerful Features
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Everything you need to send professional emails without the complexity
+              Everything you need to send professional emails without the
+              complexity
             </p>
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <motion.div
@@ -247,11 +291,17 @@ export default function AnimatedHome() {
                 viewport={{ once: true }}
                 className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl dark:shadow-gray-900/20 transition-all duration-300 border border-gray-100 dark:border-gray-700"
               >
-                <div className={`inline-flex items-center justify-center w-16 h-16 bg-${feature.color}-50 dark:bg-${feature.color}-900/20 rounded-full mb-6`}>
+                <div
+                  className={`inline-flex items-center justify-center w-16 h-16 bg-${feature.color}-50 dark:bg-${feature.color}-900/20 rounded-full mb-6`}
+                >
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {feature.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -275,7 +325,7 @@ export default function AnimatedHome() {
               Professional email templates for every occasion, used by thousands
             </p>
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {templates.map((template, index) => (
               <motion.div
@@ -290,8 +340,12 @@ export default function AnimatedHome() {
                 <div className="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg mb-4 text-blue-600 dark:text-blue-400">
                   {template.icon}
                 </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{template.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Used {template.usage} times</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  {template.name}
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Used {template.usage} times
+                </p>
               </motion.div>
             ))}
           </div>
@@ -315,12 +369,30 @@ export default function AnimatedHome() {
               Get started in just three simple steps
             </p>
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { step: "01", title: "Sign Up & Get Credits", description: "Create your account and receive starter credits to begin sending emails", icon: <Users /> },
-              { step: "02", title: "Choose or Create", description: "Select from templates or build custom emails with our drag-and-drop builder", icon: <FileText /> },
-              { step: "03", title: "Send & Track", description: "Send emails instantly and track delivery status in your dashboard", icon: <Send /> }
+              {
+                step: "01",
+                title: "Sign Up & Get Credits",
+                description:
+                  "Create your account and receive starter credits to begin sending emails",
+                icon: <Users />,
+              },
+              {
+                step: "02",
+                title: "Choose or Create",
+                description:
+                  "Select from templates or build custom emails with our drag-and-drop builder",
+                icon: <FileText />,
+              },
+              {
+                step: "03",
+                title: "Send & Track",
+                description:
+                  "Send emails instantly and track delivery status in your dashboard",
+                icon: <Send />,
+              },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -333,8 +405,12 @@ export default function AnimatedHome() {
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6 text-white text-2xl font-bold">
                   {item.step}
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{item.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{item.description}</p>
+                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {item.description}
+                </p>
                 {index < 2 && (
                   <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-blue-200 to-purple-200 dark:from-blue-600 dark:to-purple-600 transform -translate-y-1/2" />
                 )}
@@ -361,7 +437,7 @@ export default function AnimatedHome() {
               Pay only for what you use. No subscriptions, no hidden fees.
             </p>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -373,10 +449,14 @@ export default function AnimatedHome() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
                 <DollarSign className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Pay-as-you-go</h3>
-              <p className="text-gray-600 dark:text-gray-300">Perfect for everyone</p>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                Pay-as-you-go
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Perfect for everyone
+              </p>
             </div>
-            
+
             <div className="space-y-4 mb-8">
               {[
                 "✓ Custom emails: 1 credit each",
@@ -384,7 +464,7 @@ export default function AnimatedHome() {
                 "✓ Batch emails: 0.5 credits each",
                 "✓ Anonymous sending included",
                 "✓ Full email history",
-                "✓ 24/7 support"
+                "✓ 24/7 support",
               ].map((feature, index) => (
                 <motion.div
                   key={index}
@@ -399,19 +479,25 @@ export default function AnimatedHome() {
               ))}
             </div>
 
-            {loggedIn ? <>
-            <button 
-            onClick={() => router.push("/send")}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-              Send Mail With Free Credits
-            </button></>:<>
-            <button 
-            onClick={() => router.push("/auth/signup")}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-              Start with Free Credits
-            </button></>}
-            
-            
+            {loggedIn ? (
+              <>
+                <button
+                  onClick={() => router.push("/send")}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                >
+                  Send Mail With Free Credits
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => router.push("/auth/signup")}
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                >
+                  Start with Free Credits
+                </button>
+              </>
+            )}
           </motion.div>
         </div>
       </section>
@@ -430,16 +516,23 @@ export default function AnimatedHome() {
               Ready to Transform Your Email Experience?
             </h2>
             <p className="text-xl text-white/90 mb-8 leading-relaxed">
-              Join thousands of users who trust Mail_Assist for their email needs. 
-              Start sending professional emails today.
+              Join thousands of users who trust Mail_Assist for their email
+              needs. Start sending professional emails today.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button onClick={() => router.push("/")} className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
+              <button
+                onClick={() => router.push("/")}
+                className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
+              >
                 Get Started Now <ArrowRight className="h-5 w-5" />
               </button>
               <button className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 flex items-center justify-center gap-2">
-                <MessageSquare className="h-5 w-5" onClick={() => router.push("/contact")} /> Contact Sales
+                <MessageSquare
+                  className="h-5 w-5"
+                  onClick={() => router.push("/contact")}
+                />{" "}
+                Contact Sales
               </button>
             </div>
           </motion.div>
@@ -459,18 +552,30 @@ export default function AnimatedHome() {
                 Seamless email delivery without the complexity.
               </p>
             </div>
-            
+
             {[
-              { title: "Product", links: ["Features", "Templates", "Pricing", "API"] },
-              { title: "Company", links: ["About", "Blog", "Careers", "Contact"] },
-              { title: "Support", links: ["Help Center", "Documentation", "Status", "Community"] }
+              {
+                title: "Product",
+                links: ["Features", "Templates", "Pricing", "API"],
+              },
+              {
+                title: "Company",
+                links: ["About", "Blog", "Careers", "Contact"],
+              },
+              {
+                title: "Support",
+                links: ["Help Center", "Documentation", "Status", "Community"],
+              },
             ].map((section, index) => (
               <div key={index}>
                 <h3 className="font-semibold mb-4">{section.title}</h3>
                 <ul className="space-y-2">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
-                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <a
+                        href="#"
+                        className="text-gray-400 hover:text-white transition-colors"
+                      >
                         {link}
                       </a>
                     </li>
@@ -479,7 +584,7 @@ export default function AnimatedHome() {
               </div>
             ))}
           </div>
-          
+
           <div className="border-t border-gray-800 dark:border-gray-700 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2025 Mail Assist. All rights reserved.</p>
           </div>
