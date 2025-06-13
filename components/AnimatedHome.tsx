@@ -1,364 +1,490 @@
 "use client";
+import React, { useState, useEffect, use } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { 
+  Mail, Shield, Rocket, Sparkles, Send, DollarSign, Smile, 
+  Users, FileText, Eye, Upload, Zap, Star, ArrowRight, 
+  CheckCircle, Play, MessageSquare, Globe, Lock, Clock,
+  TrendingUp, Award, Heart, ChevronDown, Sun, Moon
+} from 'lucide-react';
+import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import {
-  Mail,
-  Shield,
-  Rocket,
-  Sparkles,
-  Send,
-  DollarSign,
-  Smile,
-  LayoutTemplate,
-  MessageSquareText,
-  Upload,
-  History,
-} from "lucide-react";
-import Link from "next/link";
-import { useUser } from "@/context/UserContext";
+type AnimatedCounterProps = { end: number; duration?: number };
 
-// New or updated feature data for more detailed sections
-const coreFeatures = [
-  {
-    icon: <Mail className="h-10 w-10 text-primary" />,
-    title: "Send Custom Emails",
-    description:
-      "Craft personalized emails from scratch. Simply fill out the subject and message, and send. Your credits are deducted per email sent.",
-  },
-  {
-    icon: <LayoutTemplate className="h-10 w-10 text-primary" />,
-    title: "Predefined Email Templates",
-    description:
-      "Choose from a library of professional templates like 'Interview Invitation' or 'Payment Confirmation'. Fill in the blanks, preview, and send.",
-  },
-  {
-    icon: <Sparkles className="h-10 w-10 text-primary" />,
-    title: "Custom Email Builder",
-    description:
-      "Unleash your creativity with our drag-and-drop builder. Design unique templates, add placeholders, and customize every detail.",
-  },
-  {
-    icon: <Upload className="h-10 w-10 text-primary" />,
-    title: "Batch Email Sending",
-    description:
-      "Reach many recipients at once. Upload a CSV with contact details, and send personalized emails to everyone effortlessly.",
-  },
-  {
-    icon: <History className="h-10 w-10 text-primary" />,
-    title: "Email History Dashboard",
-    description:
-      "Keep track of all your communications. View sent emails, check their status, and review full content anytime.",
-  },
-  {
-    icon: <Shield className="h-10 w-10 text-primary" />,
-    title: "Anonymous Email Sending",
-    description:
-      "Protect your privacy. Send emails without revealing your personal identity or email address.",
-  },
-];
-
-const whyChooseUs = [
-  {
-    icon: <Rocket className="h-8 w-8 text-primary" />,
-    title: "Blazing Fast Delivery",
-    description:
-      "Experience lightning-fast email delivery to any inbox, anywhere in the world.",
-  },
-  {
-    icon: <DollarSign className="h-8 w-8 text-primary" />,
-    title: "Affordable & Flexible",
-    description:
-      "Our pay-as-you-go model means no subscriptions, just affordable credits for when you need them.",
-  },
-  {
-    icon: <Smile className="h-8 w-8 text-primary" />,
-    title: "User-Friendly Interface",
-    description:
-      "A clean, intuitive design that's simple to navigate on both desktop and mobile devices.",
-  },
-  {
-    icon: <Shield className="h-8 w-8 text-primary" />, // Reusing Shield for security emphasis
-    title: "Secure & Private",
-    description:
-      "Your communications are handled with end-to-end encryption, ensuring privacy and reliability.",
-  },
-];
+const AnimatedCounter = ({ end, duration = 2000 }: AnimatedCounterProps) => {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    let startTime: number | undefined;
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      setCount(Math.floor(progress * end));
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    requestAnimationFrame(animate);
+  }, [end, duration]);
+  
+  return count;
+};
 
 export default function AnimatedHome() {
   const { loggedIn } = useUser();
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
+  
+  const router = useRouter();
 
-  const fadeIn = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 },
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
+  const features = [
+    {
+      icon: <Send className="h-8 w-8 text-blue-500" />,
+      title: "Custom Email Sending",
+      description: "Send personalized emails to any recipient with our easy-to-use interface",
+      color: "blue"
     },
-  };
+    {
+      icon: <FileText className="h-8 w-8 text-purple-500" />,
+      title: "Predefined Templates",
+      description: "Choose from ready-made templates for interviews, events, thank you notes, and more",
+      color: "purple"
+    },
+    {
+      icon: <Sparkles className="h-8 w-8 text-pink-500" />,
+      title: "Custom Email Builder",
+      description: "Drag-and-drop interface to create your own templates with placeholders",
+      color: "pink"
+    },
+    {
+      icon: <Upload className="h-8 w-8 text-green-500" />,
+      title: "Batch Email Sending",
+      description: "Upload CSV files and send personalized emails to multiple contacts at once",
+      color: "green"
+    },
+    {
+      icon: <Eye className="h-8 w-8 text-orange-500" />,
+      title: "Email History Dashboard",
+      description: "View records of all emails sent with full content and delivery status",
+      color: "orange"
+    },
+    {
+      icon: <Shield className="h-8 w-8 text-red-500" />,
+      title: "Anonymous Sending",
+      description: "Send emails without revealing your identity for sensitive communications",
+      color: "red"
+    }
+  ];
 
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  };
+  const templates = [
+    { name: "Interview Invitation", icon: <Users className="h-6 w-6" />, usage: "2.5k" },
+    { name: "Event Reminder", icon: <Clock className="h-6 w-6" />, usage: "1.8k" },
+    { name: "Thank You Note", icon: <Heart className="h-6 w-6" />, usage: "3.2k" },
+    { name: "Payment Confirmation", icon: <CheckCircle className="h-6 w-6" />, usage: "1.4k" }
+  ];
+
+  const stats = [
+    { number: 50000, label: "Emails Delivered", icon: <Send /> },
+    { number: 2500, label: "Happy Users", icon: <Users /> },
+    { number: 99, label: "Uptime %", icon: <TrendingUp /> },
+    { number: 24, label: "Support Hours", icon: <Clock /> }
+  ];
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen">
+    <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 transition-colors duration-300">
+
+
+
       {/* Hero Section */}
-      <div className="container flex flex-col items-center justify-center gap-8 px-4 py-20 text-center md:py-24">
-        <motion.div
-  initial={{ opacity: 0, y: -20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.7 }}
-  className="mx-auto max-w-4xl flex flex-col items-center text-center"
->
-  <h1 className="text-4xl font-extrabold leading-tight tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-    <Mail className="inline-block h-12 w-12 text-primary md:h-16 md:w-16 animate-bounce" />{" "}
-    <br className="sm:hidden" />
-    <span className="bg-gradient-to-l from-primary to-blue-600 text-transparent bg-clip-text">
-      Mail_Assist
-    </span>{" "}
-    Your Seamless Email Solution
-  </h1>
-  <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl lg:text-2xl leading-relaxed">
-    Send custom emails, utilize powerful templates, and manage your communications effortlessly, all without using your personal email accounts.
-  </p>
-</motion.div>
-
-
-        {/* Dynamic Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="flex flex-col items-center gap-4 sm:flex-row mt-8"
-        >
-          {loggedIn ? (
-            <>
-              <Button
-                asChild
-                size="lg"
-                className="w-full sm:w-auto px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Link href="/dashboard">Go to Dashboard</Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto px-8 py-3 text-lg font-semibold border-2 border-primary hover:bg-primary/10 transition-all duration-300"
-              >
-                <Link href="/send">Send a Mail</Link>
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                asChild
-                size="lg"
-                className="w-full sm:w-auto px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Link href="/auth/signup">Get Started Free</Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto px-8 py-3 text-lg font-semibold border-2 border-primary hover:bg-primary/10 transition-all duration-300"
-              >
-                <Link href="/auth/login">Login</Link>
-              </Button>
-            </>
-          )}
-        </motion.div>
-      </div>
-
-      <hr className="w-full border-t border-muted-foreground/20" />
-
-      {/* How It Works Section */}
-      <div className="container py-16 md:py-24">
-        <motion.h2
-          {...fadeIn}
-          className="text-center text-3xl font-bold mb-12 md:text-4xl"
-        >
-          How Mail_Assist Simplifies Your Communication
-        </motion.h2>
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
-        >
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <motion.div 
+          style={{ y }}
+          className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 dark:from-blue-400/10 dark:via-purple-400/10 dark:to-pink-400/10"
+        />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            variants={item}
-            className="flex flex-col items-center p-6 rounded-lg border bg-card text-card-foreground shadow-md"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-4xl mx-auto"
           >
-            <div className="rounded-full bg-primary/10 p-4 mb-4">
-              <Sparkles className="h-8 w-8 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">
-              1. Sign Up & Get Credits
-            </h3>
-            <p className="text-muted-foreground">
-              Quickly create your secure account and receive initial credits to
-              start sending emails.
-            </p>
-          </motion.div>
-          <motion.div
-            variants={item}
-            className="flex flex-col items-center p-6 rounded-lg border bg-card text-card-foreground shadow-md"
-          >
-            <div className="rounded-full bg-primary/10 p-4 mb-4">
-              <MessageSquareText className="h-8 w-8 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">2. Compose Your Mail</h3>
-            <p className="text-muted-foreground">
-              Use our intuitive editor, pick a template, or build your own
-              custom design. Personalize with ease.
-            </p>
-          </motion.div>
-          <motion.div
-            variants={item}
-            className="flex flex-col items-center p-6 rounded-lg border bg-card text-card-foreground shadow-md"
-          >
-            <div className="rounded-full bg-primary/10 p-4 mb-4">
-              <Send className="h-8 w-8 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">3. Send & Track</h3>
-            <p className="text-muted-foreground">
-              Send your emails instantly. Credits are deducted per send, and you
-              can track everything on your dashboard.
-            </p>
-          </motion.div>
-        </motion.div>
-      </div>
-
-      <hr className="w-full border-t border-muted-foreground/20" />
-
-      {/* Core Features Section */}
-      <div className="container py-16 md:py-24">
-        <motion.h2
-          {...fadeIn}
-          className="text-center text-3xl font-bold mb-12 md:text-4xl"
-        >
-          Unlock Powerful Email Capabilities
-        </motion.h2>
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {coreFeatures.map((feature, index) => (
             <motion.div
-              key={index}
-              variants={item}
-              whileHover={{ y: -5, boxShadow: "0 10px 15px rgba(0,0,0,0.1)" }}
-              className="flex flex-col items-center p-6 rounded-lg border bg-card text-card-foreground text-center shadow-sm"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-6"
             >
-              <div className="rounded-full bg-primary/10 p-4 mb-4">
-                {feature.icon}
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6">
+                <Mail className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {feature.description}
-              </p>
             </motion.div>
-          ))}
-        </motion.div>
-      </div>
-
-      <hr className="w-full border-t border-muted-foreground/20" />
-
-      {/* Why Choose Mail_Assist Section */}
-      <div className="container py-16 md:py-24">
-        <motion.h2
-          {...fadeIn}
-          className="text-center text-3xl font-bold mb-12 md:text-4xl"
-        >
-          Why Choose Mail_Assist?
-        </motion.h2>
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-        >
-          {whyChooseUs.map((benefit, index) => (
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 dark:from-gray-100 dark:via-blue-100 dark:to-purple-100 bg-clip-text text-transparent"
+            >
+              Mail_Assist
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
+            >
+              Send emails seamlessly without using your own email address. 
+              <br className="hidden md:block" />
+              Secure, fast, and hassle-free email delivery for everyone.
+            </motion.p>
+            
             <motion.div
-              key={index}
-              variants={item}
-              whileHover={{ y: -5, boxShadow: "0 10px 15px rgba(0,0,0,0.1)" }}
-              className="flex flex-col items-center p-6 rounded-lg border bg-card text-card-foreground text-center shadow-sm"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
             >
-              <div className="rounded-full bg-primary/10 p-4 mb-4">
-                {benefit.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {benefit.description}
-              </p>
+              {loggedIn ? (
+                <>
+                  <button onClick={() => router.push("/dashboard")} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    Go to Dashboard
+                  </button>
+                  <button onClick={() => router.push("/send")} className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 bg-white dark:bg-gray-800">
+                    Send Mail Now
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => router.push("/auth/signup")}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center gap-2">
+                    Get Started Free <ArrowRight className="h-5 w-5" />
+                  </button>
+                  <button className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 flex items-center gap-2 bg-white dark:bg-gray-800">
+                    <Play className="h-5 w-5" /> Watch Demo
+                  </button>
+                </>
+              )}
             </motion.div>
-          ))}
-        </motion.div>
-      </div>
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="animate-bounce"
+            >
+              <ChevronDown className="h-8 w-8 text-gray-400 dark:text-gray-500 mx-auto" />
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
-      <hr className="w-full border-t border-muted-foreground/20" />
-
-      {/* Call to Action Section - End */}
-      <div className="container py-16 md:py-24 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mx-auto max-w-3xl"
-        >
-          <h2 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
-            Ready to Revolutionize Your Email Sending?
-          </h2>
-          <p className="mt-6 text-lg text-muted-foreground sm:text-xl">
-            Join thousands of users who are sending emails seamlessly and
-            securely with Mail_Assist.
-          </p>
+      {/* Stats Section */}
+      <section className="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
+        <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-8 flex flex-col items-center gap-4 sm:flex-row justify-center"
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
           >
-            {loggedIn ? (
-              <Button
-                asChild
-                size="lg"
-                className="w-full sm:w-auto px-10 py-4 text-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
               >
-                <Link href="/dashboard">Access Dashboard</Link>
-              </Button>
-            ) : (
-              <Button
-                asChild
-                size="lg"
-                className="w-full sm:w-auto px-10 py-4 text-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Link href="/auth/signup">Get Started Now</Link>
-              </Button>
-            )}
-            
-
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4 text-white">
+                  {stat.icon}
+                </div>
+                <div className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  <AnimatedCounter end={stat.number} />
+                  {stat.label === "Uptime %" && "%"}
+                  {stat.label === "Support Hours" && "/7"}
+                  {(stat.label === "Emails Delivered" || stat.label === "Happy Users") && "+"}
+                </div>
+                <div className="text-gray-600 dark:text-gray-400">{stat.label}</div>
+              </motion.div>
+            ))}
           </motion.div>
+        </div>
+      </section>
 
-        </motion.div>
-      </div>
-    </section>
+      {/* Features Section */}
+      <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 transition-colors duration-300">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-blue-900 dark:from-gray-100 dark:to-blue-100 bg-clip-text text-transparent">
+              Powerful Features
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Everything you need to send professional emails without the complexity
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl dark:shadow-gray-900/20 transition-all duration-300 border border-gray-100 dark:border-gray-700"
+              >
+                <div className={`inline-flex items-center justify-center w-16 h-16 bg-${feature.color}-50 dark:bg-${feature.color}-900/20 rounded-full mb-6`}>
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{feature.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Templates Section */}
+      <section className="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+              Ready-Made Templates
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Professional email templates for every occasion, used by thousands
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {templates.map((template, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl dark:shadow-gray-900/20 transition-all duration-300 border border-gray-100 dark:border-gray-600"
+              >
+                <div className="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg mb-4 text-blue-600 dark:text-blue-400">
+                  {template.icon}
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{template.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Used {template.usage} times</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 transition-colors duration-300">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-blue-900 dark:from-gray-100 dark:to-blue-100 bg-clip-text text-transparent">
+              How It Works
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Get started in just three simple steps
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { step: "01", title: "Sign Up & Get Credits", description: "Create your account and receive starter credits to begin sending emails", icon: <Users /> },
+              { step: "02", title: "Choose or Create", description: "Select from templates or build custom emails with our drag-and-drop builder", icon: <FileText /> },
+              { step: "03", title: "Send & Track", description: "Send emails instantly and track delivery status in your dashboard", icon: <Send /> }
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className="text-center relative"
+              >
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6 text-white text-2xl font-bold">
+                  {item.step}
+                </div>
+                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{item.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{item.description}</p>
+                {index < 2 && (
+                  <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-blue-200 to-purple-200 dark:from-blue-600 dark:to-purple-600 transform -translate-y-1/2" />
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+              Simple Pricing
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Pay only for what you use. No subscriptions, no hidden fees.
+            </p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="max-w-md mx-auto bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 shadow-xl border border-blue-100 dark:border-blue-800"
+          >
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
+                <DollarSign className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Pay-as-you-go</h3>
+              <p className="text-gray-600 dark:text-gray-300">Perfect for everyone</p>
+            </div>
+            
+            <div className="space-y-4 mb-8">
+              {[
+                "✓ Custom emails: 1 credit each",
+                "✓ Template emails: 2 credits each",
+                "✓ Batch emails: 0.5 credits each",
+                "✓ Anonymous sending included",
+                "✓ Full email history",
+                "✓ 24/7 support"
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex items-center text-gray-700 dark:text-gray-300"
+                >
+                  <span>{feature}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            {loggedIn ? <>
+            <button 
+            onClick={() => router.push("/send")}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              Send Mail With Free Credits
+            </button></>:<>
+            <button 
+            onClick={() => router.push("/auth/signup")}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              Start with Free Credits
+            </button></>}
+            
+            
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              Ready to Transform Your Email Experience?
+            </h2>
+            <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              Join thousands of users who trust Mail_Assist for their email needs. 
+              Start sending professional emails today.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button onClick={() => router.push("/")} className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                Get Started Now <ArrowRight className="h-5 w-5" />
+              </button>
+              <button className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300 flex items-center justify-center gap-2">
+                <MessageSquare className="h-5 w-5" onClick={() => router.push("/contact")} /> Contact Sales
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 bg-gray-900 dark:bg-gray-950 text-white transition-colors duration-300">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Mail className="h-8 w-8 text-blue-400" />
+                <span className="text-xl font-bold">Mail_Assist</span>
+              </div>
+              <p className="text-gray-400">
+                Seamless email delivery without the complexity.
+              </p>
+            </div>
+            
+            {[
+              { title: "Product", links: ["Features", "Templates", "Pricing", "API"] },
+              { title: "Company", links: ["About", "Blog", "Careers", "Contact"] },
+              { title: "Support", links: ["Help Center", "Documentation", "Status", "Community"] }
+            ].map((section, index) => (
+              <div key={index}>
+                <h3 className="font-semibold mb-4">{section.title}</h3>
+                <ul className="space-y-2">
+                  {section.links.map((link, linkIndex) => (
+                    <li key={linkIndex}>
+                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                        {link}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          
+          <div className="border-t border-gray-800 dark:border-gray-700 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2025 Mail Assist. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
