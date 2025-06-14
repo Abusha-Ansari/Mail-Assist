@@ -18,7 +18,7 @@ import {
   Clock,
   TrendingUp,
   Heart,
-  ChevronDown
+  ChevronDown,
 } from "lucide-react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
@@ -160,7 +160,7 @@ export default function AnimatedHome() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 dark:from-gray-100 dark:via-blue-100 dark:to-purple-100 bg-clip-text text-transparent"
             >
-              Mail_Assist
+              Mail Assist
             </motion.h1>
 
             <motion.p
@@ -370,7 +370,10 @@ export default function AnimatedHome() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Connector line behind the steps */}
+            <div className="hidden md:block absolute top-10 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-200 to-purple-200 dark:from-blue-600 dark:to-purple-600" />
+
             {[
               {
                 step: "01",
@@ -402,7 +405,7 @@ export default function AnimatedHome() {
                 viewport={{ once: true }}
                 className="text-center relative"
               >
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6 text-white text-2xl font-bold">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6 text-white text-2xl font-bold z-10">
                   {item.step}
                 </div>
                 <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -411,9 +414,6 @@ export default function AnimatedHome() {
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   {item.description}
                 </p>
-                {index < 2 && (
-                  <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-blue-200 to-purple-200 dark:from-blue-600 dark:to-purple-600 transform -translate-y-1/2" />
-                )}
               </motion.div>
             ))}
           </div>
@@ -516,7 +516,7 @@ export default function AnimatedHome() {
               Ready to Transform Your Email Experience?
             </h2>
             <p className="text-xl text-white/90 mb-8 leading-relaxed">
-              Join thousands of users who trust Mail_Assist for their email
+              Join thousands of users who trust Mail Assist for their email
               needs. Start sending professional emails today.
             </p>
 
@@ -546,7 +546,7 @@ export default function AnimatedHome() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Mail className="h-8 w-8 text-blue-400" />
-                <span className="text-xl font-bold">Mail_Assist</span>
+                <span className="text-xl font-bold">Mail Assist</span>
               </div>
               <p className="text-gray-400">
                 Seamless email delivery without the complexity.
