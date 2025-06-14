@@ -85,7 +85,7 @@ export function Navbar() {
 
   return (
     <motion.nav 
-      className="sticky top-0 left-0 right-0 z-50 border-b border-border/40 pt-5"
+      className="sticky top-0 left-0 right-0 z-50 border-b border-border/40 pt-5 backdrop-blur-2xl"
       style={{
         backdropFilter: `blur(${navBlur}px)`,
         height: navHeight,
