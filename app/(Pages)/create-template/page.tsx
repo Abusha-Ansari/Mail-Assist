@@ -72,7 +72,7 @@ export default function EmailBuilder() {
     return () => {
       // Restore the original theme
       if (originalTheme.current) {
-        setTheme(originalTheme.current)
+        setTheme("dark")
       }
     }
   }, [theme,setTheme]);
@@ -232,11 +232,11 @@ export default function EmailBuilder() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 overflow-hidden">
       {container}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 animate-fade-in">
+        <div className="flex items-center justify-between mb-8 animate-fade-in flex-col md:flex-row gap-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-blue-500 rounded-xl text-white">
               <Mail className="w-6 h-6" />
@@ -248,7 +248,7 @@ export default function EmailBuilder() {
           </div>
           
           {/* Template Name and Save Actions */}
-          <div className="flex items-center gap-4 animate-slide-in-right">
+          <div className="flex flex-col items-center gap-4 md:flex-row animate-slide-in-right">
             <div className="flex items-center gap-2">
               <Input
                 type="text"
@@ -287,7 +287,7 @@ export default function EmailBuilder() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
                   <Button 
                     onClick={() => addBlock("heading")} 
                     variant="outline"
