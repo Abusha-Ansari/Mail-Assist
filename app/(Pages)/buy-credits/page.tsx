@@ -1,6 +1,6 @@
 "use client";
 import { Coffee, CreditCard, Mail, IndianRupee } from "lucide-react";
-import  Link  from "next/link";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 const creditPlans = [
   {
@@ -46,7 +47,7 @@ export default function BuyCreditsPage() {
     setShowPayment(false);
   };
 
-    const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const originalTheme = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function BuyCreditsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/30">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
-      
+
       <section className="relative container flex flex-col items-center justify-center gap-6 px-4 pb-12 pt-6 md:py-16">
         {/* Header Section */}
         <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center animate-fade-in">
@@ -92,8 +93,8 @@ export default function BuyCreditsPage() {
             >
               <Card
                 className={`h-full transition-all cursor-pointer relative overflow-hidden ${
-                  selectedAmount === plan.amount 
-                    ? "ring-2 ring-primary shadow-2xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20" 
+                  selectedAmount === plan.amount
+                    ? "ring-2 ring-primary shadow-2xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20"
                     : "hover:shadow-xl bg-white/70 dark:bg-gray-800/70"
                 } backdrop-blur-sm border-white/20`}
               >
@@ -149,7 +150,15 @@ export default function BuyCreditsPage() {
               <CardContent className="flex flex-col items-center gap-6">
                 <div className="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 p-6 rounded-lg border border-white/20">
                   <div className="w-64 h-64 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                    <Coffee className="h-16 w-16 text-muted-foreground" />
+                    <div className="bg-primary/10 p-6 rounded-lg">
+                      <Image
+                        src="/QR-Code.png"
+                        alt="QR Code"
+                        width={256}
+                        height={256}
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground text-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
@@ -167,8 +176,8 @@ export default function BuyCreditsPage() {
         {/* Contact Button */}
         <div className="mt-8 animate-fade-in">
           <Link href="/contact">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="hover:cursor-pointer bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-white/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transform transition-all duration-300 hover:scale-105"
             >
               <Mail className="mr-2 h-4 w-4" />

@@ -145,6 +145,13 @@ function TemplateCard({ name, description, href, cost, disabled = false }: Templ
 
 const templates = [
   {
+    name: "Custom Template",
+    description: "Design your own custom template with our drag-and-drop builder",
+    href: "/send/customTemplate",
+    cost: 10,
+    disabled: false,
+  },
+  {
     name: "Normal Email",
     description: "Simple email with subject and body for everyday communication",
     href: "/send/templates/normal",
@@ -179,13 +186,6 @@ const templates = [
     description: "Notify users of successful payment and transaction details",
     href: "/send/templates/payment-confirmation",
     cost: 10,
-  },
-  {
-    name: "Custom Template",
-    description: "Design your own custom template with our drag-and-drop builder",
-    href: "/send/customTemplate",
-    cost: 10,
-    disabled: false,
   },
 ];
 

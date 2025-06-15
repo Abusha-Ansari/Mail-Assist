@@ -1,344 +1,8 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { useParams } from "next/navigation";
-// import Papa from "papaparse";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import {
-//   Card,
-//   CardHeader,
-//   CardTitle,
-//   CardContent,
-//   CardFooter,
-// } from "@/components/ui/card";
-// import {
-//   Table,
-//   TableHeader,
-//   TableRow,
-//   TableHead,
-//   TableBody,
-//   TableCell,
-// } from "@/components/ui/table";
-// import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-// import { supabase } from "@/lib/supabaseClient";
-// import { success, failure, container } from "@/lib/toast.util";
-// import { deductCredits } from "@/utils/auth";
-// import { useUser } from "@/context/UserContext";
-
-// export default function BatchEmailPage() {
-//   const { id: templateId } = useParams();
-
-//   const [headers, setHeaders] = useState<string[]>([]);
-//   const [rows, setRows] = useState<Record<string, string>[]>([]);
-//   const [previews, setPreviews] = useState<string[]>([]);
-//   const [subject, setSubject] = useState<string>("");
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [activeTab, setActiveTab] = useState("edit");
-//   const { user } = useUser();
-
-//   useEffect(() => {
-//     const fetchTemplate = async () => {
-//       setIsLoading(true);
-//       try {
-//         const { data: templateData, error } = await supabase
-//           .from("email_templates")
-//           .select("blocks, placeholders")
-//           .eq("id", templateId)
-//           .single();
-
-//         if (error || !templateData) {
-//           throw error || new Error("Template not found");
-//         }
-
-//         const placeholders: string[] = templateData.placeholders || [];
-//         setHeaders(["email", ...placeholders]);
-//         setRows([
-//           {
-//             email: "",
-//             ...Object.fromEntries(placeholders.map((p) => [p, ""])),
-//           },
-//         ]);
-//       } catch (error) {
-//         console.error("Failed to load template:", error);
-//         alert("Failed to load template");
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-
-//     if (templateId) fetchTemplate();
-//   }, [templateId]);
-
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const csv = e.target.files?.[0];
-//     if (!csv) return;
-
-//     setIsLoading(true);
-//     Papa.parse(csv, {
-//       header: true,
-//       skipEmptyLines: true,
-//       complete: (results) => {
-//         setRows(results.data as Record<string, string>[]);
-//         setIsLoading(false);
-//       },
-//       error: () => {
-//         failure(
-//           "Failed to parse CSV file. Please ensure it is formatted correctly.",
-//           2000
-//         );
-//         setIsLoading(false);
-//       },
-//     });
-//   };
-
-//   const previewEmails = async () => {
-//     if (!rows.length) return;
-
-//     setIsLoading(true);
-//     try {
-//       const res = await fetch("/api/send-batch/preview", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ templateId, rows }),
-//       });
-
-//       const data = await res.json();
-//       if (res.ok) {
-//         setPreviews(data.previews);
-//         setActiveTab("preview");
-//       } else {
-//         throw new Error(data.message);
-//       }
-//     } catch (error) {
-//       failure(
-//         `Failed to preview emails: ${error instanceof Error ? error.message : "Unknown error"}`,
-//         2000
-//       );
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   const sendEmails = async () => {
-//     if (!subject.trim()) {
-//       failure("Please enter an email subject.", 2000);
-//       return;
-//     }
-
-//     if (!confirm(`Are you sure you want to send ${rows.length} emails?`)) {
-//       return;
-//     }
-
-//     setIsLoading(true);
-//     try {
-//       if (rows.length === 0) {
-//         failure("No recipients to send emails to.", 2000);
-//         return;
-//       }
-//       try {
-//         await deductCredits(user!.id, rows.length * 10);
-//       } catch {
-//         failure("Not enough credits to send email", 2000);
-//         return;
-//       }
-//       const res = await fetch("/api/send-batch", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ templateId, rows, subject }),
-//       });
-
-//       const data = await res.json();
-//       if (res.ok) {
-//         success(`Successfully sent ${rows.length} emails!`, 2000);
-//       } else {
-//         throw new Error(data.message);
-//       }
-//     } catch (error) {
-//       failure(
-//         `Failed to Send emails: ${error instanceof Error ? error.message : "Unknown error"}`,
-//         2000
-//       );
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="p-6 max-w-5xl mx-auto space-y-6">
-//       {container}
-//       <Card>
-//         <CardHeader>
-//           <CardTitle>Batch Email Sender</CardTitle>
-//         </CardHeader>
-//         <CardContent className="space-y-4">
-//           <div className="space-y-2">
-//             <Label htmlFor="subject">Email Subject</Label>
-//             <Input
-//               id="subject"
-//               type="text"
-//               placeholder="Enter Email Subject"
-//               value={subject}
-//               onChange={(e) => setSubject(e.target.value)}
-//             />
-//           </div>
-
-//           <div className="space-y-2">
-//             <Label>
-//               Recipients Data (Upload a CSV file with all the placeholders
-//             </Label>
-//             <div className="flex items-center gap-2">
-//               <Input
-//                 type="file"
-//                 accept=".csv"
-//                 onChange={handleFileChange}
-//                 className="max-w-md"
-//                 disabled={isLoading}
-//               />
-//               <span className="text-sm text-muted-foreground">
-//                 {rows.length} {rows.length === 1 ? "recipient" : "recipients"}{" "}
-//                 loaded
-//               </span>
-//             </div>
-//           </div>
-
-//           <div className="flex flex-wrap gap-2">
-//             <Button
-//               onClick={() =>
-//                 setRows([
-//                   ...rows,
-//                   Object.fromEntries(headers.map((h) => [h, ""])),
-//                 ])
-//               }
-//               disabled={isLoading}
-//             >
-//               Add Row
-//             </Button>
-//             <Button
-//               onClick={() => setRows(rows.slice(0, -1))}
-//               disabled={rows.length === 0 || isLoading}
-//               variant="outline"
-//             >
-//               Remove Last Row
-//             </Button>
-//             <Button
-//               onClick={() => {
-//                 const csv = Papa.unparse(rows);
-//                 const blob = new Blob([csv], {
-//                   type: "text/csv;charset=utf-8;",
-//                 });
-//                 const link = document.createElement("a");
-//                 link.href = URL.createObjectURL(blob);
-//                 link.download = "batch-emails.csv";
-//                 link.click();
-//               }}
-//               variant="outline"
-//               disabled={isLoading}
-//             >
-//               Download CSV
-//             </Button>
-//           </div>
-//         </CardContent>
-//       </Card>
-
-//       <Card>
-//         <CardHeader>
-//           <Tabs value={activeTab} onValueChange={setActiveTab}>
-//             <TabsList>
-//               <TabsTrigger value="edit">Edit Data</TabsTrigger>
-//               <TabsTrigger value="preview" disabled={previews.length === 0}>
-//                 Previews ({previews.length})
-//               </TabsTrigger>
-//             </TabsList>
-//           </Tabs>
-//         </CardHeader>
-//         <CardContent>
-//           <Tabs value={activeTab}>
-//             <TabsContent value="edit">
-//               <div className="rounded-md border">
-//                 <Table>
-//                   <TableHeader>
-//                     <TableRow>
-//                       {headers.map((header) => (
-//                         <TableHead key={header}>{header}</TableHead>
-//                       ))}
-//                     </TableRow>
-//                   </TableHeader>
-//                   <TableBody>
-//                     {rows.map((row, rowIndex) => (
-//                       <TableRow key={rowIndex}>
-//                         {headers.map((header) => (
-//                           <TableCell key={header}>
-//                             <Input
-//                               type="text"
-//                               value={row[header] || ""}
-//                               onChange={(e) => {
-//                                 const updatedRows = [...rows];
-//                                 updatedRows[rowIndex][header] = e.target.value;
-//                                 setRows(updatedRows);
-//                               }}
-//                               className="border-none focus:ring-1"
-//                               disabled={isLoading}
-//                             />
-//                           </TableCell>
-//                         ))}
-//                       </TableRow>
-//                     ))}
-//                   </TableBody>
-//                 </Table>
-//               </div>
-//             </TabsContent>
-//             <TabsContent value="preview">
-//               <div className="space-y-4">
-//                 {previews.map((html, i) => (
-//                   <Card key={i}>
-//                     <CardHeader>
-//                       <h3 className="font-medium">Preview #{i + 1}</h3>
-//                     </CardHeader>
-//                     <CardContent>
-//                       <div
-//                         className="prose max-w-none bg-white p-4 rounded border"
-//                         dangerouslySetInnerHTML={{ __html: html }}
-//                       />
-//                     </CardContent>
-//                   </Card>
-//                 ))}
-//               </div>
-//             </TabsContent>
-//           </Tabs>
-//         </CardContent>
-//         <CardFooter className="flex justify-end gap-2">
-//           <Button
-//             onClick={previewEmails}
-//             disabled={!rows.length || isLoading}
-//             variant="outline"
-//           >
-//             {isLoading ? "Loading..." : "Preview Emails"}
-//           </Button>
-//           <Button
-//             onClick={sendEmails}
-//             disabled={!rows.length || isLoading}
-//             className="bg-green-600 hover:bg-green-700"
-//           >
-//             {isLoading ? "Sending..." : `Send ${rows.length} Emails (${rows.length*10} credits)`}
-//           </Button>
-//         </CardFooter>
-//       </Card>
-//     </div>
-//   );
-// }
-
-
-
-
-
-//* fix/match the working using above code snippet
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
+import Papa from "papaparse";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -349,18 +13,13 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Upload, Download, Plus, Minus, Send, Eye, Users, Mail } from "lucide-react";
-import { container, success, failure } from "@/lib/toast.util";
+import { Upload, Download, Plus, Minus, Send, Eye, Users, Mail, AlertCircle } from "lucide-react";
+import { success, failure, container } from "@/lib/toast.util";
 import { useTheme } from "next-themes";
+import { supabase } from "@/lib/supabaseClient";
+import { deductCredits } from "@/utils/auth";
+import { useUser } from "@/context/UserContext";
 
 export default function BatchEmailPage() {
   const { id: templateId } = useParams();
@@ -371,30 +30,41 @@ export default function BatchEmailPage() {
   const [subject, setSubject] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("edit");
-  const { theme, setTheme } = useTheme()
-  const originalTheme = useRef<string | undefined>(undefined)
+  const [csvParseError, setCsvParseError] = useState<string>("");
+  const { theme, setTheme } = useTheme();
+  const originalTheme = useRef<string | undefined>(undefined);
+  const { user } = useUser();
 
   useEffect(() => {
     // Save the original theme
-    originalTheme.current = theme
+    originalTheme.current = theme;
     
-    // Change to the desired theme (e.g., dark)
-    setTheme('light')
+    // Change to the desired theme (e.g., light)
+    setTheme('light');
 
     return () => {
       // Restore the original theme
       if (originalTheme.current) {
-        setTheme('dark')
+        setTheme('dark');
       }
-    }
+    };
   }, [theme, setTheme]);
 
   useEffect(() => {
     const fetchTemplate = async () => {
       setIsLoading(true);
       try {
-        // Mock template data for demo
-        const placeholders = ["firstName", "lastName", "company"];
+        const { data: templateData, error } = await supabase
+          .from("email_templates")
+          .select("blocks, placeholders")
+          .eq("id", templateId)
+          .single();
+
+        if (error || !templateData) {
+          throw error || new Error("Template not found");
+        }
+
+        const placeholders: string[] = templateData.placeholders || [];
         setHeaders(["email", ...placeholders]);
         setRows([
           {
@@ -417,16 +87,65 @@ export default function BatchEmailPage() {
     const csv = e.target.files?.[0];
     if (!csv) return;
 
+    setCsvParseError("");
     setIsLoading(true);
-    // Mock CSV parsing for demo
-    setTimeout(() => {
-      setRows([
-        { email: "john@example.com", firstName: "John", lastName: "Doe", company: "Acme Inc" },
-        { email: "jane@example.com", firstName: "Jane", lastName: "Smith", company: "Tech Corp" },
-      ]);
-      setIsLoading(false);
-      success("CSV file parsed successfully", 2000);
-    }, 1000);
+
+    Papa.parse(csv, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        try {
+          const csvData = results.data as Record<string, string>[];
+          const csvHeaders = results.meta?.fields || Object.keys(csvData[0] || {});
+          
+          // Validate that CSV has required headers
+          const missingHeaders = headers.filter(header => 
+            !csvHeaders.some(csvHeader => 
+              csvHeader.toLowerCase().includes(header.toLowerCase()) || 
+              header.toLowerCase().includes(csvHeader.toLowerCase())
+            )
+          );
+
+          if (missingHeaders.length > 0) {
+            setCsvParseError(`Missing or unmatched columns: ${missingHeaders.join(', ')}. Please ensure your CSV has columns that match the required placeholders.`);
+            setIsLoading(false);
+            return;
+          }
+
+          // Map CSV data to our template structure
+          const mappedRows = csvData.map(csvRow => {
+            const mappedRow: Record<string, string> = {};
+            
+            headers.forEach(requiredHeader => {
+              // Try to find matching CSV column
+              const matchingCsvHeader = csvHeaders.find(csvHeader => 
+                csvHeader.toLowerCase().includes(requiredHeader.toLowerCase()) || 
+                requiredHeader.toLowerCase().includes(csvHeader.toLowerCase()) ||
+                csvHeader.toLowerCase() === requiredHeader.toLowerCase()
+              );
+              
+              mappedRow[requiredHeader] = matchingCsvHeader ? (csvRow[matchingCsvHeader] || '') : '';
+            });
+            
+            return mappedRow;
+          });
+
+          setRows(mappedRows);
+          setCsvParseError("");
+          success(`Successfully imported ${mappedRows.length} recipients`, 2000);
+        } catch {
+          setCsvParseError("Failed to parse CSV file. Please ensure it is formatted correctly.");
+          failure("Failed to parse CSV file. Please ensure it is formatted correctly.", 2000);
+        } finally {
+          setIsLoading(false);
+        }
+      },
+      error: () => {
+        setCsvParseError("Failed to parse CSV file. Please ensure it is formatted correctly.");
+        failure("Failed to parse CSV file. Please ensure it is formatted correctly.", 2000);
+        setIsLoading(false);
+      },
+    });
   };
 
   const previewEmails = async () => {
@@ -434,22 +153,32 @@ export default function BatchEmailPage() {
 
     setIsLoading(true);
     try {
-      // Mock preview generation
-      setTimeout(() => {
-        setPreviews(rows.map((_, i) => `<h1>Email Preview ${i + 1}</h1><p>This is a mock preview.</p>`));
+      const res = await fetch("/api/send-batch/preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ templateId, rows }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setPreviews(data.previews);
         setActiveTab("preview");
-        setIsLoading(false);
-        success("Email previews generated", 2000);
-      }, 1000);
-    } catch {
-      failure("Failed to preview emails", 2000);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      failure(
+        `Failed to preview emails: ${error instanceof Error ? error.message : "Unknown error"}`,
+        2000
+      );
+    } finally {
       setIsLoading(false);
     }
   };
 
   const sendEmails = async () => {
     if (!subject.trim()) {
-      failure("Please enter an email subject", 2000);
+      failure("Please enter an email subject.", 2000);
       return;
     }
 
@@ -459,15 +188,71 @@ export default function BatchEmailPage() {
 
     setIsLoading(true);
     try {
-      // Mock email sending
-      setTimeout(() => {
+      if (rows.length === 0) {
+        failure("No recipients to send emails to.", 2000);
+        return;
+      }
+      try {
+        await deductCredits(user!.id, rows.length * 10);
+      } catch {
+        failure("Not enough credits to send email", 2000);
+        return;
+      }
+      const res = await fetch("/api/send-batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ templateId, rows, subject }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
         success(`Successfully sent ${rows.length} emails!`, 2000);
-        setIsLoading(false);
-      }, 2000);
-    } catch {
-      failure("Failed to send emails", 2000);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      failure(
+        `Failed to Send emails: ${error instanceof Error ? error.message : "Unknown error"}`,
+        2000
+      );
+    } finally {
       setIsLoading(false);
     }
+  };
+
+  const downloadSampleCSV = () => {
+    const csvContent = [
+      headers.join(','),
+      headers.map(header => {
+        switch(header) {
+          case 'email': return 'john@example.com';
+          case 'firstName': return 'John';
+          case 'lastName': return 'Doe';
+          case 'company': return 'Example Corp';
+          case 'position': return 'Manager';
+          default: return `sample_${header}`;
+        }
+      }).join(',')
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sample_template.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const downloadCurrentCSV = () => {
+    const csv = Papa.unparse(rows);
+    const blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "batch-emails.csv";
+    link.click();
   };
 
   return (
@@ -475,7 +260,6 @@ export default function BatchEmailPage() {
       {container}
       
       {/* Background decorations */}
-      {/* Enhanced background decorations */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.1),transparent_50%)]" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse" style={{animationDuration: '4s'}} />
@@ -530,6 +314,21 @@ export default function BatchEmailPage() {
                 <Upload className="h-4 w-4" />
                 Recipients Data (CSV File)
               </Label>
+              
+              {/* Required columns info */}
+              {headers.length > 0 && (
+                <div className="p-4 bg-blue-50/50 rounded-lg border border-blue-200/50">
+                  <h4 className="font-medium text-slate-800 mb-2">Required CSV Columns:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {headers.map(header => (
+                      <span key={header} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-medium">
+                        {header}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="flex items-center gap-4">
                 <Input
                   type="file"
@@ -545,6 +344,17 @@ export default function BatchEmailPage() {
                   </span>
                 </div>
               </div>
+
+              {/* CSV Parse Error */}
+              {csvParseError && (
+                <div className="p-4 bg-red-50/50 rounded-lg border border-red-200/50 flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-medium text-red-800">CSV Import Error</h4>
+                    <p className="text-red-700 text-sm mt-1">{csvParseError}</p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -572,16 +382,22 @@ export default function BatchEmailPage() {
                 Remove Last Row
               </Button>
               <Button
-                onClick={() => {
-                  // Mock CSV download
-                  success("CSV file download initiated", 2000);
-                }}
+                onClick={downloadCurrentCSV}
                 variant="outline"
-                disabled={isLoading}
+                disabled={isLoading || rows.length === 0}
                 className="group bg-white/80 hover:bg-green-50 border-slate-300/50 hover:border-green-400/50 transition-all duration-300"
               >
                 <Download className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform duration-200" />
                 Download CSV
+              </Button>
+              <Button
+                onClick={downloadSampleCSV}
+                variant="outline"
+                disabled={isLoading}
+                className="group bg-white/80 hover:bg-purple-50 border-slate-300/50 hover:border-purple-400/50 transition-all duration-300"
+              >
+                <Download className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform duration-200" />
+                Sample CSV
               </Button>
             </div>
           </CardContent>
@@ -617,21 +433,21 @@ export default function BatchEmailPage() {
             <Tabs value={activeTab}>
               <TabsContent value="edit" className="space-y-4">
                 <div className="rounded-xl border border-slate-200/50 overflow-hidden bg-white/60 backdrop-blur-sm shadow-lg">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100/50">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-gradient-to-r from-slate-50 to-slate-100/50">
                         {headers.map((header) => (
-                          <TableHead key={header} className="font-semibold text-slate-700 capitalize">
+                          <th key={header} className="font-semibold text-slate-700 capitalize p-3 text-left border-b border-slate-200/50">
                             {header}
-                          </TableHead>
+                          </th>
                         ))}
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
+                      </tr>
+                    </thead>
+                    <tbody>
                       {rows.map((row, rowIndex) => (
-                        <TableRow key={rowIndex} className="hover:bg-blue-50/50 transition-colors duration-200">
+                        <tr key={rowIndex} className="hover:bg-blue-50/50 transition-colors duration-200 border-b border-slate-100/50">
                           {headers.map((header) => (
-                            <TableCell key={header} className="p-2">
+                            <td key={header} className="p-2">
                               <Input
                                 type="text"
                                 value={row[header] || ""}
@@ -644,12 +460,12 @@ export default function BatchEmailPage() {
                                 disabled={isLoading}
                                 placeholder={`Enter ${header}...`}
                               />
-                            </TableCell>
+                            </td>
                           ))}
-                        </TableRow>
+                        </tr>
                       ))}
-                    </TableBody>
-                  </Table>
+                    </tbody>
+                  </table>
                 </div>
               </TabsContent>
               <TabsContent value="preview" className="space-y-4">
