@@ -101,17 +101,17 @@ export default function JobOfferTemplatePage() {
         <div className="space-y-4">
           <div>
             <Label htmlFor="to" className="pb-2">To</Label>
-            <Input id="to" type="email" value={formData.to} onChange={handleChange} required />
+            <Input id="to" type="email" value={formData.to} onChange={handleChange} required placeholder="Enter Recipient Email" />
           </div>
 
           <div>
             <Label htmlFor="company" className="pb-2">Company</Label>
-            <Input id="company" value={formData.company} onChange={handleChange} required />
+            <Input id="company" value={formData.company} onChange={handleChange} required placeholder="Company Name" />
           </div>
 
           <div>
             <Label htmlFor="position" className="pb-2">Position</Label>
-            <Input id="position" value={formData.position} onChange={handleChange} required />
+            <Input id="position" value={formData.position} onChange={handleChange} required placeholder="Position" />
           </div>
 
           <div>
@@ -121,6 +121,7 @@ export default function JobOfferTemplatePage() {
               value={formData.description}
               onChange={handleChange}
               required
+              placeholder="Enter Job Description"
             />
           </div>
 

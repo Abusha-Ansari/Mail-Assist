@@ -125,43 +125,110 @@ export default function NormalEmailForm() {
   return (
     <MailFormLayout title="Send Normal Email" description="Use the standard email format (5 credits)">
       {container}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="to">To</Label>
-          <Input id="to" type="email" required value={formData.to} onChange={handleChange} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="subject">Subject</Label>
-          <Input id="subject" required value={formData.subject} onChange={handleChange} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="body">Body</Label>
-          <Textarea id="body" required value={formData.body} onChange={handleChange} className="min-h-[200px]" />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="to" className="text-sm font-medium text-gray-700">
+          To
+        </Label>
+        <Input 
+          id="to" 
+          type="email" 
+          placeholder="recipient@email.com"
+          required 
+          value={formData.to} 
+          onChange={handleChange}
+          className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
 
-        {/* Schedule Option */}
-        <div className="space-y-2">
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" checked={schedule} onChange={(e) => setSchedule(e.target.checked)} />
-            <span>Schedule this email?</span>
-          </label>
-          {schedule && (
-            <div className="flex gap-4">
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
+      <div className="space-y-2">
+        <Label htmlFor="subject" className="text-sm font-medium text-gray-700">
+          Subject
+        </Label>
+        <Input 
+          id="subject" 
+          placeholder="Email subject"
+          required 
+          value={formData.subject} 
+          onChange={handleChange}
+          className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="body" className="text-sm font-medium text-gray-700">
+          Message
+        </Label>
+        <Textarea 
+          id="body" 
+          placeholder="Write your message here..."
+          required 
+          value={formData.body} 
+          onChange={handleChange} 
+          className="min-h-[200px] border-gray-200 focus:border-blue-500 focus:ring-blue-500 resize-none"
+        />
+      </div>
+
+      {/* Schedule Option */}
+      <div className="space-y-4">
+        <div className="flex items-center space-x-3">
+          <input 
+            type="checkbox" 
+            id="schedule-checkbox"
+            checked={schedule} 
+            onChange={(e) => setSchedule(e.target.checked)}
+            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+          />
+          <Label htmlFor="schedule-checkbox" className="text-sm font-medium text-gray-700 cursor-pointer">
+            Schedule this email?
+          </Label>
+        </div>
+        
+        {schedule && (
+          <div className="flex gap-4 pt-2">
+            <div className="flex-1">
+              <Label htmlFor="schedule-date" className="text-sm font-medium text-gray-700 mb-2 block">
+                Date
+              </Label>
+              <Input 
+                id="schedule-date"
+                type="date" 
+                value={date} 
+                onChange={(e) => setDate(e.target.value)} 
+                required 
+                className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+              />
             </div>
-          )}
-        </div>
+            <div className="flex-1">
+              <Label htmlFor="schedule-time" className="text-sm font-medium text-gray-700 mb-2 block">
+                Time
+              </Label>
+              <Input 
+                id="schedule-time"
+                type="time" 
+                value={time} 
+                onChange={(e) => setTime(e.target.value)} 
+                required 
+                className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+        )}
+      </div>
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Sending..." : (
-            <>
-              <Send className="mr-2 h-4 w-4" />
-              {schedule ? "Schedule Email" : "Send Email"}
-            </>
-          )}
-        </Button>
-      </form>
+      <Button 
+        type="submit" 
+        className="w-full h-11 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium transition-all duration-200" 
+        disabled={isLoading}
+      >
+        {isLoading ? "Sending..." : (
+          <>
+            <Send className="mr-2 h-4 w-4" />
+            {schedule ? "Schedule Email" : "Send Email"}
+          </>
+        )}
+      </Button>
+    </form>
     </MailFormLayout>
   );
 }
