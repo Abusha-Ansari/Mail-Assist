@@ -60,7 +60,6 @@ export function Navbar() {
 
   const publicLinks = [
     { href: "/features", label: "Features", badge: null },
-    { href: "/pricing", label: "Pricing", badge: null },
     { href: "/help", icon: HelpCircle, label: "Help", badge: null },
   ]
 
@@ -275,7 +274,7 @@ export function Navbar() {
             className="lg:hidden overflow-hidden bg-background/95 backdrop-blur-sm border-t"
           >
             <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 bg-black text-black dark:bg-black dark:text-white backdrop-blur-xl rounded-lg p-4">
                 {/* User Info (if logged in) */}
                 {loggedIn && (
                   <div className="flex items-center gap-3 p-3 bg-accent/20 rounded-lg mb-3">
