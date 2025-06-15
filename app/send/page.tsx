@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "next-themes";
+import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
 
 // SearchBar Component
 interface SearchBarProps {
@@ -50,11 +52,13 @@ function EmptyState({ searchTerm }: EmptyStateProps) {
       <h3 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-4 animate-slide-in-right">
         {searchTerm ? "No templates found" : "No templates available"}
       </h3>
-      <p className="text-slate-600 max-w-lg mx-auto text-lg leading-relaxed animate-slide-in-right opacity-0" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
-        {searchTerm 
+      <p
+        className="text-slate-600 max-w-lg mx-auto text-lg leading-relaxed animate-slide-in-right opacity-0"
+        style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
+      >
+        {searchTerm
           ? `No templates match "${searchTerm}". Try adjusting your search terms.`
-          : "There are currently no email templates available."
-        }
+          : "There are currently no email templates available."}
       </p>
     </div>
   );
@@ -69,34 +73,44 @@ interface TemplateCardProps {
   disabled?: boolean;
 }
 
-function TemplateCard({ name, description, href, cost, disabled = false }: TemplateCardProps) {
+function TemplateCard({
+  name,
+  description,
+  href,
+  cost,
+  disabled = false,
+}: TemplateCardProps) {
   const gradients = [
-    'from-blue-500/10 to-cyan-500/10',
-    'from-purple-500/10 to-pink-500/10', 
-    'from-green-500/10 to-emerald-500/10',
-    'from-orange-500/10 to-red-500/10',
-    'from-indigo-500/10 to-blue-500/10',
-    'from-pink-500/10 to-rose-500/10',
-    'from-teal-500/10 to-cyan-500/10'
+    "from-blue-500/10 to-cyan-500/10",
+    "from-purple-500/10 to-pink-500/10",
+    "from-green-500/10 to-emerald-500/10",
+    "from-orange-500/10 to-red-500/10",
+    "from-indigo-500/10 to-blue-500/10",
+    "from-pink-500/10 to-rose-500/10",
+    "from-teal-500/10 to-cyan-500/10",
   ];
-  
+
   const borderColors = [
-    'hover:border-blue-500/30 hover:shadow-blue-500/20',
-    'hover:border-purple-500/30 hover:shadow-purple-500/20',
-    'hover:border-green-500/30 hover:shadow-green-500/20',
-    'hover:border-orange-500/30 hover:shadow-orange-500/20',
-    'hover:border-indigo-500/30 hover:shadow-indigo-500/20',
-    'hover:border-pink-500/30 hover:shadow-pink-500/20',
-    'hover:border-teal-500/30 hover:shadow-teal-500/20'
+    "hover:border-blue-500/30 hover:shadow-blue-500/20",
+    "hover:border-purple-500/30 hover:shadow-purple-500/20",
+    "hover:border-green-500/30 hover:shadow-green-500/20",
+    "hover:border-orange-500/30 hover:shadow-orange-500/20",
+    "hover:border-indigo-500/30 hover:shadow-indigo-500/20",
+    "hover:border-pink-500/30 hover:shadow-pink-500/20",
+    "hover:border-teal-500/30 hover:shadow-teal-500/20",
   ];
 
   const gradient = gradients[Math.abs(name.length) % gradients.length];
   const borderColor = borderColors[Math.abs(name.length) % borderColors.length];
 
   return (
-    <Card className={`group relative overflow-hidden border-2 border-slate-200/50 bg-white/90 backdrop-blur-sm transition-all duration-500 hover:-translate-y-3 hover:scale-[1.03] ${borderColor} hover:shadow-2xl rounded-2xl`}>
-      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
-      
+    <Card
+      className={`group relative overflow-hidden border-2 border-slate-200/50 bg-white/90 backdrop-blur-sm transition-all duration-500 hover:-translate-y-3 hover:scale-[1.03] ${borderColor} hover:shadow-2xl rounded-2xl`}
+    >
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+      />
+
       {/* Animated background pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
@@ -106,8 +120,8 @@ function TemplateCard({ name, description, href, cost, disabled = false }: Templ
             {name}
           </h3>
 
-          <Badge 
-            variant={disabled ? "secondary" : "default"} 
+          <Badge
+            variant={disabled ? "secondary" : "default"}
             className="flex items-center gap-2 px-4 py-2 text-sm font-bold shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300 bg-gradient-to-r from-amber-400 to-orange-500 text-white border-0 rounded-full"
           >
             <Zap className="h-4 w-4 animate-pulse" />
@@ -125,7 +139,10 @@ function TemplateCard({ name, description, href, cost, disabled = false }: Templ
           className="group/button relative h-14 w-full text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 rounded-xl overflow-hidden"
           size="lg"
         >
-          <Link href={href} className="relative flex items-center justify-center gap-3">
+          <Link
+            href={href}
+            className="relative flex items-center justify-center gap-3"
+          >
             <span className="relative z-10 transition-transform duration-300 group-hover/button:scale-105">
               {disabled ? "Coming Soon" : "Use Template"}
             </span>
@@ -146,14 +163,16 @@ function TemplateCard({ name, description, href, cost, disabled = false }: Templ
 const templates = [
   {
     name: "Custom Template",
-    description: "Design your own custom template with our drag-and-drop builder",
+    description:
+      "Design your own custom template with our drag-and-drop builder",
     href: "/send/customTemplate",
     cost: 10,
     disabled: false,
   },
   {
     name: "Normal Email",
-    description: "Simple email with subject and body for everyday communication",
+    description:
+      "Simple email with subject and body for everyday communication",
     href: "/send/templates/normal",
     cost: 5,
   },
@@ -191,22 +210,24 @@ const templates = [
 
 export default function SendMailHome() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { theme, setTheme } = useTheme()
-  const originalTheme = useRef<string | undefined>(undefined)
+  const { theme, setTheme } = useTheme();
+  const originalTheme = useRef<string | undefined>(undefined);
+  const { loggedIn } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     // Save the original theme
-    originalTheme.current = theme
-    
+    originalTheme.current = theme;
+
     // Change to the desired theme (e.g., dark)
-    setTheme('light')
+    setTheme("light");
 
     return () => {
       // Restore the original theme
       if (originalTheme.current) {
-        setTheme('dark')
+        setTheme("dark");
       }
-    }
+    };
   }, [theme, setTheme]);
 
   const filteredTemplates = templates.filter((template) => {
@@ -217,15 +238,34 @@ export default function SendMailHome() {
     );
   });
 
+  useEffect(() => {
+    if (!loggedIn) {
+      router.push("/auth/login");
+    }
+  }, [loggedIn, router]);
+
+  if (!loggedIn) {
+    return null; // Prevent render while redirecting
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 relative overflow-hidden">
       {/* Enhanced background decorations */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(147,51,234,0.1),transparent_50%)]" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse" style={{animationDuration: '4s'}} />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style={{animationDuration: '6s', animationDelay: '2s'}} />
-      <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-green-400/10 to-blue-400/10 rounded-full blur-2xl animate-pulse -translate-x-1/2 -translate-y-1/2" style={{animationDuration: '8s', animationDelay: '1s'}} />
-      
+      <div
+        className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse"
+        style={{ animationDuration: "4s" }}
+      />
+      <div
+        className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse"
+        style={{ animationDuration: "6s", animationDelay: "2s" }}
+      />
+      <div
+        className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-green-400/10 to-blue-400/10 rounded-full blur-2xl animate-pulse -translate-x-1/2 -translate-y-1/2"
+        style={{ animationDuration: "8s", animationDelay: "1s" }}
+      />
+
       <div className="container mx-auto px-4 py-20 relative z-10">
         {/* Enhanced Header Section */}
         <div className="text-center mb-20 animate-fade-in">
@@ -235,14 +275,23 @@ export default function SendMailHome() {
             </h1>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 blur-2xl -z-10 animate-pulse" />
           </div>
-          <p className="text-xl md:text-2xl text-slate-700 max-w-4xl mx-auto leading-relaxed animate-slide-in-right font-medium" style={{animationDelay: '0.3s'}}>
-            Select from our collection of professionally designed email templates 
-            to create <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">engaging communications</span>
+          <p
+            className="text-xl md:text-2xl text-slate-700 max-w-4xl mx-auto leading-relaxed animate-slide-in-right font-medium"
+            style={{ animationDelay: "0.3s" }}
+          >
+            Select from our collection of professionally designed email
+            templates to create{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">
+              engaging communications
+            </span>
           </p>
         </div>
 
         {/* Enhanced Search Section */}
-        <div className="flex justify-center mb-20 animate-scale-in" style={{animationDelay: '0.6s'}}>
+        <div
+          className="flex justify-center mb-20 animate-scale-in"
+          style={{ animationDelay: "0.6s" }}
+        >
           <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </div>
 
@@ -250,27 +299,26 @@ export default function SendMailHome() {
         {filteredTemplates.length === 0 ? (
           <EmptyState searchTerm={searchTerm} />
         ) : (
-          <div className="animate-fade-in" style={{animationDelay: '0.9s'}}>
+          <div className="animate-fade-in" style={{ animationDelay: "0.9s" }}>
             <div className="flex items-center justify-between mb-12">
               <div className="relative">
                 <p className="text-slate-700 text-xl font-semibold bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg border border-slate-200/50">
-                  {searchTerm 
-                    ? `Found ${filteredTemplates.length} template${filteredTemplates.length !== 1 ? 's' : ''} matching "${searchTerm}"`
-                    : `${filteredTemplates.length} template${filteredTemplates.length !== 1 ? 's' : ''} available`
-                  }
+                  {searchTerm
+                    ? `Found ${filteredTemplates.length} template${filteredTemplates.length !== 1 ? "s" : ""} matching "${searchTerm}"`
+                    : `${filteredTemplates.length} template${filteredTemplates.length !== 1 ? "s" : ""} available`}
                 </p>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur opacity-50" />
               </div>
             </div>
-            
+
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
               {filteredTemplates.map((template, index) => (
-                <div 
-                  key={template.name} 
+                <div
+                  key={template.name}
                   className="animate-fade-in"
                   style={{
-                    animationDelay: `${1.2 + (index * 0.15)}s`,
-                    animationFillMode: 'both'
+                    animationDelay: `${1.2 + index * 0.15}s`,
+                    animationFillMode: "both",
                   }}
                 >
                   <TemplateCard

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Mail,
@@ -22,11 +22,27 @@ import {
 } from "lucide-react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 type AnimatedCounterProps = { end: number; duration?: number };
 
 const AnimatedCounter = ({ end, duration = 2000 }: AnimatedCounterProps) => {
   const [count, setCount] = useState(0);
+
+  const { theme, setTheme } = useTheme();
+  const originalTheme = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    // Save the original theme
+    originalTheme.current = theme;
+
+    // Change to the desired theme (e.g., dark)
+    setTheme("dark");
+
+    return () => {
+      setTheme("dark");
+    };
+  }, [theme, setTheme]);
 
   useEffect(() => {
     let startTime: number | undefined;
