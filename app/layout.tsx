@@ -19,10 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
     {/* // <html lang="en" className={resolvedTheme === "dark" ? "dark" : ""} suppressHydrationWarning> */}
 
-      <body className={inter.className}>
+      <body className={inter.className} >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

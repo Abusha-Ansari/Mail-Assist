@@ -341,18 +341,18 @@ export default function Dashboard() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     placeholder="Search emails or subjects..."
-                    className="pl-10 w-full sm:w-64 bg-white/50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-500"
+                    className="pl-10 w-full sm:w-64 bg-white/50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 text-black dark:text-white"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black dark:text-white pointer-events-none " />
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-full sm:w-40 pl-10 bg-white/50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600">
+                    <SelectTrigger className="w-full sm:w-40 pl-10 bg-white/50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 text-black dark:text-white">
                       <SelectValue placeholder="Filter status" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                    <SelectContent className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-black dark:text-white">
                       <SelectItem value="all">All Status</SelectItem>
                       <SelectItem value="send">Sent</SelectItem>
                       <SelectItem value="failed">Failed</SelectItem>
@@ -436,7 +436,7 @@ export default function Dashboard() {
                               variant="ghost"
                               size="sm"
                               onClick={() => openModal(mail)}
-                              className="opacity-70 group-hover:opacity-100 transition-opacity duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                              className="opacity-70 group-hover:opacity-100 transition-opacity duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-black dark:text-white"
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
@@ -465,7 +465,7 @@ export default function Dashboard() {
                           setCurrentPage((prev) => Math.max(prev - 1, 1))
                         }
                         disabled={currentPage === 1}
-                        className="hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                        className="hover:bg-blue-50 dark:hover:bg-blue-900/30 text-black dark:text-white"
                       >
                         Previous
                       </Button>
@@ -481,7 +481,7 @@ export default function Dashboard() {
                           )
                         }
                         disabled={currentPage === totalPages}
-                        className="hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                        className="hover:bg-blue-50 dark:hover:bg-blue-900/30 text-black dark:text-white"
                       >
                         Next
                       </Button>
@@ -515,7 +515,7 @@ export default function Dashboard() {
         <DialogContent className="w-[95vw] max-w-4xl max-h-[85vh] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
             <DialogTitle className="flex items-center space-x-3 text-gray-800 dark:text-white">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center ">
                 <Mail className="h-4 w-4 text-white" />
               </div>
               <div>
@@ -529,7 +529,7 @@ export default function Dashboard() {
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="space-y-4 text-black dark:text-white">
             {selectedMail && (
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
                 <div>

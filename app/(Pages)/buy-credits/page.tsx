@@ -63,7 +63,7 @@ export default function BuyCreditsPage() {
   }, [theme, setTheme]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/30">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/30 text-black dark:text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
 
       <section className="relative container flex flex-col items-center justify-center gap-6 px-4 pb-12 pt-6 md:py-16">
@@ -100,9 +100,9 @@ export default function BuyCreditsPage() {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <CardHeader className="items-center relative z-10">
-                  <div className="rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 p-4 mb-2">
+                  {/* <div className="rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 p-4 mb-2">
                     {plan.icon}
-                  </div>
+                  </div> */}
                   <CardTitle className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     {plan.label}
                   </CardTitle>

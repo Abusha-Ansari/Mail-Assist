@@ -33,16 +33,20 @@ const AnimatedCounter = ({ end, duration = 2000 }: AnimatedCounterProps) => {
   const originalTheme = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    // Save the original theme
+    // Save the original theme only once on mount
     originalTheme.current = theme;
 
-    // Change to the desired theme (e.g., dark)
+    // Force dark theme
     setTheme("dark");
 
     return () => {
-      setTheme("dark");
+      // Restore original theme on unmount
+      if (originalTheme.current) {
+        setTheme(originalTheme.current);
+      }
     };
-  }, [theme, setTheme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setTheme]);
 
   useEffect(() => {
     let startTime: number | undefined;

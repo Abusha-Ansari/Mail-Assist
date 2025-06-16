@@ -244,7 +244,7 @@ export function Navbar() {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2 text-black dark:text-white">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="ghost"
@@ -274,7 +274,7 @@ export function Navbar() {
             className="lg:hidden overflow-hidden bg-background/95 backdrop-blur-sm border-t"
           >
             <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col gap-2 bg-black text-black dark:bg-black dark:text-white backdrop-blur-xl rounded-lg p-4">
+              <div className="flex flex-col gap-2 bg-black text-white   backdrop-blur-xl rounded-lg p-4">
                 {/* User Info (if logged in) */}
                 {loggedIn && (
                   <div className="flex items-center gap-3 p-3 bg-accent/20 rounded-lg mb-3">

@@ -148,22 +148,27 @@ export default function FeaturesPage() {
   const originalTheme = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    // Save the original theme
+    // Save the original theme only once on mount
     originalTheme.current = theme;
 
-    // Change to the desired theme (e.g., dark)
+    // Force dark theme
     setTheme("dark");
 
     return () => {
-      setTheme("dark");
+      // Restore original theme on unmount
+      if (originalTheme.current) {
+        setTheme(originalTheme.current);
+      }
     };
-  }, [theme, setTheme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setTheme]);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/30">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
 
       {/* Hero Section */}
-      <section className="relative container mx-auto px-4 py-16 text-center">
+      <section className="relative container mx-auto px-4 py-16 text-center text-black dark:text-white">
         <div className="max-w-4xl mx-auto animate-fade-in">
           <div className="relative mb-8">
             <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl" />
@@ -174,7 +179,7 @@ export default function FeaturesPage() {
             Mail Assist Features
           </h1>
 
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg px-6 py-4 border border-white/20">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg px-6 py-4 border border-white/20 text-black dark:text-white">
             Discover all the powerful features that make Mail Assist the perfect
             solution for creating, customizing, and sending emails efficiently.
           </p>
@@ -192,7 +197,7 @@ export default function FeaturesPage() {
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-white/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transform transition-all duration-300 hover:scale-105"
+                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-white/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transform transition-all duration-300 hover:scale-105 text-black dark:text-white"
               >
                 View Templates
               </Button>
@@ -205,7 +210,7 @@ export default function FeaturesPage() {
               <Badge
                 key={index}
                 variant="secondary"
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-white/20 text-sm py-1 px-3 animate-scale-in"
+                className="text-black dark:text-white bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-white/20 text-sm py-1 px-3 animate-scale-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {signal}
@@ -221,7 +226,7 @@ export default function FeaturesPage() {
           {features.map((feature, index) => (
             <Card
               key={feature.id}
-              className="group hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 relative overflow-hidden animate-scale-in"
+              className="text-black dark:text-white group hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 relative overflow-hidden animate-scale-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -264,7 +269,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* Responsive & Accessible UI Feature */}
-      <section className="relative container mx-auto px-4 pb-16">
+      <section className="relative container mx-auto px-4 pb-16 text-black dark:text-white">
         <Card className="max-w-4xl mx-auto bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border-white/20 animate-fade-in">
           <CardHeader className="text-center">
             <div className="rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -327,7 +332,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="relative container mx-auto px-4 pb-16 text-center">
+      <section className="relative container mx-auto px-4 pb-16 text-center text-black dark:text-white">
         <div className="max-w-2xl mx-auto animate-fade-in">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Ready to Transform Your Email Experience?
