@@ -32,6 +32,9 @@ import {
 } from "lucide-react";
 import { container, success, failure } from "@/lib/toast.util";
 import { useTheme } from "next-themes";
+import { useUser } from "@/context/UserContext";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 
 interface Block {
   id: string;
@@ -61,6 +64,9 @@ export default function EmailBuilder() {
   const [isSaving, setIsSaving] = useState(false);
   const { theme, setTheme } = useTheme();
   const originalTheme = useRef<string | undefined>(undefined)
+
+  const { user } = useUser();
+  const Router = useRouter();
 
   useEffect(() => {
     // Save the original theme
@@ -167,28 +173,51 @@ export default function EmailBuilder() {
     }
   };
 
+  const extractPlaceholders = (blocks: Block[]): string[] => {
+    const placeholderSet = new Set<string>();
+    blocks.forEach((block) => {
+      const matches = block.content.match(/{{(.*?)}}/g);
+      matches?.forEach((match) => {
+        placeholderSet.add(match.replace(/[{}]/g, "").trim());
+      });
+    });
+    return Array.from(placeholderSet);
+  };
+
   const saveTemplate = async () => {
-    if (!templateName.trim()) {
-      failure("Template Name Required: Please enter a name for your template.", 2000);
+    if (!user?.id) {
+      failure("You must be logged in to save templates", 2000);
+      await new Promise((res) => setTimeout(res, 2500));
+      Router.push("/login");
       return;
     }
 
     setIsSaving(true);
     try {
-      // Simulate save operation
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      success(`Template "${templateName}" has been saved successfully.`, 2000);
-      
-      // Reset form
-      setTemplateName("");
-      setBlocks([]);
+      const placeholders = extractPlaceholders(blocks);
+      const { error } = await supabase.from("email_templates").insert([
+        {
+          user_id: user.id,
+          name: templateName || `Template ${Date.now()}`,
+          blocks,
+          placeholders,
+        },
+      ]);
+
+      if (error) throw error;
+      success("Template saved successfully!", 2000);
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+      Router.push("/send/all-custom-templates");
+
       setFormData({
-        name: "John Doe",
-        company: "TechCorp",
-        position: "Software Engineer"
+        candidateName: "Username Here",
+        position: "Position Title",
+        company: "Company Name",
+        description: "Description of the company.",
       });
-    } catch {
-      failure("Save Failed: Failed to save template. Please try again.", 2000);
+    } catch (error) {
+      failure("Failed to save template", 2000);
+      console.error(error);
     } finally {
       setIsSaving(false);
     }
