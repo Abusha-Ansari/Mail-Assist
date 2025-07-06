@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +26,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes";
 
 const faqs = [
   {
@@ -101,45 +101,45 @@ export default function HelpPage() {
     faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-    const { theme, setTheme } = useTheme();
-  const originalTheme = useRef<string | undefined>(undefined);
+  // const { theme, setTheme } = useTheme();
+  // const originalTheme = useRef<string | undefined>(undefined);
 
-  useEffect(() => {
-    // Save the original theme
-    originalTheme.current = theme;
+  // useEffect(() => {
+  //   // Save the original theme
+  //   originalTheme.current = theme;
 
-    // Change to the desired theme (e.g., dark)
-    setTheme("dark");
+  //   // Change to the desired theme (e.g., dark)
+  //   setTheme("dark");
 
-    return () => {
-      setTheme("dark");
-    };
-  }, [theme, setTheme]);
+  //   return () => {
+  //     setTheme("dark");
+  //   };
+  // }, [theme, setTheme]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/30 text-black dark:text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-muted/30">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary),0.1),transparent_50%)]" />
       
       {/* Hero Section */}
       <section className="relative container mx-auto px-4 py-16 text-center">
         <div className="max-w-4xl mx-auto animate-fade-in">
           <div className="relative mb-8">
-            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl" />
+            <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-primary/10 rounded-full blur-xl" />
             <HelpCircle className="relative h-20 w-20 mx-auto text-primary animate-scale-in" />
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-foreground via-primary to-primary/80 bg-clip-text text-transparent">
             Help & Support
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg px-6 py-4 border border-white/20">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto bg-card/50 backdrop-blur-sm rounded-lg px-6 py-4 border border-border/20">
             Need help with Mail Assist? Find answers to common questions or contact us directly for personalized support.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+              className="bg-primary hover:bg-primary/90 transform transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg"
               onClick={() => window.open('mailto:support@mailassist.com', '_blank')}
             >
               <Mail className="w-4 h-4 mr-2" />
@@ -149,7 +149,7 @@ export default function HelpPage() {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-white/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transform transition-all duration-300 hover:scale-105"
+                className="bg-card/70 backdrop-blur-sm border-border/20 hover:bg-card/90 transform transition-all duration-300 hover:scale-105"
               >
                 Back to Dashboard
               </Button>
@@ -162,7 +162,7 @@ export default function HelpPage() {
               <Badge 
                 key={index} 
                 variant="secondary" 
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border border-white/20 text-sm py-1 px-3 animate-scale-in"
+                className="bg-card/70 backdrop-blur-sm border border-border/20 text-sm py-1 px-3 animate-scale-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {signal}
@@ -181,7 +181,7 @@ export default function HelpPage() {
               placeholder="Search Help Topics..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 focus:bg-white dark:focus:bg-gray-800 transition-all duration-300"
+              className="pl-10 bg-card/80 backdrop-blur-sm border-border/20 focus:bg-card transition-all duration-300"
             />
           </div>
         </div>
@@ -191,7 +191,7 @@ export default function HelpPage() {
       <section className="relative container mx-auto px-4 pb-16">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
               Frequently Asked Questions
             </h2>
             <p className="text-muted-foreground">
@@ -200,7 +200,7 @@ export default function HelpPage() {
           </div>
 
           {filteredFaqs.length > 0 ? (
-            <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 animate-scale-in">
+            <Card className="bg-card/80 backdrop-blur-sm border-border/20 animate-scale-in shadow-md">
               <CardContent className="p-6">
                 <Accordion type="single" collapsible className="w-full">
                   {filteredFaqs.map((faq, index) => (
@@ -212,7 +212,7 @@ export default function HelpPage() {
                     >
                       <AccordionTrigger className="text-left hover:no-underline group">
                         <div className="flex items-center gap-3">
-                          <div className="rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 p-2 group-hover:scale-110 transition-transform duration-200">
+                          <div className="rounded-full bg-gradient-to-br from-primary/10 to-accent/10 p-2 group-hover:scale-110 transition-transform duration-200 shadow-sm">
                             <faq.icon className="h-4 w-4 text-primary" />
                           </div>
                           <span className="font-medium">{faq.question}</span>
@@ -227,7 +227,7 @@ export default function HelpPage() {
               </CardContent>
             </Card>
           ) : (
-            <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 animate-scale-in">
+            <Card className="bg-card/80 backdrop-blur-sm border-border/20 animate-scale-in shadow-md">
               <CardContent className="p-8 text-center">
                 <Search className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-semibold mb-2">No results found</h3>
@@ -244,7 +244,7 @@ export default function HelpPage() {
       <section className="relative container mx-auto px-4 pb-16">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
               Quick Troubleshooting
             </h2>
             <p className="text-muted-foreground">
@@ -256,12 +256,12 @@ export default function HelpPage() {
             {troubleshootingTips.map((tip, index) => (
               <Card 
                 key={index} 
-                className="group hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-white/20 animate-scale-in"
+                className="group hover:shadow-lg transition-all duration-300 hover:scale-105 bg-card/80 backdrop-blur-sm border-border/20 animate-scale-in shadow-md"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="rounded-full bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 p-3 group-hover:scale-110 transition-transform duration-200">
+                    <div className="rounded-full bg-gradient-to-br from-orange-100/50 to-red-100/50 dark:from-orange-900/20 dark:to-red-900/20 p-3 group-hover:scale-110 transition-transform duration-200 shadow-sm">
                       <tip.icon className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                     </div>
                   </div>
@@ -282,12 +282,12 @@ export default function HelpPage() {
 
       {/* Contact Support Section */}
       <section className="relative container mx-auto px-4 pb-16">
-        <Card className="max-w-2xl mx-auto bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border-white/20 animate-fade-in">
+        <Card className="max-w-2xl mx-auto bg-gradient-to-r from-primary/5 to-accent/5 backdrop-blur-sm border-border/20 animate-fade-in shadow-lg">
           <CardHeader className="text-center">
-            <div className="rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+            <div className="rounded-full bg-gradient-to-br from-primary/10 to-accent/10 p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-md">
               <Mail className="h-8 w-8 text-primary" />
             </div>
-            <CardTitle className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
               Still Need Help?
             </CardTitle>
             <CardDescription className="text-lg">
@@ -308,7 +308,7 @@ export default function HelpPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                className="bg-primary hover:bg-primary/90 transform transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg"
                 onClick={() => window.open('mailto:support@mailassist.com', '_blank')}
               >
                 <Mail className="w-4 h-4 mr-2" />
@@ -317,7 +317,7 @@ export default function HelpPage() {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm border-white/20 hover:bg-white/90 dark:hover:bg-gray-800/90 transform transition-all duration-300 hover:scale-105"
+                className="bg-card/70 backdrop-blur-sm border-border/20 hover:bg-card/90 transform transition-all duration-300 hover:scale-105"
                 // onClick={() => window.open('https://docs.lovable.dev/', '_blank')}
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
@@ -325,7 +325,7 @@ export default function HelpPage() {
               </Button>
             </div>
             
-            <div className="pt-4 border-t border-white/20">
+            <div className="pt-4 border-t border-border/20">
               <p className="text-sm text-muted-foreground">
                 <strong>Email:</strong> support@mailassist.com
               </p>

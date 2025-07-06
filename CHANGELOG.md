@@ -1,5 +1,93 @@
 # CHANGELOG.md
 
+## [2024-12-19] - Centralized Theming System Implementation
+
+### Added
+- **Theme Toggle Component**: New `components/ui/theme-toggle.tsx` with smooth animations and proper theme switching
+- **Smooth Theme Transitions**: Added 150ms CSS transitions for background-color, border-color, and color changes
+- **Enhanced Navbar**: Integrated theme toggle button in both desktop and mobile navigation
+- **Centralized Color System**: Converted hardcoded colors to use ShadCN CSS variables throughout navbar, AnimatedHome component, features page, help page, dashboard page, send page, and buy-credits page
+
+### Changed
+- **Navbar Color Scheme**: Replaced hardcoded blue/purple gradients with primary color variables
+- **User Menu Styling**: Updated dropdown menu to use popover and border CSS variables
+- **Mobile Menu**: Converted mobile menu background to use card and border variables
+- **Button Styling**: Updated signup buttons and logout buttons to use semantic color variables
+- **Logo Branding**: Converted logo gradients to use primary color variables
+- **AnimatedHome Component**: Complete color system overhaul:
+  - Hero section gradients converted to use primary/accent variables
+  - Feature icons updated to use semantic colors (primary, accent, destructive)
+  - All text colors converted to foreground/muted-foreground
+  - Background sections updated to use card/muted variables
+  - Button styling unified with primary color system
+  - Footer colors converted to use muted/foreground variables
+- **Features Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Hero section updated with primary color gradients
+  - Feature cards converted to use card/border variables
+  - Button styling unified with primary color system
+  - Trust signals and badges updated to use card/border variables
+  - CTA section converted to use semantic color variables
+- **Help Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Hero section updated with primary color gradients
+  - FAQ cards converted to use card/border variables
+  - Button styling unified with primary color system
+  - Trust signals and badges updated to use card/border variables
+  - Troubleshooting cards updated to use semantic color variables
+  - Contact support section converted to use primary/accent variables
+- **Dashboard Page**: Complete color system conversion:
+  - Background gradients converted to use background/muted variables
+  - Header section updated with primary color gradients
+  - User profile card converted to use card/border variables
+  - Stats cards updated to use semantic color variables
+  - Email management section converted to use card/border variables
+  - Table styling updated to use muted/border variables
+  - Search and filter controls converted to use card/border variables
+  - Pagination controls updated to use primary color system
+  - Email preview modal converted to use card/border variables
+  - All text colors converted to foreground/muted-foreground
+- **Send Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Header section updated with primary color gradients
+  - Search bar converted to use primary/card/border variables
+  - Template cards updated to use card/border variables
+  - Button styling unified with primary color system
+  - Empty state converted to use semantic color variables
+  - All text colors converted to foreground/muted-foreground
+- **Buy-Credits Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Header section updated with primary color gradients
+  - Credit plan cards updated to use card/border variables
+  - Button styling unified with primary color system
+  - QR code payment section converted to use card/border variables
+  - All text colors converted to foreground/muted-foreground
+
+### Technical Details
+- **Files Modified**: 
+  - `app/globals.css` - Added smooth transitions
+  - `components/ui/theme-toggle.tsx` - New theme toggle component
+  - `components/navbar.tsx` - Integrated theme toggle and converted colors
+  - `components/AnimatedHome.tsx` - Complete color system conversion
+  - `app/features/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/help/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/(Pages)/dashboard/page.tsx` - Complete color system conversion
+  - `app/send/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/(Pages)/buy-credits/page.tsx` - Complete color system conversion and theme logic removal
+- **Color Variables Used**: primary, primary-foreground, popover, border, card, destructive, accent, foreground, muted-foreground, background, muted
+- **Animation**: Added hover and tap animations for theme toggle with Framer Motion
+- **Shadow System**: Implemented consistent shadow-md and shadow-lg usage
+- **Theme Logic**: Removed forced dark theme logic from features, help, send, and buy-credits pages for proper theme switching
+
+### User Feedback & Open Questions
+- None at this time - theming system implementation
+
+---
+
 ## [2024-12-19] - Initial Changelog System Implementation
 
 ### Added

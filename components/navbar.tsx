@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "./ui/button"
+import { ThemeToggle } from "./ui/theme-toggle"
 import { 
   Mail, 
   LogIn, 
@@ -102,14 +103,14 @@ export function Navbar() {
                 whileTap={{ scale: 0.9 }}
                 className="relative"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
-                  <Mail className="h-6 w-6 text-white" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/60 to-primary rounded-lg blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative bg-gradient-to-r from-primary to-primary/80 p-2 rounded-lg shadow-md">
+                  <Mail className="h-6 w-6 text-primary-foreground" />
                 </div>
               </motion.div>
               <div className="flex flex-col">
                 <motion.span 
-                  className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                  className="font-bold text-xl bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent"
                   whileHover={{ scale: 1.02 }}
                 >
                   Mail Assist
@@ -157,6 +158,8 @@ export function Navbar() {
 
           {/* Desktop Right Section */}
           <div className="hidden lg:flex items-center gap-2">
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {loggedIn ? (
               <>
@@ -176,8 +179,8 @@ export function Navbar() {
                       onClick={() => setUserMenuOpen(!userMenuOpen)}
                       className="flex items-center gap-2 px-3"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                        <User className="h-4 w-4 text-white" />
+                      <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-md">
+                        <User className="h-4 w-4 text-primary-foreground" />
                       </div>
                       <span className="text-sm font-medium">{user?.username?.split('@')[0] || 'User'}</span>
                       <motion.div
@@ -195,7 +198,7 @@ export function Navbar() {
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="absolute right-0 mt-2 w-48 dark:bg-black/80 dark:text-white text-white bg-black/80 backdrop-blur-2xl border rounded-lg shadow-lg py-1"
+                        className="absolute right-0 mt-2 w-48 bg-popover border border-border rounded-lg shadow-md py-1 backdrop-blur-sm"
                       >
                         {userMenuItems.map(({ href, icon: Icon, label }) => (
                           <Link
@@ -211,7 +214,7 @@ export function Navbar() {
                         <hr className="my-1" />
                         <button
                           onClick={handleLogout}
-                          className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-accent/50 transition-colors w-full text-left text-red-600"
+                          className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-destructive/10 transition-colors w-full text-left text-destructive"
                         >
                           <LogOut className="h-4 w-4" />
                           Logout
@@ -229,7 +232,7 @@ export function Navbar() {
                       variant={label === 'Sign Up' ? 'default' : 'ghost'}
                       size="sm"
                       asChild
-                      className={label === 'Sign Up' ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700' : ''}
+                      className={label === 'Sign Up' ? 'bg-primary hover:bg-primary/90 shadow-md' : ''}
                     >
                       <Link href={href} className="flex items-center gap-2">
                         <Icon className="h-4 w-4" />
@@ -243,7 +246,8 @@ export function Navbar() {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="lg:hidden flex items-center gap-2 text-black dark:text-white">
+          <div className="lg:hidden flex items-center gap-2">
+            <ThemeToggle />
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="ghost"
@@ -273,13 +277,13 @@ export function Navbar() {
             className="lg:hidden overflow-hidden bg-background/95 backdrop-blur-sm border-t"
           >
             <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col gap-2 text-white bg-black/80 backdrop-blur-xl rounded-lg p-4">
+              <div className="flex flex-col gap-2 bg-card border border-border rounded-lg p-4 shadow-md">
 
                 {/* User Info (if logged in) */}
                 {loggedIn && (
                   <div className="flex items-center gap-3 p-3 bg-accent/20 rounded-lg mb-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-white" />
+                    <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-md">
+                      <User className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div>
                       <p className="font-bold text-lg">{user?.username?.split('@')[0] || 'User'}</p>
@@ -321,7 +325,7 @@ export function Navbar() {
                           size="lg"
                           asChild
                           className={`w-full justify-start ${
-                            label === 'Sign Up' ? 'bg-gradient-to-r from-blue-500 to-purple-600' : ''
+                            label === 'Sign Up' ? 'bg-primary hover:bg-primary/90 shadow-md' : ''
                           }`}
                         >
                           <Link href={href} onClick={() => setMenuOpen(false)}>
@@ -341,7 +345,7 @@ export function Navbar() {
                       variant="outline"
                       size="lg"
                       onClick={handleLogout}
-                      className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50"
+                      className="w-full justify-start text-destructive border-destructive/20 hover:bg-destructive/10"
                     >
                       <LogOut className="mr-2 h-5 w-5" />
                       Logout
