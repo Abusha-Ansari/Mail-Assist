@@ -23,6 +23,7 @@ import {
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 type AnimatedCounterProps = { end: number; duration?: number };
 
@@ -147,6 +148,36 @@ export default function AnimatedHome() {
     { number: 24, label: "Support Hours", icon: <Clock /> },
   ];
 
+  const footerSections = [
+    {
+      title: "Product",
+      links: {
+        Features: "/features",
+        Templates: "/send",
+        Pricing: "/buy-credits",
+        API: "/api-docs",
+      },
+    },
+    {
+      title: "Company",
+      links: {
+        About: "/about",
+        Blog: "/blog",
+        Careers: "/careers",
+        Contact: "/contact",
+      },
+    },
+    {
+      title: "Support",
+      links: {
+        "Help Center": "/help",
+        Documentation: "/",
+        Status: "/status",
+        Community: "/community",
+      },
+    },
+  ];
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900 transition-colors duration-300">
       {/* Hero Section */}
@@ -219,13 +250,19 @@ export default function AnimatedHome() {
                 <>
                   <button
                     onClick={() => router.push("/auth/signup")}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center gap-2"
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center gap-2 hover:cursor-pointer"
                   >
                     Get Started Free <ArrowRight className="h-5 w-5" />
                   </button>
-                  <button className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 flex items-center gap-2 bg-white dark:bg-gray-800">
-                    <Play className="h-5 w-5" /> Watch Demo
-                  </button>
+                  <button
+      type="button"
+      aria-label="Read Documentation"
+      onClick={() => window.open("https://docs.mailassist.abusha.tech", "_blank")}
+      className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-full font-semibold text-lg hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 flex items-center gap-2 bg-white dark:bg-gray-800 hover:cursor-pointer"
+    >
+      <Play className="h-5 w-5" />
+      Read Docs
+    </button>
                 </>
               )}
             </motion.div>
@@ -512,7 +549,7 @@ export default function AnimatedHome() {
               <>
                 <button
                   onClick={() => router.push("/auth/signup")}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:cursor-pointer"
                 >
                   Start with Free Credits
                 </button>
@@ -543,7 +580,7 @@ export default function AnimatedHome() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => router.push("/")}
-                className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
+                className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2 hover:cursor-pointer"
               >
                 Get Started Now <ArrowRight className="h-5 w-5" />
               </button>
@@ -561,55 +598,49 @@ export default function AnimatedHome() {
 
       {/* Footer */}
       <footer className="py-12 bg-gray-900 dark:bg-gray-950 text-white transition-colors duration-300">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Mail className="h-8 w-8 text-blue-400" />
-                <span className="text-xl font-bold">Mail Assist</span>
-              </div>
-              <p className="text-gray-400">
-                Seamless email delivery without the complexity.
-              </p>
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          {/* Logo + Description */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <Mail className="h-8 w-8 text-blue-400" />
+              <span className="text-xl font-bold">Mail Assist</span>
             </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Seamless email delivery without the complexity.
+            </p>
+          </div>
 
-            {[
-              {
-                title: "Product",
-                links: ["Features", "Templates", "Pricing", "API"],
-              },
-              {
-                title: "Company",
-                links: ["About", "Blog", "Careers", "Contact"],
-              },
-              {
-                title: "Support",
-                links: ["Help Center", "Documentation", "Status", "Community"],
-              },
-            ].map((section, index) => (
-              <div key={index}>
-                <h3 className="font-semibold mb-4">{section.title}</h3>
+          {/* Link Sections */}
+          <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
+            {footerSections.map((section) => (
+              <div key={section.title}>
+                <h3 className="font-semibold mb-4 text-white text-lg">
+                  {section.title}
+                </h3>
                 <ul className="space-y-2">
-                  {section.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <a
-                        href="#"
+                  {Object.entries(section.links).map(([label, href]) => (
+                    <li key={label}>
+                      <Link
+                        href={href}
                         className="text-gray-400 hover:text-white transition-colors"
                       >
-                        {link}
-                      </a>
+                        {label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-
-          <div className="border-t border-gray-800 dark:border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Mail Assist. All rights reserved.</p>
-          </div>
         </div>
-      </footer>
+
+        {/* Footer Bottom */}
+        <div className="border-t border-gray-800 dark:border-gray-700 mt-12 pt-6 text-center text-sm text-gray-400">
+          <p>&copy; 2025 Mail Assist. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
     </div>
   );
 }

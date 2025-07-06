@@ -1,6 +1,5 @@
 "use client";
-import { Coffee, CreditCard, Mail, IndianRupee } from "lucide-react";
-import Link from "next/link";
+import { Coffee, CreditCard, IndianRupee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,19 +15,22 @@ import Image from "next/image";
 const creditPlans = [
   {
     amount: 100,
-    label: "₹100",
+    label: "Basic",
+    priceLabel: "₹100",
     description: "Basic support",
     icon: <IndianRupee className="h-8 w-8 text-primary" />,
   },
   {
     amount: 500,
-    label: "₹500",
+    label: "Premium",
+    priceLabel: "₹500",
     description: "Premium support",
     icon: <IndianRupee className="h-8 w-8 text-primary" />,
   },
   {
     amount: 1000,
-    label: "₹1000",
+    label: "VIP",
+    priceLabel: "₹1000",
     description: "VIP support",
     icon: <IndianRupee className="h-8 w-8 text-primary" />,
   },
@@ -61,6 +63,11 @@ export default function BuyCreditsPage() {
       setTheme("dark");
     };
   }, [theme, setTheme]);
+
+  const getPlanLabel = (amount: number): string => {
+    const plan = creditPlans.find((p) => p.amount === amount);
+    return plan?.label || "Basic"; // fallback to Basic
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/30 text-black dark:text-white">
@@ -104,7 +111,7 @@ export default function BuyCreditsPage() {
                     {plan.icon}
                   </div> */}
                   <CardTitle className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    {plan.label}
+                    {plan.label + " " + plan.priceLabel}
                   </CardTitle>
                   <CardDescription className="text-lg font-semibold text-primary">
                     {calculateCredits(plan.amount)} credits
@@ -129,7 +136,8 @@ export default function BuyCreditsPage() {
               className="w-full sm:w-auto px-8 border-2 hover:cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <CreditCard className="mr-2 h-5 w-5" />
-              Pay {creditPlans.find((p) => p.amount === selectedAmount)?.label}
+              Pay{" "}
+              {creditPlans.find((p) => p.amount === selectedAmount)?.priceLabel}
             </Button>
           </div>
         )}
@@ -144,7 +152,10 @@ export default function BuyCreditsPage() {
                 </CardTitle>
                 <CardDescription>
                   Scan the QR code & pay{" "}
-                  {creditPlans.find((p) => p.amount === selectedAmount)?.label}
+                  {
+                    creditPlans.find((p) => p.amount === selectedAmount)
+                      ?.priceLabel
+                  }
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center gap-6">
@@ -152,7 +163,7 @@ export default function BuyCreditsPage() {
                   <div className="w-64 h-64 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                     <div className="bg-primary/10 p-6 rounded-lg">
                       <Image
-                        src="/QR-Code.png"
+                        src={`/QR-${getPlanLabel(selectedAmount)}.jpg`}
                         alt="QR Code"
                         width={256}
                         height={256}
@@ -167,6 +178,14 @@ export default function BuyCreditsPage() {
                     {calculateCredits(selectedAmount)} credits
                   </span>{" "}
                   after payment verification.
+                  <br />
+                  <span className="font-bold text-primary">
+                    (Also enter your{" "}
+                    <span className="text-primary font-semibold">
+                      Email
+                    </span>{" "}
+                    in the note while processing the payment)
+                  </span>
                 </p>
               </CardContent>
             </Card>
@@ -174,7 +193,7 @@ export default function BuyCreditsPage() {
         )}
 
         {/* Contact Button */}
-        <div className="mt-8 animate-fade-in">
+        {/* <div className="mt-8 animate-fade-in">
           <Link href="/contact">
             <Button
               variant="outline"
@@ -184,7 +203,7 @@ export default function BuyCreditsPage() {
               Contact Us
             </Button>
           </Link>
-        </div>
+        </div> */}
       </section>
     </div>
   );

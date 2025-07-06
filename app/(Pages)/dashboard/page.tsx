@@ -411,10 +411,11 @@ export default function Dashboard() {
                             </div>
                           </TableCell>
                           <TableCell className="hidden sm:table-cell max-w-[200px]">
-                            <span className="truncate text-gray-600 dark:text-gray-400">
+                            <span className="text-gray-600 dark:text-gray-400 whitespace-normal break-words">
                               {mail.subject || "No subject"}
                             </span>
                           </TableCell>
+
                           <TableCell>
                             <Badge
                               className={`${getStatusColor(mail.status)} border flex items-center space-x-1 w-fit`}
@@ -512,84 +513,94 @@ export default function Dashboard() {
 
       {/* Email Preview Modal */}
       <Dialog open={isModalOpen} onOpenChange={closeModal}>
-        <DialogContent className="w-[95vw] max-w-4xl max-h-[85vh] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-          <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
-            <DialogTitle className="flex items-center space-x-3 text-gray-800 dark:text-white">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center ">
-                <Mail className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <span>Email Preview</span>
-                {selectedMail?.subject && (
-                  <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
-                    {selectedMail.subject}
-                  </p>
-                )}
-              </div>
-            </DialogTitle>
-          </DialogHeader>
+  <DialogContent
+    className="w-[95vw] max-w-4xl h-[85vh] flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden"
+  >
+    {/* Header */}
+    <DialogHeader className="border-b border-gray-200 dark:border-gray-700 pb-4">
+      <DialogTitle className="flex items-center space-x-3 text-gray-800 dark:text-white">
+        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+          <Mail className="h-4 w-4 text-white" />
+        </div>
+       <div className="flex flex-col">
+  <span className="text-base font-semibold text-gray-800 dark:text-white">
+    Email Preview
+  </span>
+  <p className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1 break-words max-w-xs sm:max-w-sm md:max-w-md">
+    {selectedMail?.subject || "No subject"}
+  </p>
+</div>
 
-          <div className="space-y-4 text-black dark:text-white">
-            {selectedMail && (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                    To
-                  </label>
-                  <p className="text-sm text-gray-800 dark:text-gray-200 mt-1">
-                    {selectedMail.to_email}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                    Status
-                  </label>
-                  <div className="mt-1">
-                    <Badge
-                      className={`${getStatusColor(selectedMail.status)} border flex items-center space-x-1 w-fit`}
-                    >
-                      {getStatusIcon(selectedMail.status)}
-                      <span className="capitalize">{selectedMail.status}</span>
-                    </Badge>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                    Sent
-                  </label>
-                  <p className="text-sm text-gray-800 dark:text-gray-200 mt-1">
-                    {new Date(selectedMail.mail_time).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            )}
+      </DialogTitle>
+    </DialogHeader>
 
-            {selectedMail?.html ? (
-              <div className="overflow-y-auto max-h-[50vh] border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
-                <div
-                  dangerouslySetInnerHTML={{ __html: selectedMail.html }}
-                  className="prose prose-sm max-w-none dark:prose-invert"
-                />
-              </div>
-            ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                <Mail className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                <p>No email content available to preview.</p>
-              </div>
-            )}
+    {/* Body (scrollable) */}
+    <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 text-black dark:text-white">
+      {selectedMail && (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg p-4">
+          <div>
+            <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              To
+            </label>
+            <p className="text-sm text-gray-800 dark:text-gray-200 mt-1 break-words">
+              {selectedMail.to_email}
+            </p>
           </div>
+          <div>
+            <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Status
+            </label>
+            <div className="mt-1">
+              <Badge
+                className={`${getStatusColor(
+                  selectedMail.status
+                )} border flex items-center space-x-1 w-fit`}
+              >
+                {getStatusIcon(selectedMail.status)}
+                <span className="capitalize">{selectedMail.status}</span>
+              </Badge>
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Sent
+            </label>
+            <p className="text-sm text-gray-800 dark:text-gray-200 mt-1">
+              {new Date(selectedMail.mail_time).toLocaleString()}
+            </p>
+          </div>
+        </div>
+      )}
 
-          <DialogFooter className="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <Button
-              onClick={closeModal}
-              variant="outline"
-              className="hover:bg-gray-50 dark:hover:bg-gray-700"
-            >
-              Close Preview
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* HTML email body preview */}
+      {selectedMail?.html ? (
+        <div className="overflow-y-auto max-h-[50vh] border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
+          <div
+            className="prose prose-sm max-w-none dark:prose-invert break-words"
+            dangerouslySetInnerHTML={{ __html: selectedMail.html }}
+          />
+        </div>
+      ) : (
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <Mail className="h-12 w-12 mx-auto mb-3 opacity-50" />
+          <p>No email content available to preview.</p>
+        </div>
+      )}
+    </div>
+
+    {/* Footer (fixed at bottom) */}
+    <DialogFooter className="border-t border-gray-200 dark:border-gray-700 pt-4">
+      <Button
+        onClick={closeModal}
+        variant="outline"
+        className="hover:bg-gray-50 dark:hover:bg-gray-700"
+      >
+        Close Preview
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
 
       <style jsx global>{`
         @keyframes fade-in {
