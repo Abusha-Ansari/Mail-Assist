@@ -94,6 +94,30 @@
   - Divider styling updated to use border variables
   - Mobile menu text colors converted to foreground variables
   - All remaining hardcoded colors replaced with CSS variables
+- **Custom Template Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Background decorations updated to use primary color variables
+  - Icon container converted to use primary color variables
+  - Title gradients updated to use foreground/primary variables
+  - Description text converted to use muted-foreground variables
+  - Primary button styling unified with primary color system
+  - Outline button converted to use card/border variables
+  - Feature highlight card updated to use card/border variables
+  - All text colors converted to foreground/muted-foreground
+- **All Custom Templates Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Background decorations updated to use primary color variables
+  - Title gradients updated to use foreground/primary variables
+  - Search bar converted to use card/border/primary variables
+  - Empty state icon and text updated to use muted/primary variables
+  - Template cards converted to use card/border variables
+  - Template icons updated to use primary color variables
+  - Placeholder badges converted to use primary color variables
+  - Primary button styling unified with primary color system
+  - Outline button converted to use card/border variables
+  - All text colors converted to foreground/muted-foreground
 
 ### Technical Details
 - **Files Modified**: 
@@ -108,10 +132,12 @@
   - `app/(Pages)/buy-credits/page.tsx` - Complete color system conversion and theme logic removal
   - `app/auth/login/page.tsx` - Complete color system conversion and theme logic removal
   - `app/auth/signup/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/send/customTemplate/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/send/all-custom-templates/page.tsx` - Complete color system conversion and theme logic removal
 - **Color Variables Used**: primary, primary-foreground, popover, border, card, destructive, accent, foreground, muted-foreground, background, muted
 - **Animation**: Added hover and tap animations for theme toggle with Framer Motion
 - **Shadow System**: Implemented consistent shadow-md and shadow-lg usage
-- **Theme Logic**: Removed forced dark theme logic from features, help, send, buy-credits, login, and signup pages for proper theme switching
+- **Theme Logic**: Removed forced dark theme logic from features, help, send, buy-credits, login, signup, customTemplate, and all-custom-templates pages for proper theme switching
 
 ### User Feedback & Open Questions
 - None at this time - theming system implementation
