@@ -13,7 +13,6 @@ import {
   LayoutDashboard,
   Settings,
   HelpCircle,
-  Bell,
   User,
   ChevronDown,
 } from "lucide-react"
