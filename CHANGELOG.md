@@ -118,6 +118,21 @@
   - Primary button styling unified with primary color system
   - Outline button converted to use card/border variables
   - All text colors converted to foreground/muted-foreground
+- **Create Template Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Header icon and text updated to use primary/foreground variables
+  - Template name input converted to use card/border variables
+  - Action buttons unified with primary color system
+  - Add blocks section converted to use card/border variables
+  - Block type buttons updated to use primary/accent color variables
+  - Block editor cards converted to use card/border variables
+  - Content editor inputs updated to use muted/border variables
+  - Style controls converted to use muted/border variables
+  - Block preview areas updated to use muted/card variables
+  - Placeholder manager converted to use card/border variables
+  - Live preview section updated to use card/border variables
+  - All text colors converted to foreground/muted-foreground
 
 ### Technical Details
 - **Files Modified**: 
@@ -134,10 +149,11 @@
   - `app/auth/signup/page.tsx` - Complete color system conversion and theme logic removal
   - `app/send/customTemplate/page.tsx` - Complete color system conversion and theme logic removal
   - `app/send/all-custom-templates/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/(Pages)/create-template/page.tsx` - Complete color system conversion and theme logic removal
 - **Color Variables Used**: primary, primary-foreground, popover, border, card, destructive, accent, foreground, muted-foreground, background, muted
 - **Animation**: Added hover and tap animations for theme toggle with Framer Motion
 - **Shadow System**: Implemented consistent shadow-md and shadow-lg usage
-- **Theme Logic**: Removed forced dark theme logic from features, help, send, buy-credits, login, signup, customTemplate, and all-custom-templates pages for proper theme switching
+- **Theme Logic**: Removed forced dark theme logic from features, help, send, buy-credits, login, signup, customTemplate, all-custom-templates, and create-template pages for proper theme switching
 
 ### User Feedback & Open Questions
 - None at this time - theming system implementation

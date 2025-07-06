@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ import {
   Mail
 } from "lucide-react";
 import { container, success, failure } from "@/lib/toast.util";
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes";
 import { useUser } from "@/context/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
@@ -62,26 +62,26 @@ export default function EmailBuilder() {
   const [newKey, setNewKey] = useState("");
   const [newValue, setNewValue] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const originalTheme = useRef<string | undefined>(undefined)
+  // const { theme, setTheme } = useTheme();
+  // const originalTheme = useRef<string | undefined>(undefined)
 
   const { user } = useUser();
   const Router = useRouter();
 
-  useEffect(() => {
-    // Save the original theme
-    originalTheme.current = theme
+  // useEffect(() => {
+  //   // Save the original theme
+  //   originalTheme.current = theme
     
-    // Change to the desired theme (e.g., dark)
-    setTheme('light')
+  //   // Change to the desired theme (e.g., dark)
+  //   setTheme('light')
 
-    return () => {
-      // Restore the original theme
-      if (originalTheme.current) {
-        setTheme("dark")
-      }
-    }
-  }, [theme,setTheme]);
+  //   return () => {
+  //     // Restore the original theme
+  //     if (originalTheme.current) {
+  //       setTheme("dark")
+  //     }
+  //   }
+  // }, [theme,setTheme]);
 
   const addBlock = (type: Block["type"]) => {
     let defaultContent = "";
@@ -261,18 +261,18 @@ export default function EmailBuilder() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted p-4 overflow-hidden">
       {container}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 animate-fade-in flex-col md:flex-row gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-500 rounded-xl text-white">
+            <div className="p-3 bg-primary rounded-xl text-primary-foreground">
               <Mail className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">Email Builder</h1>
-              <p className="text-slate-600">Create beautiful email templates with ease</p>
+              <h1 className="text-3xl font-bold text-foreground">Email Builder</h1>
+              <p className="text-muted-foreground">Create beautiful email templates with ease</p>
             </div>
           </div>
           
@@ -284,18 +284,18 @@ export default function EmailBuilder() {
                 placeholder="Enter template name..."
                 value={templateName}
                 onChange={(e) => setTemplateName(e.target.value)}
-                className="w-64 bg-white/80 backdrop-blur-sm border-slate-200 focus:border-blue-500 transition-colors"
+                className="w-64 bg-card/80 backdrop-blur-sm border-border focus:border-primary transition-colors"
               />
             </div>
             <div className="flex gap-2">
-              <Button onClick={exportTemplate} variant="outline" className="gap-2 bg-white/80 backdrop-blur-sm">
+              <Button onClick={exportTemplate} variant="outline" className="gap-2 bg-card/80 backdrop-blur-sm">
                 <Download className="w-4 h-4" />
                 Export
               </Button>
               <Button 
                 onClick={saveTemplate} 
                 disabled={isSaving}
-                className="gap-2 bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+                className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-colors"
               >
                 <Save className="w-4 h-4" />
                 {isSaving ? "Saving..." : "Save Template"}
@@ -308,10 +308,10 @@ export default function EmailBuilder() {
           {/* Left Column - Block Management */}
           <div className="xl:col-span-2 space-y-6">
             {/* Add Blocks Section */}
-            <Card className="bg-white/80 backdrop-blur-sm border-slate-200 shadow-lg animate-scale-in">
+            <Card className="bg-card/80 backdrop-blur-sm border-border shadow-lg animate-scale-in">
               <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <Plus className="w-5 h-5 text-blue-500" />
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Plus className="w-5 h-5 text-primary" />
                   Add Content Blocks
                 </CardTitle>
               </CardHeader>
@@ -320,25 +320,25 @@ export default function EmailBuilder() {
                   <Button 
                     onClick={() => addBlock("heading")} 
                     variant="outline"
-                    className="gap-2 bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200 hover:from-purple-100 hover:to-purple-200 transition-all duration-200 hover-scale"
+                    className="gap-2 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20 hover:from-primary/20 hover:to-primary/10 transition-all duration-200 hover-scale"
                   >
-                    <Heading1 className="w-4 h-4 text-purple-600" />
+                    <Heading1 className="w-4 h-4 text-primary" />
                     Heading
                   </Button>
                   <Button 
                     onClick={() => addBlock("text")} 
                     variant="outline"
-                    className="gap-2 bg-gradient-to-r from-green-50 to-green-100 border-green-200 hover:from-green-100 hover:to-green-200 transition-all duration-200 hover-scale"
+                    className="gap-2 bg-gradient-to-r from-accent/10 to-accent/5 border-accent/20 hover:from-accent/20 hover:to-accent/10 transition-all duration-200 hover-scale"
                   >
-                    <Type className="w-4 h-4 text-green-600" />
+                    <Type className="w-4 h-4 text-accent-foreground" />
                     Text
                   </Button>
                   <Button 
                     onClick={() => addBlock("button")} 
                     variant="outline"
-                    className="gap-2 bg-gradient-to-r from-orange-50 to-orange-100 border-orange-200 hover:from-orange-100 hover:to-orange-200 transition-all duration-200 hover-scale"
+                    className="gap-2 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20 hover:from-primary/20 hover:to-primary/10 transition-all duration-200 hover-scale"
                   >
-                    <MousePointer className="w-4 h-4 text-orange-600" />
+                    <MousePointer className="w-4 h-4 text-primary" />
                     Button
                   </Button>
                 </div>
@@ -348,7 +348,7 @@ export default function EmailBuilder() {
             {/* Blocks Editor */}
             <div className="space-y-4">
               {blocks.map((block, index) => (
-                <Card key={block.id} className="bg-white/90 backdrop-blur-sm border-slate-200 shadow-lg animate-fade-in hover:shadow-xl transition-all duration-300">
+                <Card key={block.id} className="bg-card/90 backdrop-blur-sm border-border shadow-lg animate-fade-in hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -356,13 +356,13 @@ export default function EmailBuilder() {
                         <Badge variant="secondary" className="capitalize">
                           {block.type}
                         </Badge>
-                        <span className="text-sm text-slate-500">Block {index + 1}</span>
+                        <span className="text-sm text-muted-foreground">Block {index + 1}</span>
                       </div>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteBlock(block.id)}
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors"
+                        className="text-destructive hover:text-destructive/80 hover:bg-destructive/10 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -371,7 +371,7 @@ export default function EmailBuilder() {
                   <CardContent className="space-y-6">
                     {/* Content Editor */}
                     <div className="space-y-2">
-                      <Label className="flex items-center gap-2 text-slate-700">
+                      <Label className="flex items-center gap-2 text-foreground">
                         <Edit className="w-4 h-4" />
                         Content
                       </Label>
@@ -379,14 +379,14 @@ export default function EmailBuilder() {
                         rows={3}
                         value={block.content}
                         onChange={(e) => updateBlockContent(block.id, e.target.value)}
-                        className="bg-slate-50 border-slate-200 focus:border-blue-500 transition-colors resize-none"
+                        className="bg-muted border-border focus:border-primary transition-colors resize-none"
                         placeholder={`Enter your ${block.type} content...`}
                       />
                     </div>
 
                     {/* Style Controls */}
                     <div className="space-y-4">
-                      <Label className="flex items-center gap-2 text-slate-700">
+                      <Label className="flex items-center gap-2 text-foreground">
                         <Palette className="w-4 h-4" />
                         Styling Options
                       </Label>
@@ -438,7 +438,7 @@ export default function EmailBuilder() {
                           },
                         ].map(({ label, type, field, options, placeholder }) => (
                           <div key={field} className="space-y-2">
-                            <Label className="text-xs font-medium text-slate-600">{label}</Label>
+                            <Label className="text-xs font-medium text-muted-foreground">{label}</Label>
                             {type === "select" ? (
                               <Select
                                 value={block.styles[field as keyof Block["styles"]] ?? ""}
@@ -446,10 +446,10 @@ export default function EmailBuilder() {
                                   updateBlockStyle(block.id, field as keyof Block["styles"], value)
                                 }
                               >
-                                <SelectTrigger className="h-9 bg-slate-50 border-slate-200">
+                                <SelectTrigger className="h-9 bg-muted border-border">
                                   <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-white border-slate-200">
+                                <SelectContent className="bg-card border-border">
                                   {options?.map((option) => (
                                     <SelectItem key={option.value} value={option.value}>
                                       {option.label}
@@ -465,7 +465,7 @@ export default function EmailBuilder() {
                                   onChange={(e) =>
                                     updateBlockStyle(block.id, field as keyof Block["styles"], e.target.value)
                                   }
-                                  className="w-12 h-9 p-1 bg-slate-50 border-slate-200"
+                                  className="w-12 h-9 p-1 bg-muted border-border"
                                 />
                                 <Input
                                   type="text"
@@ -473,7 +473,7 @@ export default function EmailBuilder() {
                                   onChange={(e) =>
                                     updateBlockStyle(block.id, field as keyof Block["styles"], e.target.value)
                                   }
-                                  className="flex-1 h-9 bg-slate-50 border-slate-200 font-mono text-sm"
+                                  className="flex-1 h-9 bg-muted border-border font-mono text-sm"
                                 />
                               </div>
                             ) : (
@@ -484,7 +484,7 @@ export default function EmailBuilder() {
                                   updateBlockStyle(block.id, field as keyof Block["styles"], e.target.value)
                                 }
                                 placeholder={placeholder}
-                                className="h-9 bg-slate-50 border-slate-200"
+                                className="h-9 bg-muted border-border"
                               />
                             )}
                           </div>
@@ -494,11 +494,11 @@ export default function EmailBuilder() {
 
                     {/* Block Preview */}
                     <div className="space-y-2">
-                      <Label className="flex items-center gap-2 text-slate-700">
+                      <Label className="flex items-center gap-2 text-foreground">
                         <Eye className="w-4 h-4" />
                         Preview
                       </Label>
-                      <div className="p-4 bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-lg">
+                      <div className="p-4 bg-gradient-to-br from-muted to-card border border-border rounded-lg">
                         {renderPreview(block)}
                       </div>
                     </div>
@@ -511,10 +511,10 @@ export default function EmailBuilder() {
           {/* Right Column - Placeholders and Final Preview */}
           <div className="space-y-6">
             {/* Placeholder Manager */}
-            <Card className="bg-white/90 backdrop-blur-sm border-slate-200 shadow-lg animate-slide-in-right">
+            <Card className="bg-card/90 backdrop-blur-sm border-border shadow-lg animate-slide-in-right">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <Settings className="w-5 h-5 text-blue-500" />
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Settings className="w-5 h-5 text-primary" />
                   Placeholder Values
                 </CardTitle>
               </CardHeader>
@@ -533,7 +533,7 @@ export default function EmailBuilder() {
                           delete newFormData[key];
                           setFormData(newFormData);
                         }}
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 h-auto"
+                        className="text-destructive hover:text-destructive/80 hover:bg-destructive/10 p-1 h-auto"
                       >
                         <Trash2 className="w-3 h-3" />
                       </Button>
@@ -547,7 +547,7 @@ export default function EmailBuilder() {
                           [key]: e.target.value,
                         }))
                       }
-                      className="bg-slate-50 border-slate-200 focus:border-blue-500"
+                      className="bg-muted border-border focus:border-primary"
                     />
                   </div>
                 ))}
@@ -562,14 +562,14 @@ export default function EmailBuilder() {
                       placeholder="Key"
                       value={newKey}
                       onChange={(e) => setNewKey(e.target.value)}
-                      className="bg-slate-50 border-slate-200"
+                      className="bg-muted border-border"
                     />
                     <Input
                       type="text"
                       placeholder="Value"
                       value={newValue}
                       onChange={(e) => setNewValue(e.target.value)}
-                      className="bg-slate-50 border-slate-200"
+                      className="bg-muted border-border"
                     />
                   </div>
                   <Button
@@ -581,7 +581,7 @@ export default function EmailBuilder() {
                         success(`Placeholder {{${newKey.trim()}}} has been added.`, 2000);
                       }
                     }}
-                    className="w-full gap-2 bg-blue-500 hover:bg-blue-600"
+                    className="w-full gap-2 bg-primary hover:bg-primary/90"
                     disabled={!newKey.trim()}
                   >
                     <Plus className="w-4 h-4" />
@@ -592,17 +592,17 @@ export default function EmailBuilder() {
             </Card>
 
             {/* Final Preview */}
-            <Card className="bg-white/90 backdrop-blur-sm border-slate-200 shadow-lg animate-fade-in sticky top-4">
+            <Card className="bg-card/90 backdrop-blur-sm border-border shadow-lg animate-fade-in sticky top-4">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-800">
-                  <Eye className="w-5 h-5 text-blue-500" />
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Eye className="w-5 h-5 text-primary" />
                   Live Preview
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4 p-4 bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-lg min-h-[200px]">
+                <div className="space-y-4 p-4 bg-gradient-to-br from-muted to-card border border-border rounded-lg min-h-[200px]">
                   {blocks.length === 0 ? (
-                    <div className="flex items-center justify-center h-32 text-slate-400">
+                    <div className="flex items-center justify-center h-32 text-muted-foreground">
                       <div className="text-center">
                         <Mail className="w-8 h-8 mx-auto mb-2 opacity-50" />
                         <p className="text-sm">Add blocks to see preview</p>
