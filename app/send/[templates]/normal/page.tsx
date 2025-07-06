@@ -127,7 +127,7 @@ export default function NormalEmailForm() {
       {container}
       <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="to" className="text-sm font-medium text-gray-700">
+        <Label htmlFor="to" className="text-sm font-medium text-foreground">
           To
         </Label>
         <Input 
@@ -137,12 +137,12 @@ export default function NormalEmailForm() {
           required 
           value={formData.to} 
           onChange={handleChange}
-          className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+          className="h-11 border-border focus:border-primary focus:ring-primary"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="subject" className="text-sm font-medium text-gray-700">
+        <Label htmlFor="subject" className="text-sm font-medium text-foreground">
           Subject
         </Label>
         <Input 
@@ -151,12 +151,12 @@ export default function NormalEmailForm() {
           required 
           value={formData.subject} 
           onChange={handleChange}
-          className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+          className="h-11 border-border focus:border-primary focus:ring-primary"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="body" className="text-sm font-medium text-gray-700">
+        <Label htmlFor="body" className="text-sm font-medium text-foreground">
           Message
         </Label>
         <Textarea 
@@ -165,7 +165,7 @@ export default function NormalEmailForm() {
           required 
           value={formData.body} 
           onChange={handleChange} 
-          className="min-h-[200px] border-gray-200 focus:border-blue-500 focus:ring-blue-500 resize-none"
+          className="min-h-[200px] border-border focus:border-primary focus:ring-primary resize-none"
         />
       </div>
 
@@ -177,9 +177,9 @@ export default function NormalEmailForm() {
             id="schedule-checkbox"
             checked={schedule} 
             onChange={(e) => setSchedule(e.target.checked)}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+            className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2"
           />
-          <Label htmlFor="schedule-checkbox" className="text-sm font-medium text-gray-700 cursor-pointer">
+          <Label htmlFor="schedule-checkbox" className="text-sm font-medium text-foreground cursor-pointer">
             Schedule this email?
           </Label>
         </div>
@@ -187,7 +187,7 @@ export default function NormalEmailForm() {
         {schedule && (
           <div className="flex gap-4 pt-2">
             <div className="flex-1">
-              <Label htmlFor="schedule-date" className="text-sm font-medium text-gray-700 mb-2 block">
+              <Label htmlFor="schedule-date" className="text-sm font-medium text-foreground mb-2 block">
                 Date
               </Label>
               <Input 
@@ -196,11 +196,11 @@ export default function NormalEmailForm() {
                 value={date} 
                 onChange={(e) => setDate(e.target.value)} 
                 required 
-                className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                className="h-11 border-border focus:border-primary focus:ring-primary"
               />
             </div>
             <div className="flex-1">
-              <Label htmlFor="schedule-time" className="text-sm font-medium text-gray-700 mb-2 block">
+              <Label htmlFor="schedule-time" className="text-sm font-medium text-foreground mb-2 block">
                 Time
               </Label>
               <Input 
@@ -209,7 +209,7 @@ export default function NormalEmailForm() {
                 value={time} 
                 onChange={(e) => setTime(e.target.value)} 
                 required 
-                className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                className="h-11 border-border focus:border-primary focus:ring-primary"
               />
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function NormalEmailForm() {
 
       <Button 
         type="submit" 
-        className="w-full h-11 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium transition-all duration-200" 
+        className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200" 
         disabled={isLoading}
       >
         {isLoading ? "Sending..." : (

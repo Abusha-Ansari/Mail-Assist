@@ -95,44 +95,45 @@ export default function JobOfferTemplatePage() {
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
       {container}
-      <h1 className="text-2xl font-bold mb-6 text-center">Send a Job Offer Email</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center text-foreground">Send a Job Offer Email</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="to" className="pb-2">To</Label>
-            <Input id="to" type="email" value={formData.to} onChange={handleChange} required placeholder="Enter Recipient Email" />
+            <Label htmlFor="to" className="pb-2 text-foreground">To</Label>
+            <Input id="to" type="email" value={formData.to} onChange={handleChange} required placeholder="Enter Recipient Email" className="border-border focus:border-primary focus:ring-primary" />
           </div>
 
           <div>
-            <Label htmlFor="company" className="pb-2">Company</Label>
-            <Input id="company" value={formData.company} onChange={handleChange} required placeholder="Company Name" />
+            <Label htmlFor="company" className="pb-2 text-foreground">Company</Label>
+            <Input id="company" value={formData.company} onChange={handleChange} required placeholder="Company Name" className="border-border focus:border-primary focus:ring-primary" />
           </div>
 
           <div>
-            <Label htmlFor="position" className="pb-2">Position</Label>
-            <Input id="position" value={formData.position} onChange={handleChange} required placeholder="Position" />
+            <Label htmlFor="position" className="pb-2 text-foreground">Position</Label>
+            <Input id="position" value={formData.position} onChange={handleChange} required placeholder="Position" className="border-border focus:border-primary focus:ring-primary" />
           </div>
 
           <div>
-            <Label htmlFor="description" className="pb-2">Job Description</Label>
+            <Label htmlFor="description" className="pb-2 text-foreground">Job Description</Label>
             <Textarea
               id="description"
               value={formData.description}
               onChange={handleChange}
               required
               placeholder="Enter Job Description"
+              className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
-          <Button type="submit" disabled={isSending} className="w-full border hover:cursor-pointer">
+          <Button type="submit" disabled={isSending} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground border-border hover:cursor-pointer">
             {isSending ? "Sending..." : "Send Email (10 credits)"}
           </Button>
         </div>
 
-        <div className="border rounded-md p-4 bg-muted text-muted-foreground">
-          <h2 className="text-md font-semibold mb-4">📬 Preview:</h2>
-          <div className="bg-background p-4 rounded-md shadow">
+        <div className="border border-border rounded-md p-4 bg-muted text-muted-foreground">
+          <h2 className="text-md font-semibold mb-4 text-foreground">📬 Preview:</h2>
+          <div className="bg-card p-4 rounded-md shadow border border-border">
             <JobOfferTemplate
               company={formData.company || "Your Company"}
               position={formData.position || "Position Title"}

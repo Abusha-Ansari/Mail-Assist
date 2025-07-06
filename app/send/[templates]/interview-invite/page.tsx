@@ -95,7 +95,7 @@ export default function InterviewInviteForm() {
     <>
       <div className="container max-w-4xl mx-auto py-8 px-4">
         {container}
-        <h1 className="text-2xl font-bold mb-6 text-center">
+        <h1 className="text-2xl font-bold mb-6 text-center text-foreground">
           Send an Interview Invitation
         </h1>
 
@@ -105,73 +105,79 @@ export default function InterviewInviteForm() {
         >
           <div className="space-y-4">
             <div>
-              <Label htmlFor="to" className="pb-2">To</Label>
+              <Label htmlFor="to" className="pb-2 text-foreground">To</Label>
               <Input
                 id="to"
                 type="email"
                 value={form.to}
                 onChange={handleChange}
+                className="border-border focus:border-primary focus:ring-primary"
               />
             </div>
 
             <div>
-              <Label htmlFor="company" className="pb-2">Company</Label>
+              <Label htmlFor="company" className="pb-2 text-foreground">Company</Label>
               <Input
                 id="company"
                 value={form.company}
                 onChange={handleChange}
                 required
+                className="border-border focus:border-primary focus:ring-primary"
               />
             </div>
 
             <div>
-              <Label htmlFor="position" className="pb-2">Position</Label>
+              <Label htmlFor="position" className="pb-2 text-foreground">Position</Label>
               <Input
                 id="position"
                 value={form.position}
                 onChange={handleChange}
                 required
+                className="border-border focus:border-primary focus:ring-primary"
               />
             </div>
 
             <div>
-              <Label htmlFor="date" className="pb-2">Date</Label>
+              <Label htmlFor="date" className="pb-2 text-foreground">Date</Label>
               <Input
                 id="date"
                 value={form.date}
                 onChange={handleChange}
                 required
+                className="border-border focus:border-primary focus:ring-primary"
               />
             </div>
 
             <div>
-              <Label htmlFor="time" className="pb-2">Time</Label>
+              <Label htmlFor="time" className="pb-2 text-foreground">Time</Label>
               <Input
                 id="time"
                 value={form.time}
                 onChange={handleChange}
                 required
+                className="border-border focus:border-primary focus:ring-primary"
               />
             </div>
 
             <div>
-              <Label htmlFor="location" className="pb-2">Location</Label>
+              <Label htmlFor="location" className="pb-2 text-foreground">Location</Label>
               <Input
                 id="location"
                 value={form.location}
                 onChange={handleChange}
                 required
+                className="border-border focus:border-primary focus:ring-primary"
               />
             </div>
 
-            <Button type="submit" disabled={isLoading} className="w-full border hover:cursor-pointer">
+            <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground border-border hover:cursor-pointer">
               {isLoading ? "Sending..." : "Send Invitation (10 credits)"}
             </Button>
           </div>
 
-          <div className="border rounded-md p-4 bg-muted text-muted-foreground">
-            <h2 className="text-md font-semibold mb-4">📬 Preview:</h2>
-            <div className="bg-background p-4 rounded-md shadow">
+          <div className="border border-border rounded-md p-4 bg-muted text-muted-foreground">
+            <h2 className="text-md font-semibold mb-4 text-foreground">📬 Preview:</h2>
+            <div className="bg-card p-4 rounded-md shadow border border-border">
               <InterviewInviteTemplate {...form} />
             </div>
           </div>

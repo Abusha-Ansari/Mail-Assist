@@ -97,70 +97,75 @@ export default function PaymentConfirmationPage() {
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
       {container}
-      <h1 className="text-2xl font-bold mb-6 text-center">Send Payment Confirmation</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center text-foreground">Send Payment Confirmation</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="to" className="pb-2">Recipient Email</Label>
+            <Label htmlFor="to" className="pb-2 text-foreground">Recipient Email</Label>
             <Input
               id="to"
               type="email"
               value={formData.to}
               onChange={handleChange}
               placeholder="recipient@example.com"
+              className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
-            <Label htmlFor="recipientName" className="pb-2">Recipient Name</Label>
+            <Label htmlFor="recipientName" className="pb-2 text-foreground">Recipient Name</Label>
             <Input 
               id="recipientName" 
               value={formData.recipientName} 
               onChange={handleChange} 
               required 
+              className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
-            <Label htmlFor="amount" className="pb-2">Amount</Label>
+            <Label htmlFor="amount" className="pb-2 text-foreground">Amount</Label>
             <Input 
               id="amount" 
               value={formData.amount} 
               onChange={handleChange} 
               required 
+              className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
-            <Label htmlFor="transactionId" className="pb-2">Transaction ID</Label>
+            <Label htmlFor="transactionId" className="pb-2 text-foreground">Transaction ID</Label>
             <Input 
               id="transactionId" 
               value={formData.transactionId} 
               onChange={handleChange} 
               required 
+              className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
-            <Label htmlFor="date" className="pb-2">Payment Date</Label>
+            <Label htmlFor="date" className="pb-2 text-foreground">Payment Date</Label>
             <Input 
               id="date" 
               type="date" 
               value={formData.date} 
               onChange={handleChange} 
               required 
+              className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
-          <Button type="submit" disabled={isSending} className="w-full border hover:cursor-pointer">
+          <Button type="submit" disabled={isSending} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground border-border hover:cursor-pointer">
             {isSending ? 'Sending...' : 'Send Confirmation (10 credits)'}
           </Button>
         </div>
 
-        <div className="border rounded-md p-4 bg-muted text-muted-foreground">
-          <h2 className="text-md font-semibold mb-4">📬 Preview:</h2>
-          <div className="bg-background p-4 rounded-md shadow">
+        <div className="border border-border rounded-md p-4 bg-muted text-muted-foreground">
+          <h2 className="text-md font-semibold mb-4 text-foreground">📬 Preview:</h2>
+          <div className="bg-card p-4 rounded-md shadow border border-border">
             <PaymentConfirmationTemplate
               amount={formData.amount || "0.00"}
               transactionId={formData.transactionId || "TRANS12345"}
