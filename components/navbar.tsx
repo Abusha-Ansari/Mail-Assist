@@ -66,7 +66,7 @@ export function Navbar() {
   const userLinks = loggedIn ? [
     { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", badge: null },
     { href: "/send", icon: Mail, label: "Send Mail", badge: null },
-    { href: "/buy-credits", icon: CreditCard, label: "Buy Credits", badge: "Popular" },
+    { href: "/buy-credits", icon: CreditCard, label: "Buy Credits" },
   ] : []
 
   const authLinks = loggedIn ? [] : [
@@ -162,12 +162,12 @@ export function Navbar() {
             {loggedIn ? (
               <>
                 {/* Notifications */}
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button variant="ghost" size="icon" className="relative">
                     <Bell className="h-4 w-4" />
-                    {/* <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div> */}
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                   </Button>
-                </motion.div>
+                </motion.div> */}
 
                 {/* User Menu */}
                 <div className="relative user-menu">
@@ -196,7 +196,7 @@ export function Navbar() {
                         initial={{ opacity: 0, y: -10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="absolute right-0 mt-2 w-48 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg py-1"
+                        className="absolute right-0 mt-2 w-48 dark:bg-black/80 dark:text-white text-white bg-black/80 backdrop-blur-2xl border rounded-lg shadow-lg py-1"
                       >
                         {userMenuItems.map(({ href, icon: Icon, label }) => (
                           <Link
@@ -274,7 +274,8 @@ export function Navbar() {
             className="lg:hidden overflow-hidden bg-background/95 backdrop-blur-sm border-t"
           >
             <div className="container mx-auto px-4 py-4">
-              <div className="flex flex-col gap-2 bg-black text-white   backdrop-blur-xl rounded-lg p-4">
+              <div className="flex flex-col gap-2 text-white bg-black/80 backdrop-blur-xl rounded-lg p-4">
+
                 {/* User Info (if logged in) */}
                 {loggedIn && (
                   <div className="flex items-center gap-3 p-3 bg-accent/20 rounded-lg mb-3">
@@ -282,8 +283,8 @@ export function Navbar() {
                       <User className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">{user?.username?.split('@')[0] || 'User'}</p>
-                      <p className="text-xs text-muted-foreground">{user?.username}</p>
+                      <p className="font-bold text-lg">{user?.username?.split('@')[0] || 'User'}</p>
+                      {/* <p className="text-xs text-muted-foreground">{user?.username}</p> */}
                     </div>
                   </div>
                 )}

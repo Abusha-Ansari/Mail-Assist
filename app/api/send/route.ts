@@ -20,9 +20,9 @@ export async function POST(req: NextRequest) {
   
   const emailData: EmailProps = await req.json();
 
-  const { to, from, subject, bodyMessage, templateType, templateData } = emailData;
+  const { to, subject, bodyMessage, templateType, templateData } = emailData;
 
-  if (!to || !from || !subject) {
+  if (!to || !bodyMessage || !subject) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
