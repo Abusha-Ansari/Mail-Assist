@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,7 @@ import { useUser } from "@/context/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 import { container, failure, success } from "@/lib/toast.util";
 import { getUserProfile } from "@/utils/auth";
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -22,23 +22,23 @@ export default function LoginPage() {
   const router = useRouter();
   const { setLoggedIn, setUser } = useUser();
 
-    const { theme, setTheme } = useTheme()
-  const originalTheme = useRef<string | undefined>(undefined)
+    // const { theme, setTheme } = useTheme()
+  // const originalTheme = useRef<string | undefined>(undefined)
 
-  useEffect(() => {
-    // Save the original theme
-    originalTheme.current = theme
+  // useEffect(() => {
+  //   // Save the original theme
+  //   originalTheme.current = theme
     
-    // Change to the desired theme (e.g., dark)
-    setTheme('light')
+  //   // Change to the desired theme (e.g., dark)
+  //   setTheme('light')
 
-    return () => {
-      // Restore the original theme
-      if (originalTheme.current) {
-        setTheme('dark')
-      }
-    }
-  }, [theme, setTheme]);
+  //   return () => {
+  //     // Restore the original theme
+  //     if (originalTheme.current) {
+  //       setTheme('dark')
+  //     }
+  //   }
+  // }, [theme, setTheme]);
 
 function handleGoogleLogin() {
   // Your Google OAuth logic would go here
@@ -90,18 +90,18 @@ const handleSubmit = async (e: React.FormEvent) => {
   };
 
   return (
-     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+     <div className="min-h-screen bg-gradient-to-br from-background via-card/20 to-muted/20 flex items-center justify-center p-4">
       {container}
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
+        <Card className="shadow-2xl border-0 bg-card/80 backdrop-blur-sm">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-              <LogIn className="w-6 h-6 text-white" />
+            <div className="mx-auto w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center">
+              <LogIn className="w-6 h-6 text-primary-foreground" />
             </div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-muted-foreground">
               Enter your credentials to access your account
             </CardDescription>
           </CardHeader>
@@ -109,7 +109,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           <CardContent className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="email" className="text-sm font-medium text-foreground">
                   Email Address
                 </Label>
                 <Input
@@ -119,12 +119,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  className="h-11 border-border focus:border-primary focus:ring-primary"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="password" className="text-sm font-medium text-foreground">
                   Password
                 </Label>
                 <div className="relative">
@@ -134,7 +134,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 pr-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="h-11 pr-10 border-border focus:border-primary focus:ring-primary"
                   />
                   <Button
                     type="button"
@@ -144,9 +144,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
+                      <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                   </Button>
                 </div>
@@ -154,7 +154,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
               <Button 
                 type="submit" 
-                className="w-full h-11 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium transition-all duration-200" 
+                className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200" 
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign In"}
@@ -163,16 +163,16 @@ const handleSubmit = async (e: React.FormEvent) => {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-200" />
+                <span className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
 
             <Button 
               variant="outline" 
-              className="w-full h-11 border-gray-200 hover:bg-gray-50" 
+              className="w-full h-11 border-border hover:bg-muted" 
               type="button"
               onClick={() => handleGoogleLogin()}
             >
@@ -201,11 +201,11 @@ const handleSubmit = async (e: React.FormEvent) => {
             </Button>
 
             <div className="text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 {`Don't have an account? `}
                 <Link
                   href="/auth/signup"
-                  className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                  className="font-medium text-primary hover:text-primary/80 transition-colors"
                 >
                   Sign up here
                 </Link>

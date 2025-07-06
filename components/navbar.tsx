@@ -129,7 +129,7 @@ export function Navbar() {
                   <Link href={href} className="text-sm font-medium">
                     {label}
                     {badge && (
-                      <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-400 to-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                      <span className="absolute -top-1 -right-1 bg-gradient-to-r from-destructive to-destructive/80 text-destructive-foreground text-xs px-1.5 py-0.5 rounded-full">
                         {badge}
                       </span>
                     )}
@@ -146,7 +146,7 @@ export function Navbar() {
                     <Icon className="h-4 w-4" />
                     {label}
                     {badge && (
-                      <span className="absolute -top-1 -right-1 bg-gradient-to-r from-green-400 to-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                      <span className="absolute -top-1 -right-1 bg-gradient-to-r from-accent to-accent/80 text-accent-foreground text-xs px-1.5 py-0.5 rounded-full">
                         {badge}
                       </span>
                     )}
@@ -182,7 +182,7 @@ export function Navbar() {
                       <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-md">
                         <User className="h-4 w-4 text-primary-foreground" />
                       </div>
-                      <span className="text-sm font-medium">{user?.username?.split('@')[0] || 'User'}</span>
+                      <span className="text-sm font-medium text-foreground">{user?.username?.split('@')[0] || 'User'}</span>
                       <motion.div
                         animate={{ rotate: userMenuOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
@@ -211,7 +211,7 @@ export function Navbar() {
                             {label}
                           </Link>
                         ))}
-                        <hr className="my-1" />
+                        <hr className="my-1 border-border" />
                         <button
                           onClick={handleLogout}
                           className="flex items-center gap-3 px-4 py-2 text-sm hover:bg-destructive/10 transition-colors w-full text-left text-destructive"
@@ -286,7 +286,7 @@ export function Navbar() {
                       <User className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div>
-                      <p className="font-bold text-lg">{user?.username?.split('@')[0] || 'User'}</p>
+                      <p className="font-bold text-lg text-foreground">{user?.username?.split('@')[0] || 'User'}</p>
                       {/* <p className="text-xs text-muted-foreground">{user?.username}</p> */}
                     </div>
                   </div>
@@ -305,11 +305,11 @@ export function Navbar() {
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors relative"
                     >
                       {Icon && <Icon className="h-5 w-5" />}
-                      <span className="font-medium">{label}</span>
+                      <span className="font-medium text-foreground">{label}</span>
                       {badge && (
-                        <span className="ml-auto bg-gradient-to-r from-green-400 to-blue-500 text-white text-xs px-2 py-1 rounded-full">
-                          {badge}
-                        </span>
+                                              <span className="ml-auto bg-gradient-to-r from-accent to-accent/80 text-accent-foreground text-xs px-2 py-1 rounded-full">
+                        {badge}
+                      </span>
                       )}
                     </Link>
                   </motion.div>

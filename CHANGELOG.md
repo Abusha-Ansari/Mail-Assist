@@ -6,7 +6,7 @@
 - **Theme Toggle Component**: New `components/ui/theme-toggle.tsx` with smooth animations and proper theme switching
 - **Smooth Theme Transitions**: Added 150ms CSS transitions for background-color, border-color, and color changes
 - **Enhanced Navbar**: Integrated theme toggle button in both desktop and mobile navigation
-- **Centralized Color System**: Converted hardcoded colors to use ShadCN CSS variables throughout navbar, AnimatedHome component, features page, help page, dashboard page, send page, and buy-credits page
+- **Centralized Color System**: Converted hardcoded colors to use ShadCN CSS variables throughout navbar, AnimatedHome component, features page, help page, dashboard page, send page, buy-credits page, login page, and signup page
 
 ### Changed
 - **Navbar Color Scheme**: Replaced hardcoded blue/purple gradients with primary color variables
@@ -66,6 +66,34 @@
   - Button styling unified with primary color system
   - QR code payment section converted to use card/border variables
   - All text colors converted to foreground/muted-foreground
+- **Login Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Card styling updated to use card/border variables
+  - Icon container converted to use primary color variables
+  - Title gradients updated to use foreground/primary variables
+  - Form inputs converted to use border/primary focus variables
+  - Button styling unified with primary color system
+  - Divider and separator styling updated to use border/card variables
+  - Link colors converted to use primary color variables
+  - All text colors converted to foreground/muted-foreground
+- **Signup Page**: Complete color system conversion:
+  - Removed theme forcing logic (commented out useTheme hook)
+  - Background gradients converted to use background/muted variables
+  - Card styling updated to use card/border variables
+  - Icon container converted to use primary color variables
+  - Title gradients updated to use foreground/primary variables
+  - Form inputs converted to use border/primary focus variables
+  - Button styling unified with primary color system
+  - Divider and separator styling updated to use border/card variables
+  - Link colors converted to use primary color variables
+  - All text colors converted to foreground/muted-foreground
+- **Navbar Component**: Enhanced color system conversion:
+  - Badge colors updated to use destructive/accent color variables
+  - User menu text colors converted to foreground variables
+  - Divider styling updated to use border variables
+  - Mobile menu text colors converted to foreground variables
+  - All remaining hardcoded colors replaced with CSS variables
 
 ### Technical Details
 - **Files Modified**: 
@@ -78,10 +106,12 @@
   - `app/(Pages)/dashboard/page.tsx` - Complete color system conversion
   - `app/send/page.tsx` - Complete color system conversion and theme logic removal
   - `app/(Pages)/buy-credits/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/auth/login/page.tsx` - Complete color system conversion and theme logic removal
+  - `app/auth/signup/page.tsx` - Complete color system conversion and theme logic removal
 - **Color Variables Used**: primary, primary-foreground, popover, border, card, destructive, accent, foreground, muted-foreground, background, muted
 - **Animation**: Added hover and tap animations for theme toggle with Framer Motion
 - **Shadow System**: Implemented consistent shadow-md and shadow-lg usage
-- **Theme Logic**: Removed forced dark theme logic from features, help, send, and buy-credits pages for proper theme switching
+- **Theme Logic**: Removed forced dark theme logic from features, help, send, buy-credits, login, and signup pages for proper theme switching
 
 ### User Feedback & Open Questions
 - None at this time - theming system implementation
