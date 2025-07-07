@@ -208,7 +208,6 @@ export default function BatchEmailPage() {
     const data = await res.json();
 
     if (res.ok) {
-      console.log("Emails sent successfully:", data);
 
       const htmls = data.renderedHtmls || [];
 

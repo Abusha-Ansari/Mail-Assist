@@ -115,7 +115,6 @@ export default function NormalEmailForm() {
         router.push("/dashboard");
       }
     } catch (err) {
-      console.log(err)
       failure("Sending failed " + `${err}`, 2000);
     } finally {
       setIsLoading(false);
