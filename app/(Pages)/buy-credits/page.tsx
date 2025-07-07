@@ -41,7 +41,7 @@ export default function BuyCreditsPage() {
   const [showPayment, setShowPayment] = useState(false);
 
   const calculateCredits = (amount: number) => {
-    return amount * 2.5;
+    return amount * 25;
   };
 
   const handleAmountSelect = (amount: number) => {
@@ -84,7 +84,7 @@ export default function BuyCreditsPage() {
             Buy Email Credits
           </h1>
           <p className="max-w-[700px] text-base text-muted-foreground sm:text-lg bg-card/50 backdrop-blur-sm rounded-lg px-6 py-3 border border-border/20">
-            Get 2.5x credits on every purchase. Support our service and get more
+            Get 25x credits on every purchase. Support our service and get more
             emails to send.
           </p>
         </div>
