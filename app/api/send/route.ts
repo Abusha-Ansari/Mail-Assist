@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
   const { to, subject, bodyMessage, templateType, templateData } = emailData;
 
-  if (!to || !bodyMessage || !subject) {
+  if (!to || !subject) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
