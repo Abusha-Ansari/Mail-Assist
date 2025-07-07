@@ -19,6 +19,7 @@ import { success, failure, container } from "@/lib/toast.util";
 import { supabase } from "@/lib/supabaseClient";
 import { deductCredits } from "@/utils/auth";
 import { useUser } from "@/context/UserContext";
+import { addUserMail, MailStatus } from "@/utils/userMail.utils";
 
 export default function BatchEmailPage() {
   const { id: templateId } = useParams();
@@ -173,49 +174,82 @@ export default function BatchEmailPage() {
     }
   };
 
-  const sendEmails = async () => {
-    if (!subject.trim()) {
-      failure("Please enter an email subject.", 2000);
+ const sendEmails = async () => {
+  if (!subject.trim()) {
+    failure("Please enter an email subject.", 2000);
+    return;
+  }
+
+  if (!confirm(`Are you sure you want to send ${rows.length} emails?`)) {
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    if (rows.length === 0) {
+      failure("No recipients to send emails to.", 2000);
       return;
     }
 
-    if (!confirm(`Are you sure you want to send ${rows.length} emails?`)) {
-      return;
-    }
-
-    setIsLoading(true);
     try {
-      if (rows.length === 0) {
-        failure("No recipients to send emails to.", 2000);
-        return;
-      }
-      try {
-        await deductCredits(user!.id, rows.length * 10);
-      } catch {
-        failure("Not enough credits to send email", 2000);
-        return;
-      }
-      const res = await fetch("/api/send-batch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ templateId, rows, subject }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        success(`Successfully sent ${rows.length} emails!`, 2000);
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      failure(
-        `Failed to Send emails: ${error instanceof Error ? error.message : "Unknown error"}`,
-        2000
-      );
-    } finally {
-      setIsLoading(false);
+      await deductCredits(user!.id, rows.length * 10);
+    } catch {
+      failure("Not enough credits to send email", 2000);
+      return;
     }
-  };
+
+    const res = await fetch("/api/send-batch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ templateId, rows, subject }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      console.log("Emails sent successfully:", data);
+
+      const htmls = data.renderedHtmls || [];
+
+      // Use the same rows (you originally sent)
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const html = htmls[i];
+
+        const mailData = {
+          userId: user!.id,
+          mailId: `${Date.now()}_${i}`, // fallback ID
+          status: "send" as MailStatus,
+          to_email: row.email,
+          subject,
+          html,
+        };
+
+        console.log(`Saving email data for ${i}:`, mailData);
+
+        try {
+          await addUserMail(mailData);
+        } catch (err) {
+          console.error(`Failed to save email ${i}:`, err);
+        }
+      }
+
+      success(`Successfully sent ${rows.length} emails!`, 2000);
+    } else {
+      throw new Error(data?.message || "Failed to send emails.");
+    }
+  } catch (error) {
+    failure(
+      `Failed to send emails: ${error instanceof Error ? error.message : "Unknown error"}`,
+      2000
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
 
   const downloadSampleCSV = () => {
     const csvContent = [

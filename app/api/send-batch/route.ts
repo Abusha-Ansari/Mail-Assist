@@ -72,8 +72,10 @@ export async function POST(req: NextRequest) {
         .join('');
     }
 
+    const generatedHtmlArray: string[] = [];
     const messages = rows.map((row: Record<string, string>) => {
       const html = renderBlocks(blocks, row);
+      generatedHtmlArray.push(html);
 
       return {
         from: 'Mail Assist <mailassist@abusha.tech>',
@@ -85,7 +87,20 @@ export async function POST(req: NextRequest) {
 
     const result = await resend.batch.send(messages);
 
-    return NextResponse.json({ message: 'Emails sent', result });
+    return NextResponse.json({
+  message: "Emails sent",
+  result: {
+    data: Array.isArray(result.data)
+      ? result.data
+      : Object.values(result.data || {}).filter(
+          (item) => typeof item === "object" && item !== null && !Array.isArray(item)
+        ),
+  },
+  renderedHtmls: generatedHtmlArray,
+});
+
+
+
   } catch (err) {
     return NextResponse.json(
       { message: 'Error sending emails', error: (err as Error).message || err },
