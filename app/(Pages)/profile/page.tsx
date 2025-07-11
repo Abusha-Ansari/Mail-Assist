@@ -149,7 +149,7 @@ export default function ProfilePage() {
                         variant="ghost"
                         onClick={handleSaveUsername}
                         disabled={usernameLoading}
-                        className="p-1"
+                        className="p-1 hover:cursor-pointer"
                         aria-label="Save username"
                       >
                         <Check className="w-4 h-4 text-green-600" />
@@ -159,7 +159,7 @@ export default function ProfilePage() {
                         variant="ghost"
                         onClick={handleCancelEdit}
                         disabled={usernameLoading}
-                        className="p-1"
+                        className="p-1 hover:cursor-pointer"
                         aria-label="Cancel edit"
                       >
                         <X className="w-4 h-4 text-destructive" />
@@ -172,7 +172,7 @@ export default function ProfilePage() {
                         size="icon"
                         variant="ghost"
                         onClick={handleEditUsername}
-                        className="p-1"
+                        className="p-1 hover:cursor-pointer"
                         aria-label="Edit username"
                       >
                         <Pencil className="w-4 h-4 text-muted-foreground" />
@@ -203,7 +203,7 @@ export default function ProfilePage() {
               </div>
               <Separator />
               <div className="flex flex-col gap-2">
-                <Button variant="destructive" onClick={handleSignOut} className="w-full">
+                <Button variant="destructive" onClick={handleSignOut} className="w-full hover:cursor-pointer">
                   Sign Out
                 </Button>
               </div>
