@@ -13,6 +13,9 @@ import { success, failure, container } from "@/lib/toast.util";
 import { deductCredits } from "@/utils/auth";
 import { addUserMail } from "@/utils/userMail.utils";
 
+// Admin configuration - change this to enable/disable scheduling
+const SCHEDULING_ENABLED = false;
+
 export default function NormalEmailForm() {
   const [formData, setFormData] = useState({
     to: "",
@@ -40,9 +43,6 @@ export default function NormalEmailForm() {
 
     setIsLoading(true);
     try {
-      // Try to deduct credits upfront
-      await deductCredits(user.id, 5); // Assuming scheduling also costs upfront
-
       const emailPayload = {
         to: formData.to,
         subject: formData.subject,
@@ -50,15 +50,18 @@ export default function NormalEmailForm() {
         from: `${user.username}+@gmail.com`,
       };
 
-      if (schedule==true) {
+      if (SCHEDULING_ENABLED && schedule) {
+        // Handle scheduling when enabled
         if (!date || !time) {
           failure("Please select both date and time", 2000);
+          setIsLoading(false);
           return;
         }
 
         const scheduledTime = new Date(`${date}T${time}`);
         if (scheduledTime <= new Date()) {
           failure("Scheduled time must be in the future", 2000);
+          setIsLoading(false);
           return;
         }
 
@@ -75,6 +78,7 @@ export default function NormalEmailForm() {
         if (!res.ok) {
           throw new Error("Scheduling failed");
         }
+
         await deductCredits(user.id, 5);
         await addUserMail({
           userId: user.id,
@@ -86,11 +90,8 @@ export default function NormalEmailForm() {
         });
 
         success("Email scheduled successfully", 2000);
-
-        await new Promise((res) => setTimeout(res, 2000));
-        router.push("/dashboard");
       } else {
-        // Send immediately
+        // Send immediately (default behavior or when scheduling is disabled)
         const res = await fetch("/api/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -111,9 +112,10 @@ export default function NormalEmailForm() {
         });
 
         success("Email sent successfully", 2000);
-        await new Promise((res) => setTimeout(res, 2000));
-        router.push("/dashboard");
       }
+
+      await new Promise((res) => setTimeout(res, 2000));
+      router.push("/dashboard");
     } catch (err) {
       failure("Sending failed " + `${err}`, 2000);
     } finally {
@@ -175,7 +177,13 @@ export default function NormalEmailForm() {
             type="checkbox" 
             id="schedule-checkbox"
             checked={schedule} 
-            onChange={(e) => setSchedule(e.target.checked)}
+            onChange={(e) => {
+              if (!SCHEDULING_ENABLED && e.target.checked) {
+                failure("Scheduling mail is temporarily disabled", 2000);
+                return;
+              }
+              setSchedule(e.target.checked);
+            }}
             className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2"
           />
           <Label htmlFor="schedule-checkbox" className="text-sm font-medium text-foreground cursor-pointer">
@@ -223,7 +231,7 @@ export default function NormalEmailForm() {
         {isLoading ? "Sending..." : (
           <>
             <Send className="mr-2 h-4 w-4" />
-            {schedule ? "Schedule Email" : "Send Email"}
+            {SCHEDULING_ENABLED && schedule ? "Schedule Email" : "Send Email"}
           </>
         )}
       </Button>
