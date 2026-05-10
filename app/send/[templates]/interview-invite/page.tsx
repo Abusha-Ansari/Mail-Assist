@@ -38,20 +38,20 @@ export default function InterviewInviteForm() {
     try {
 
       try {
-              await deductCredits(user.id, 10);
-            } catch (creditError) {
-              failure("Not enough credits to send email", 2000);
-              console.error("Credit deduction failed:", creditError);
-              // setIsSending(false);
-              return;
-            }
+        await deductCredits(user.id, 10);
+      } catch (creditError) {
+        failure("Not enough credits to send email", 2000);
+        console.error("Credit deduction failed:", creditError);
+        // setIsSending(false);
+        return;
+      }
 
       const response = await fetch("/api/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: `${user.username}@gmail.com`,
-          from: "mail.assist.user@abusha.tech",
+          from: "mail.assist.user@abusha.in",
           subject: `Interview Invitation from ${form.company}`,
           bodyMessage: "", // not used in template
           templateType: "interview-invite",

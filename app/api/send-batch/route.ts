@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
       generatedHtmlArray.push(html);
 
       return {
-        from: 'Mail Assist <mailassist@abusha.tech>',
+        from: 'Mail Assist <mailassist@abusha.in>',
         to: [row.email],
         subject: `${subject}`,
         html,

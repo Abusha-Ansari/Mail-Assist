@@ -255,14 +255,14 @@ export default function AnimatedHome() {
                     Get Started Free <ArrowRight className="h-5 w-5" />
                   </button>
                   <button
-      type="button"
-      aria-label="Read Documentation"
-      onClick={() => window.open("https://docs.mailassist.abusha.tech", "_blank")}
-      className="border-2 border-border text-foreground px-8 py-4 rounded-full font-semibold text-lg hover:border-primary hover:text-primary transition-all duration-300 flex items-center gap-2 bg-background hover:bg-accent/50 hover:cursor-pointer"
-    >
-      <Play className="h-5 w-5" />
-      Read Docs
-    </button>
+                    type="button"
+                    aria-label="Read Documentation"
+                    onClick={() => window.open("https://docs.mailassist.abusha.in", "_blank")}
+                    className="border-2 border-border text-foreground px-8 py-4 rounded-full font-semibold text-lg hover:border-primary hover:text-primary transition-all duration-300 flex items-center gap-2 bg-background hover:bg-accent/50 hover:cursor-pointer"
+                  >
+                    <Play className="h-5 w-5" />
+                    Read Docs
+                  </button>
                 </>
               )}
             </motion.div>
@@ -598,49 +598,49 @@ export default function AnimatedHome() {
 
       {/* Footer */}
       <footer className="py-12 bg-muted text-foreground transition-colors duration-300">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          {/* Logo + Description */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Mail className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold">Mail Assist</span>
-            </div>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Seamless email delivery without the complexity.
-            </p>
-          </div>
-
-          {/* Link Sections */}
-          <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
-            {footerSections.map((section) => (
-              <div key={section.title}>
-                <h3 className="font-semibold mb-4 text-foreground text-lg">
-                  {section.title}
-                </h3>
-                <ul className="space-y-2">
-                  {Object.entries(section.links).map(([label, href]) => (
-                    <li key={label}>
-                      <Link
-                        href={href}
-                        className="text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        {label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            {/* Logo + Description */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Mail className="h-8 w-8 text-primary" />
+                <span className="text-xl font-bold">Mail Assist</span>
               </div>
-            ))}
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Seamless email delivery without the complexity.
+              </p>
+            </div>
+
+            {/* Link Sections */}
+            <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
+              {footerSections.map((section) => (
+                <div key={section.title}>
+                  <h3 className="font-semibold mb-4 text-foreground text-lg">
+                    {section.title}
+                  </h3>
+                  <ul className="space-y-2">
+                    {Object.entries(section.links).map(([label, href]) => (
+                      <li key={label}>
+                        <Link
+                          href={href}
+                          className="text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          {label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer Bottom */}
+          <div className="border-t border-border mt-12 pt-6 text-center text-sm text-muted-foreground">
+            <p>&copy; 2025 Mail Assist. All rights reserved.</p>
           </div>
         </div>
-
-        {/* Footer Bottom */}
-        <div className="border-t border-border mt-12 pt-6 text-center text-sm text-muted-foreground">
-          <p>&copy; 2025 Mail Assist. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
+      </footer>
     </div>
   );
 }

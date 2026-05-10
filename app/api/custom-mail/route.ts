@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     try {
   const mailResponse = await resend.emails.send({
-    from: "Mail Assist <mailassist@abusha.tech>",
+    from: "Mail Assist <mailassist@abusha.in>",
     to: [to],
     subject: placeholderData.subject || "No Subject",
     html,

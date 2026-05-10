@@ -70,7 +70,7 @@ export default function NormalEmailForm() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             time: scheduledTime.toISOString(),
-            url: "https://mailassist.abusha.tech/api/send", // Update if needed
+            url: "https://mailassist.abusha.in/api/send", // Update if needed
             emailData: emailPayload,
           }),
         });

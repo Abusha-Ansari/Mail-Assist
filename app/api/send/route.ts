@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: "Mail Assist <mailassist@abusha.tech>",
+      from: "Mail Assist <mailassist@abusha.in>",
       to: [to],
       subject,
       react: reactTemplate,
