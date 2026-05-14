@@ -47,7 +47,9 @@ export default function NormalEmailForm() {
         to: formData.to,
         subject: formData.subject,
         bodyMessage: formData.body,
-        from: `${user.username}+@gmail.com`,
+        from: `${user.username}@gmail.com`,
+        userId: user.id,
+        templateType: "default",
       };
 
       if (SCHEDULING_ENABLED && schedule) {
@@ -102,14 +104,6 @@ export default function NormalEmailForm() {
         if (!res.ok) throw new Error(data?.error || "Send failed");
 
         await deductCredits(user.id, 5);
-        await addUserMail({
-          userId: user.id,
-          mailId: data.id,
-          status: "send",
-          to_email: formData.to,
-          subject: formData.subject,
-          html: formData.body,
-        });
 
         success("Email sent successfully", 2000);
       }
@@ -127,115 +121,115 @@ export default function NormalEmailForm() {
     <MailFormLayout title="Send Normal Email" description="Use the standard email format (5 credits)">
       {container}
       <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="to" className="text-sm font-medium text-foreground">
-          To
-        </Label>
-        <Input 
-          id="to" 
-          type="email" 
-          placeholder="recipient@email.com"
-          required 
-          value={formData.to} 
-          onChange={handleChange}
-          className="h-11 border-border focus:border-primary focus:ring-primary"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="subject" className="text-sm font-medium text-foreground">
-          Subject
-        </Label>
-        <Input 
-          id="subject" 
-          placeholder="Email subject"
-          required 
-          value={formData.subject} 
-          onChange={handleChange}
-          className="h-11 border-border focus:border-primary focus:ring-primary"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="body" className="text-sm font-medium text-foreground">
-          Message
-        </Label>
-        <Textarea 
-          id="body" 
-          placeholder="Write your message here..."
-          required 
-          value={formData.body} 
-          onChange={handleChange} 
-          className="min-h-[200px] border-border focus:border-primary focus:ring-primary resize-none"
-        />
-      </div>
-
-      {/* Schedule Option */}
-      <div className="space-y-4">
-        <div className="flex items-center space-x-3">
-          <input 
-            type="checkbox" 
-            id="schedule-checkbox"
-            checked={schedule} 
-            onChange={(e) => {
-              if (!SCHEDULING_ENABLED && e.target.checked) {
-                failure("Scheduling mail is temporarily disabled", 2000);
-                return;
-              }
-              setSchedule(e.target.checked);
-            }}
-            className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2"
-          />
-          <Label htmlFor="schedule-checkbox" className="text-sm font-medium text-foreground cursor-pointer">
-            Schedule this email?
+        <div className="space-y-2">
+          <Label htmlFor="to" className="text-sm font-medium text-foreground">
+            To
           </Label>
+          <Input
+            id="to"
+            type="email"
+            placeholder="recipient@email.com"
+            required
+            value={formData.to}
+            onChange={handleChange}
+            className="h-11 border-border focus:border-primary focus:ring-primary"
+          />
         </div>
-        
-        {schedule && (
-          <div className="flex gap-4 pt-2">
-            <div className="flex-1">
-              <Label htmlFor="schedule-date" className="text-sm font-medium text-foreground mb-2 block">
-                Date
-              </Label>
-              <Input 
-                id="schedule-date"
-                type="date" 
-                value={date} 
-                onChange={(e) => setDate(e.target.value)} 
-                required 
-                className="h-11 border-border focus:border-primary focus:ring-primary"
-              />
-            </div>
-            <div className="flex-1">
-              <Label htmlFor="schedule-time" className="text-sm font-medium text-foreground mb-2 block">
-                Time
-              </Label>
-              <Input 
-                id="schedule-time"
-                type="time" 
-                value={time} 
-                onChange={(e) => setTime(e.target.value)} 
-                required 
-                className="h-11 border-border focus:border-primary focus:ring-primary"
-              />
-            </div>
-          </div>
-        )}
-      </div>
 
-      <Button 
-        type="submit" 
-        className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200" 
-        disabled={isLoading}
-      >
-        {isLoading ? "Sending..." : (
-          <>
-            <Send className="mr-2 h-4 w-4" />
-            {SCHEDULING_ENABLED && schedule ? "Schedule Email" : "Send Email"}
-          </>
-        )}
-      </Button>
-    </form>
+        <div className="space-y-2">
+          <Label htmlFor="subject" className="text-sm font-medium text-foreground">
+            Subject
+          </Label>
+          <Input
+            id="subject"
+            placeholder="Email subject"
+            required
+            value={formData.subject}
+            onChange={handleChange}
+            className="h-11 border-border focus:border-primary focus:ring-primary"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="body" className="text-sm font-medium text-foreground">
+            Message
+          </Label>
+          <Textarea
+            id="body"
+            placeholder="Write your message here..."
+            required
+            value={formData.body}
+            onChange={handleChange}
+            className="min-h-[200px] border-border focus:border-primary focus:ring-primary resize-none"
+          />
+        </div>
+
+        {/* Schedule Option */}
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3">
+            <input
+              type="checkbox"
+              id="schedule-checkbox"
+              checked={schedule}
+              onChange={(e) => {
+                if (!SCHEDULING_ENABLED && e.target.checked) {
+                  failure("Scheduling mail is temporarily disabled", 2000);
+                  return;
+                }
+                setSchedule(e.target.checked);
+              }}
+              className="w-4 h-4 text-primary border-border rounded focus:ring-primary focus:ring-2"
+            />
+            <Label htmlFor="schedule-checkbox" className="text-sm font-medium text-foreground cursor-pointer">
+              Schedule this email?
+            </Label>
+          </div>
+
+          {schedule && (
+            <div className="flex gap-4 pt-2">
+              <div className="flex-1">
+                <Label htmlFor="schedule-date" className="text-sm font-medium text-foreground mb-2 block">
+                  Date
+                </Label>
+                <Input
+                  id="schedule-date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  required
+                  className="h-11 border-border focus:border-primary focus:ring-primary"
+                />
+              </div>
+              <div className="flex-1">
+                <Label htmlFor="schedule-time" className="text-sm font-medium text-foreground mb-2 block">
+                  Time
+                </Label>
+                <Input
+                  id="schedule-time"
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  required
+                  className="h-11 border-border focus:border-primary focus:ring-primary"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full h-11 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-200"
+          disabled={isLoading}
+        >
+          {isLoading ? "Sending..." : (
+            <>
+              <Send className="mr-2 h-4 w-4" />
+              {SCHEDULING_ENABLED && schedule ? "Schedule Email" : "Send Email"}
+            </>
+          )}
+        </Button>
+      </form>
     </MailFormLayout>
   );
 }

@@ -40,10 +40,10 @@ export default function JobOfferTemplatePage() {
       return;
     }
 
-    
-      try {
 
-        try {
+    try {
+
+      try {
         await deductCredits(user.id, 10);
       } catch (creditError) {
         failure("Not enough credits to send email", 2000);
@@ -57,7 +57,7 @@ export default function JobOfferTemplatePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: formData.to,
-          from: `${user?.username}+@gmail.com`,
+          from: `${user?.username}@gmail.com`,
           subject: formData.subject,
           templateType: "job-offer",
           templateData: {
@@ -86,7 +86,7 @@ export default function JobOfferTemplatePage() {
       await new Promise((res) => setTimeout(res, 3000));
       router.push("/dashboard");
     } catch (err) {
-      failure("Failed to send email"+`${err}`, 2000);
+      failure("Failed to send email" + `${err}`, 2000);
     } finally {
       setIsSending(false);
     }

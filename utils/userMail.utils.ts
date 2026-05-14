@@ -44,6 +44,37 @@ export async function addUserMail({
   return data;
 }
 
+// Add an anonymous mail record (when user ID is not available)
+export async function addAnonymousMail({
+  from_email,
+  mailId,
+  status = "send",
+  to_email,
+  subject,
+  html,
+}: {
+  from_email: string;
+  mailId: string;
+  status?: MailStatus;
+  to_email: string;
+  subject: string;
+  html: string;
+}) {
+  const { data, error } = await supabase.from("anonymous_mails").insert([
+    {
+      from_email,
+      mail_id: mailId,
+      status,
+      to_email,
+      subject,
+      html,
+    },
+  ]);
+
+  if (error) throw error;
+  return data;
+}
+
 // Update mail status for a specific mail record
 export async function updateMailStatus({
   mailRecordId,

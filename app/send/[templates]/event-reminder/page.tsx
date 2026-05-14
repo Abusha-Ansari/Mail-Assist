@@ -34,7 +34,7 @@ export default function EventReminderPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!loggedIn || !user) {
       failure('Please login to send email', 2000);
       return;
@@ -58,7 +58,7 @@ export default function EventReminderPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: formData.to || `${user.username}@gmail.com`,
-          from: `${user?.username}+@gmail.com`,
+          from: `${user?.username}@gmail.com`,
           subject: formData.subject,
           templateType: 'event-reminder',
           templateData: {

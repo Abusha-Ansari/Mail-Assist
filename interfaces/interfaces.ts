@@ -39,6 +39,7 @@ export interface EmailProps {
   bodyMessage?: string; // Used for default emails
   templateType?: string; // e.g. 'job-offer', 'default'
   templateData?: Record<string, any>; // Holds specific template data (e.g., job offer)
+  userId?: string;
 }
 
 

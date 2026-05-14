@@ -57,7 +57,7 @@ export default function PaymentConfirmationPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: formData.to || `${user.username}@gmail.com`,
-          from: `${user?.username}+@gmail.com`,
+          from: `${user?.username}@gmail.com`,
           subject: `Payment Confirmation to ${formData.recipientName}`,
           templateType: 'payment-confirmation',
           templateData: {
@@ -115,45 +115,45 @@ export default function PaymentConfirmationPage() {
 
           <div>
             <Label htmlFor="recipientName" className="pb-2 text-foreground">Recipient Name</Label>
-            <Input 
-              id="recipientName" 
-              value={formData.recipientName} 
-              onChange={handleChange} 
-              required 
+            <Input
+              id="recipientName"
+              value={formData.recipientName}
+              onChange={handleChange}
+              required
               className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
             <Label htmlFor="amount" className="pb-2 text-foreground">Amount</Label>
-            <Input 
-              id="amount" 
-              value={formData.amount} 
-              onChange={handleChange} 
-              required 
+            <Input
+              id="amount"
+              value={formData.amount}
+              onChange={handleChange}
+              required
               className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
             <Label htmlFor="transactionId" className="pb-2 text-foreground">Transaction ID</Label>
-            <Input 
-              id="transactionId" 
-              value={formData.transactionId} 
-              onChange={handleChange} 
-              required 
+            <Input
+              id="transactionId"
+              value={formData.transactionId}
+              onChange={handleChange}
+              required
               className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
             <Label htmlFor="date" className="pb-2 text-foreground">Payment Date</Label>
-            <Input 
-              id="date" 
-              type="date" 
-              value={formData.date} 
-              onChange={handleChange} 
-              required 
+            <Input
+              id="date"
+              type="date"
+              value={formData.date}
+              onChange={handleChange}
+              required
               className="border-border focus:border-primary focus:ring-primary"
             />
           </div>

@@ -65,14 +65,14 @@ export default function SendWithTemplate() {
         setIsSending(false);
         return;
       }
-      
+
       const res = await fetch("/api/custom-mail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           templateId,
           to: form.to || `${user.username}@gmail.com`,
-          from: `${user?.username}+@gmail.com`,
+          from: `${user?.username}@gmail.com`,
           subject: form.subject,
           placeholderData: form,
         }),
@@ -145,7 +145,7 @@ export default function SendWithTemplate() {
                 {ph}
               </Label>
               {ph.toLowerCase().includes("message") ||
-              ph.toLowerCase().includes("body") ? (
+                ph.toLowerCase().includes("body") ? (
                 <Textarea
                   id={ph}
                   value={form[ph] || ""}

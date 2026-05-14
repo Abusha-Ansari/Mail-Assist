@@ -55,7 +55,7 @@ export default function ThankYouPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: formData.to || `${user.username}@gmail.com`,
-          from: `${user?.username}+@gmail.com`,
+          from: `${user?.username}@gmail.com`,
           subject: `Thank You from ${user?.username}`,
           templateType: 'thank-you',
           templateData: {
@@ -99,11 +99,11 @@ export default function ThankYouPage() {
         <div className="space-y-4">
           <div>
             <Label htmlFor="to" className="pb-2 text-foreground">Recipient Email</Label>
-            <Input 
-              id="to" 
-              type="email" 
-              value={formData.to} 
-              onChange={handleChange} 
+            <Input
+              id="to"
+              type="email"
+              value={formData.to}
+              onChange={handleChange}
               placeholder="recipient@example.com"
               className="border-border focus:border-primary focus:ring-primary"
             />
@@ -111,22 +111,22 @@ export default function ThankYouPage() {
 
           <div>
             <Label htmlFor="recipientName" className="pb-2 text-foreground">Your Name</Label>
-            <Input 
-              id="recipientName" 
-              value={formData.recipientName} 
-              onChange={handleChange} 
-              required 
+            <Input
+              id="recipientName"
+              value={formData.recipientName}
+              onChange={handleChange}
+              required
               className="border-border focus:border-primary focus:ring-primary"
             />
           </div>
 
           <div>
             <Label htmlFor="message" className="pb-2 text-foreground">Thank You Message</Label>
-            <Textarea 
-              id="message" 
-              value={formData.message} 
-              onChange={handleChange} 
-              required 
+            <Textarea
+              id="message"
+              value={formData.message}
+              onChange={handleChange}
+              required
               rows={5}
               className="border-border focus:border-primary focus:ring-primary"
             />
@@ -140,7 +140,7 @@ export default function ThankYouPage() {
         <div className="border border-border rounded-md p-4 bg-muted text-muted-foreground">
           <h2 className="text-md font-semibold mb-4 text-foreground">📬 Preview:</h2>
           <div className="bg-card p-4 rounded-md shadow border border-border">
-            <ThankYouTemplate 
+            <ThankYouTemplate
               recipientName={formData.recipientName || "Your Name"}
               message={formData.message || "Your thank you message will appear here..."}
             />

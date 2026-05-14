@@ -9,7 +9,8 @@ import { EventReminderTemplate } from '@/templates/EventReminderTemplate';
 import { ThankYouTemplate } from '@/templates/ThankYouTemplate';
 import { PaymentConfirmationTemplate } from '@/templates/PaymentConfirmationTemplate';
 import { withRateLimit } from "@/lib/withRateLimit";
-
+import { addUserMail, addAnonymousMail } from "@/utils/userMail.utils";
+import { supabase } from "@/lib/supabaseClient";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -20,10 +21,37 @@ export async function POST(req: NextRequest) {
   
   const emailData: EmailProps = await req.json();
 
-  const { to, subject, bodyMessage, templateType, templateData } = emailData;
+  const { to, subject, bodyMessage, templateType, templateData, userId, from } = emailData;
 
   if (!to || !subject) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+  }
+
+  let finalUserId = userId;
+
+  if (!finalUserId && from) {
+    // Attempt to find user by email
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("email", from)
+      .single();
+
+    if (profile) {
+      finalUserId = profile.id;
+    } else {
+      // Attempt to find user by username (prefix of email)
+      const username = from.split("@")[0];
+      const { data: profileByUsername } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("username", username)
+        .single();
+
+      if (profileByUsername) {
+        finalUserId = profileByUsername.id;
+      }
+    }
   }
 
   let reactTemplate;
@@ -107,6 +135,32 @@ export async function POST(req: NextRequest) {
 
     if (error) {
       return NextResponse.json({ error }, { status: 500 });
+    }
+
+    if (!templateType || templateType === "default") {
+      try {
+        if (finalUserId) {
+          await addUserMail({
+            userId: finalUserId,
+            mailId: data?.id || "unknown",
+            status: "send",
+            to_email: to,
+            subject: subject,
+            html: bodyMessage || "",
+          });
+        } else if (from) {
+          await addAnonymousMail({
+            from_email: from,
+            mailId: data?.id || "unknown",
+            status: "send",
+            to_email: to,
+            subject: subject,
+            html: bodyMessage || "",
+          });
+        }
+      } catch (dbError) {
+        console.error("Error saving email to database:", dbError);
+      }
     }
 
     return NextResponse.json(data);
